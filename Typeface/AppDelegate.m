@@ -30,19 +30,11 @@ typedef void(^BlockBfrAction)(UIBackgroundFetchResult result);
 - (BOOL)application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions
 {
 
-#define MIXPANEL_TOKEN @"09b4661d1df458b334e5036d6f4616b7"
+#define MIXPANEL_TOKEN @"b3152c0c9f9d07b8b65bfcfe849194c0"
 
     // Initialize the library with your
     // Mixpanel project token, MIXPANEL_TOKEN
     [Mixpanel sharedInstanceWithToken:MIXPANEL_TOKEN];
-
-
-    Mixpanel *mixpanel = [Mixpanel sharedInstance];
-
-    [mixpanel track:@"takeSnapshot"];
-    [mixpanel track: @"inviteButtonPressed"];
-    [mixpanel track: @"ParseSendMessage"];
-
 
 
   // Override point for customization after application launch.

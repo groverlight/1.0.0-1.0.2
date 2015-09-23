@@ -548,11 +548,11 @@ static NavigationView* Myself;
   HeaderBar.frame         = frame;
   frame.size.height       = self.bounds.size.height;
   ScrollView.frame        = frame;
+  Player.frame            = frame;
+  Login.frame             = frame;
   frame                   = FriendsBundleView.bounds;
   AzFriendsListView.frame = frame;
   SendToListView.frame    = frame;
-  Player.frame            = frame;
-  Login.frame             = frame;
 }
 //__________________________________________________________________________________________________
 

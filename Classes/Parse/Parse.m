@@ -12,6 +12,7 @@
 #import "ParseMessage.h"
 #import "Tools.h"
 #import "UnreadMessages.h"
+#import "Mixpanel.h"
 //__________________________________________________________________________________________________
 
 #define PARSE_USER_TOKEN_DEFAULTS_KEY @"ParseUserToken" //!< The key to retrieve the Parse token in the user defaults.
@@ -364,6 +365,12 @@ void ParseSendMessage
     {
       ParseSendMessageBody(msg, snapshotsData, completion);
     });
+
+      NSLog(@"1 ParseSendMessage start");
+
+      Mixpanel *mixpanel = [Mixpanel sharedInstance];
+
+      [mixpanel track:@"ParseSendMessage"];
   }
 }
 //__________________________________________________________________________________________________

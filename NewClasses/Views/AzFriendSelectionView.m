@@ -14,6 +14,7 @@
 #import "ParseUser.h"
 #import "RollDownView.h"
 #import "Tools.h"
+#import "Mixpanel.h"
 //__________________________________________________________________________________________________
 
 #define USE_AUTOSEARCH 1
@@ -183,6 +184,13 @@
 // Action when the Invite button is pressed.
 -(void)inviteButtonPressed
 {
+
+    NSLog(@"invitebuttonPressed");
+
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
+
+    [mixpanel track: @"inviteButtonPressed"];
+
   GlobalParameters* parameters = GetGlobalParameters();
   if(![MFMessageComposeViewController canSendText])
   {

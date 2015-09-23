@@ -75,7 +75,7 @@ parameters.blockedUserReasonMessage       = NSLocalizedString(@"You have been bl
     [viewController loginDone:newUser];
   };
 
-    parameters.findUserMessagingSampleText          = NSLocalizedString(@"I'm done being misunderstood when we text. I'm on Typeface now. Talk to me there.\nMy username is %@\nhttp://typeface.wtf", @"");  // The %@ is a placeholder for the username.
+    parameters.findUserMessagingSampleText          = NSLocalizedString(@"I'm done being misunderstood when we text. I'm on Typeface now. Talk to me there.\nMy username is %@\nhttp://itunes.apple.com/app/id1032193825", @"");  // The %@ is a placeholder for the username.
   parameters.findUserMessagingNotSupportedAction  = ^
   {
     Alert(NSLocalizedString(@"Failed to send iMessage", @""), NSLocalizedString(@"Messaging is not supported on this device!", @""), NSLocalizedString(@"OK", @""), nil, ^(NSInteger pressedButton)
@@ -183,10 +183,10 @@ parameters.blockedUserReasonMessage       = NSLocalizedString(@"You have been bl
 
   parameters.friendsTopBarBorderOffset              = 47;
   parameters.friendsTopBarTopOffset                 = 10;
-  parameters.friendsUsernameFont                  	= [UIFont fontWithName:@"AvenirNext-Regular" size:26];
-  parameters.friendsUsernameMediumFont              = [UIFont fontWithName:@"AvenirNext-Bold" size:26];
+  parameters.friendsUsernameFont                  	= [UIFont fontWithName:@"AvenirNext-Regular" size:24];
+  parameters.friendsUsernameMediumFont              = [UIFont fontWithName:@"AvenirNext-Bold" size:24];
   parameters.friendsSelectedUsernameTextColor       = WarmGrey;
-  parameters.friendsUsernameTextColor               = DarkGrey;
+  parameters.friendsUsernameTextColor               = WarmGrey;
   parameters.friendsPhotoRadius                     = 20;
   parameters.friendsPhotoLeftMargin                 = 21;
   parameters.friendsTextLeftMargin                  = 68;
@@ -194,7 +194,7 @@ parameters.blockedUserReasonMessage       = NSLocalizedString(@"You have been bl
 
   parameters.friendsStateViewLeftMargin             = 14;
   parameters.friendsStateViewRightMargin            = 14;
-  parameters.friendsListRowHeight                 	= 78;
+  parameters.friendsListRowHeight                 	= 68;
   parameters.friendsListHeaderHeight                = 26;
 
   parameters.friendsListBackgroundColor             = Transparent;
@@ -213,15 +213,15 @@ parameters.blockedUserReasonMessage       = NSLocalizedString(@"You have been bl
   parameters.friendsProgressStrokeColor             = Transparent;
   parameters.friendsProgressFillColor               = parameters.secondaryButtonColor;
   parameters.friendsSendToLabelTitle              	= NSLocalizedString(@"press & hold send", @"");
-  parameters.friendsA_ZLabelTitle                 	= NSLocalizedString(@"tap dots for options", @"");
+  parameters.friendsA_ZLabelTitle                 	= NSLocalizedString(@"tap below to add friends", @"");
   parameters.friendsActivityLabelTitle              = NSLocalizedString(@"press & hold to watch", @"");
   parameters.friendsLabelTitleColor                 = LightGrey;
   parameters.friendsLabelTitleFontSize              = 16;
   parameters.friendsProgressDuration                = 2;
   parameters.friendsMaxRecentFriends                = 5;
 
-  parameters.friendsEditorPlaceholderText           = NSLocalizedString(@"Add friends by username...", @"");
-  parameters.friendsEditorFontSize                  = 16;
+  parameters.friendsEditorPlaceholderText           = NSLocalizedString(@"Search for username", @"");
+  parameters.friendsEditorFontSize                  = 18;
   parameters.friendsEditorHeight                    = 60;
   parameters.friendsEditorLeftMargin                = 18;
   parameters.friendsInviteFriendButtonWidth         = 220;
@@ -289,7 +289,7 @@ parameters.blockedUserReasonMessage       = NSLocalizedString(@"You have been bl
   parameters.typingValidatedBackgroundColor       = Transparent;
   parameters.typingTopBarBorderOffset             = 42;
   parameters.typingTopBarTopOffset                = -3;
-  parameters.typingCursorColor                    = TypeTeal;
+  parameters.typingCursorColor                    = Grey;
   parameters.typingFont                           = [UIFont fontWithName:@"AvenirNext-Medium" size:18];
 
 
