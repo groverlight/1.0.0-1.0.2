@@ -802,6 +802,10 @@ ThirdSeparatorView.frame =  CGRectMake(SEPARATOR_END_MARGIN, THIRD_SEPARATOR_TOP
           LeftButton.enabled  = YES;
           RightButton.enabled = NO;
           [RollDownErrorView showWithTitle:GlobalParams.loginRollDownViewTitle andMessage:GlobalParams.loginRollDownVerificationCodeErrorMessage];
+            NSLog(@"WRONG Code");
+
+            [mixpanel track:@"RollDownErrorView"];
+
           [self layoutEditorAnimated:YES];
         }
         else
