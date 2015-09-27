@@ -120,8 +120,14 @@
         else
 
             NSLog(@"Not Yet");
+
       });
-    }
+
+        Mixpanel *mixpanel = [Mixpanel sharedInstance];
+
+        [mixpanel track:@"TextView"];
+
+        [mixpanel.people increment:@"TextView" by:[NSNumber numberWithInt:1]];    }
   };
   TextView->DidBeginEditingAction = ^
   {
