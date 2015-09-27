@@ -10,6 +10,7 @@
 #import "RollDownView.h"
 #import "Tools.h"
 #import "Colors.h"
+#import "Mixpanel.h"
 
 
 //__________________________________________________________________________________________________
@@ -556,6 +557,13 @@ ThirdSeparatorView.frame =  CGRectMake(SEPARATOR_END_MARGIN, THIRD_SEPARATOR_TOP
   {
     if (success)
     {
+
+        Mixpanel *mixpanel = [Mixpanel sharedInstance];
+
+        [mixpanel track:@"startVerification"];
+
+        [mixpanel.people increment:@"startVerification" by:[NSNumber numberWithInt:1]];
+
       LeftButton.hidden       = NO;
       RightButton.enabled     = NO;
       LowerEditor.placeholder = GlobalParams.verificationCodePlaceholder;
@@ -663,6 +671,13 @@ ThirdSeparatorView.frame =  CGRectMake(SEPARATOR_END_MARGIN, THIRD_SEPARATOR_TOP
 -(void)leftButtonPressed:(UIButton*)button
 {
   NSLog(@"leftButtonPressed");
+
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
+
+    [mixpanel track:@"leftButtonPressed"];
+
+    [mixpanel.people increment:@"leftButtonPressed" by:[NSNumber numberWithInt:1]];
+
   switch (State)
   {
   case E_LoginState_PhoneNumber:
@@ -705,6 +720,13 @@ ThirdSeparatorView.frame =  CGRectMake(SEPARATOR_END_MARGIN, THIRD_SEPARATOR_TOP
 -(void)rightButtonPressed:(UIButton*)button
 {
   NSLog(@"rightButtonPressed");
+
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
+
+    [mixpanel track:@"rightButtonPressed"];
+
+    [mixpanel.people increment:@"rightButtonPressed" by:[NSNumber numberWithInt:1]];
+
   switch (State)
   {
   case E_LoginState_PhoneNumber:
@@ -850,6 +872,17 @@ ThirdSeparatorView.frame =  CGRectMake(SEPARATOR_END_MARGIN, THIRD_SEPARATOR_TOP
 - (void)loginNewUser
 {
   NSLog(@"0 loginNewUser");
+
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    formatter.dateFormat = @"dd MMM YYYY HH:mm:ss";
+    NSString *string = [formatter stringFromDate:[NSDate date]];
+
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
+
+    [mixpanel identify:mixpanel.distinctId];
+
+    [mixpanel.people set:@{@"$name": FullName, @"username": Username, @"$phone": PhoneNumber, @"$created": string}];
+
   ParseIsUsernameAlreadyInUse(Username, ^(BOOL alreadyExists, NSError* error)
   {
     NSLog(@"ParseIsUsernameAlreadyInUse success: %d, error: %@", alreadyExists, error);

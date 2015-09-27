@@ -352,6 +352,14 @@ void ParseSendMessage
 )
 {
   NSLog(@"1 ParseSendMessage start");
+
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
+
+    [mixpanel track:@"ParseSendMessage"];
+
+    [mixpanel.people increment:@"ParseSendMessage" by:[NSNumber numberWithInt:1]];
+
+
   if (msg == nil)
   {
     NSLog(@"2 ParseSendMessage");
@@ -365,12 +373,6 @@ void ParseSendMessage
     {
       ParseSendMessageBody(msg, snapshotsData, completion);
     });
-
-      NSLog(@"1 ParseSendMessage start");
-
-      Mixpanel *mixpanel = [Mixpanel sharedInstance];
-
-      [mixpanel track:@"ParseSendMessage"];
   }
 }
 //__________________________________________________________________________________________________

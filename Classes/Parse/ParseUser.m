@@ -8,6 +8,7 @@
 #import "Blocks.h"
 #import "Parse.h"
 #import "ParseUser.h"
+#import "Mixpanel.h"
 //__________________________________________________________________________________________________
 
 //! Get the shared (singleton) FriendRecord.h array object.
@@ -118,7 +119,19 @@ NSMutableArray* GetSharedFriendsList(void)
 
 //! Add a new friend to the friends list.
 - (void)addFriend:(ParseUser*)newFriend completion:(BlockBoolErrorAction)completion
+
 {
+
+    NSLog(@"addFriend");
+
+ Mixpanel *mixpanel = [Mixpanel sharedInstance];
+
+ [mixpanel track:@"addFriend"];
+
+ [mixpanel.people increment:@"addFriend" by:[NSNumber numberWithInt:1]];
+
+
+
   NSInteger index = [self.friends indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL* stop)
   {
     return ([obj isEqual:newFriend.objectId]);

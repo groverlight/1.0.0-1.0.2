@@ -191,6 +191,8 @@
 
     [mixpanel track: @"inviteButtonPressed"];
 
+    [mixpanel.people increment:@"inviteButtonPressed" by:[NSNumber numberWithInt:1]];
+
   GlobalParameters* parameters = GetGlobalParameters();
   if(![MFMessageComposeViewController canSendText])
   {
@@ -283,6 +285,13 @@
       else
       {
         [RollDownErrorView showWithTitle:parameters.addFriendRollDownViewTitle andMessage:parameters.AddFriendRollDownUnknownUsernameErrorMessage];
+
+          NSLog(@"WRONG USERNAME");
+          Mixpanel *mixpanel = [Mixpanel sharedInstance];
+
+          [mixpanel track:@"RollDownErrorView"];
+
+          [mixpanel.people increment:@"RollDownErrorView" by:[NSNumber numberWithInt:1]];
       }
     }];
   }

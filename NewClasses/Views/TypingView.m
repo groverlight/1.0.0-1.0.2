@@ -12,6 +12,7 @@
 #import "StillImageCapture.h"
 #import "Tools.h"
 #import "TopBarView.h"
+#import "Mixpanel.h"
 //__________________________________________________________________________________________________
 
 #define FACE_BUTTON_ALERT_FLAG_DEFAULTS_KEY @"FaceButtonAlertFlag"  //!< The key to retrieve the FACE button alert flag in the user defaults.
@@ -94,9 +95,12 @@
     if (faceAlertAlreadyDone)
     {
       [myself faceButtonPressed];
+
+
     }
     else
     {
+        NSLog(@"Calls the selfie alert!");
       Alert(parameters.typingLeftButtonAlertTitle   , parameters.typingLeftButtonAlertMessage,
             parameters.typingLeftButtonAlertOkString, parameters.typingLeftButtonAlertCancelString,
             ^(NSInteger pressedButtonIndex)
@@ -105,7 +109,17 @@
         if (pressedButtonIndex == 1)
         {
           [myself faceButtonPressed];
+
+            NSLog(@"YUP");
+            Mixpanel *mixpanel = [Mixpanel sharedInstance];
+
+            [mixpanel track:@"faceButtonPressed"];
+
+            [mixpanel.people increment:@"faceButtonPressed" by:[NSNumber numberWithInt:1]];
         }
+        else
+
+            NSLog(@"Not Yet");
       });
     }
   };
@@ -155,6 +169,7 @@
     }
     else
     {
+        NSLog(@"Calls send message alert");
       Alert(parameters.typingRightButtonAlertTitle   , parameters.typingRightButtonAlertMessage,
             parameters.typingRightButtonAlertOkString, parameters.typingRightButtonAlertCancelString,
             ^(NSInteger pressedButtonIndex)
@@ -163,10 +178,20 @@
         if (pressedButtonIndex == 1)
         {
           [myself goButtonPressed];
+            Mixpanel *mixpanel = [Mixpanel sharedInstance];
+
+            [mixpanel track:@"goButtonPressed"];
+
+            [mixpanel.people increment:@"goButtonPressed" by:[NSNumber numberWithInt:1]];
         }
         else
         {
           [myself->TextView becomeFirstResponder];
+            Mixpanel *mixpanel = [Mixpanel sharedInstance];
+
+            [mixpanel track:@"TextView"];
+
+            [mixpanel.people increment:@"TextView" by:[NSNumber numberWithInt:1]];
         }
       });
     }

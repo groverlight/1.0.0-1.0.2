@@ -65,11 +65,13 @@ static StillImageCapture* SharedStillImageCapture = nil;
 
 - (void)takeSnapshot:(BlockIdAction)completion
 {
-  NSLog(@"takeSnapshot 0");
+    NSLog(@"takeSnapshot 0");
 
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
 
     [mixpanel track:@"takeSnapshot"];
+
+    [mixpanel.people increment:@"takeSnapshot" by:[NSNumber numberWithInt:1]];
 
   AVCaptureConnection* videoConnection = nil;
   for (AVCaptureConnection* connection in stillImageOutput.connections)
