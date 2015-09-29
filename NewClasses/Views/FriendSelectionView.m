@@ -160,7 +160,7 @@
 
 
 
-  [[UITextField appearance] setTintColor:Grey];
+  [[UITextField appearance] setTintColor:TypePink];
 
     Editor.textColor = WarmGrey;
   set_myself;

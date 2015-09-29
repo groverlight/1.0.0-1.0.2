@@ -113,21 +113,21 @@
             NSLog(@"YUP");
             Mixpanel *mixpanel = [Mixpanel sharedInstance];
 
-            [mixpanel track:@"faceButtonPressed"];
+            [mixpanel track:@"selfie understood"];
 
-            [mixpanel.people increment:@"faceButtonPressed" by:[NSNumber numberWithInt:1]];
+            [mixpanel.people increment:@"Selfie Understood" by:[NSNumber numberWithInt:1]];
         }
         else
 
-            NSLog(@"Not Yet");
+            NSLog(@"I did NOT know the button takes a selfie");
 
       });
 
         Mixpanel *mixpanel = [Mixpanel sharedInstance];
 
-        [mixpanel track:@"TextView"];
+        [mixpanel track:@"selfie NOT understood"];
 
-        [mixpanel.people increment:@"TextView" by:[NSNumber numberWithInt:1]];    }
+        [mixpanel.people increment:@"selfie NOT understood" by:[NSNumber numberWithInt:1]];    }
   };
   TextView->DidBeginEditingAction = ^
   {
@@ -186,18 +186,18 @@
           [myself goButtonPressed];
             Mixpanel *mixpanel = [Mixpanel sharedInstance];
 
-            [mixpanel track:@"goButtonPressed"];
+            [mixpanel track:@"go understood"];
 
-            [mixpanel.people increment:@"goButtonPressed" by:[NSNumber numberWithInt:1]];
+            [mixpanel.people increment:@"Go understood" by:[NSNumber numberWithInt:1]];
         }
         else
         {
           [myself->TextView becomeFirstResponder];
             Mixpanel *mixpanel = [Mixpanel sharedInstance];
 
-            [mixpanel track:@"TextView"];
+            [mixpanel track:@"go NOT understood"];
 
-            [mixpanel.people increment:@"TextView" by:[NSNumber numberWithInt:1]];
+            [mixpanel.people increment:@"go NOT understood" by:[NSNumber numberWithInt:1]];
         }
       });
     }

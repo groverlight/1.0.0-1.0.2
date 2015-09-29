@@ -189,9 +189,9 @@
 
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
 
-    [mixpanel track: @"inviteButtonPressed"];
+    [mixpanel track: @"invites"];
 
-    [mixpanel.people increment:@"inviteButtonPressed" by:[NSNumber numberWithInt:1]];
+    [mixpanel.people increment:@"invites" by:[NSNumber numberWithInt:1]];
 
   GlobalParameters* parameters = GetGlobalParameters();
   if(![MFMessageComposeViewController canSendText])
@@ -289,9 +289,9 @@
           NSLog(@"WRONG USERNAME");
           Mixpanel *mixpanel = [Mixpanel sharedInstance];
 
-          [mixpanel track:@"RollDownErrorView"];
+          [mixpanel track:@"wrong username"];
 
-          [mixpanel.people increment:@"RollDownErrorView" by:[NSNumber numberWithInt:1]];
+          [mixpanel.people increment:@"wrong username" by:[NSNumber numberWithInt:1]];
       }
     }];
   }
@@ -411,6 +411,13 @@
       [ParseBlocked blockAFriend:friend forReason:parameters.blockedUserReasonMessage completion:^(BOOL result, NSError *error)
       {
         NSLog(@"User: '%@' has been blocked with error: %@", friend.fullName, error);
+
+          Mixpanel *mixpanel = [Mixpanel sharedInstance];
+
+          [mixpanel track:@"friends blocked"];
+
+          [mixpanel.people increment:@"friends blocked" by:[NSNumber numberWithInt:1]];
+          
       }];
       [self removeFriend:friend];
     }

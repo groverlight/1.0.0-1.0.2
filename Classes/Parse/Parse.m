@@ -355,9 +355,9 @@ void ParseSendMessage
 
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
 
-    [mixpanel track:@"ParseSendMessage"];
+    [mixpanel track:@"messages sent"];
 
-    [mixpanel.people increment:@"ParseSendMessage" by:[NSNumber numberWithInt:1]];
+    [mixpanel.people increment:@"messages sent" by:[NSNumber numberWithInt:1]];
 
 
   if (msg == nil)
@@ -479,7 +479,14 @@ void ParseRemoveFriend
   BlockBoolErrorAction  completion              //!< The block to call when the message has been sent.
 )
 {
-  NSLog(@"ParseRemoveFriend start");
+    NSLog(@"ParseRemoveFriend start");
+
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
+
+    [mixpanel track:@"friends removed"];
+
+    [mixpanel.people increment:@"friends removed" by:[NSNumber numberWithInt:1]];
+
   // Send the message to parse.
   ParseMessage* parse_message           = [ParseMessage object];
   parse_message.time                    = [[NSDate date] timeIntervalSince1970];

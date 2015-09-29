@@ -122,13 +122,13 @@ NSMutableArray* GetSharedFriendsList(void)
 
 {
 
-    NSLog(@"addFriend");
+ NSLog(@"addFriend");
 
  Mixpanel *mixpanel = [Mixpanel sharedInstance];
 
- [mixpanel track:@"addFriend"];
+ [mixpanel track:@"friends"];
 
- [mixpanel.people increment:@"addFriend" by:[NSNumber numberWithInt:1]];
+ [mixpanel.people increment:@"friends" by:[NSNumber numberWithInt:1]];
 
 
 

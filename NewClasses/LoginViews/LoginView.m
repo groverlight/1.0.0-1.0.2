@@ -11,8 +11,6 @@
 #import "Tools.h"
 #import "Colors.h"
 #import "Mixpanel.h"
-
-
 //__________________________________________________________________________________________________
 
 #define LOGIN_STATE_DEFAULTS_KEY              @"LoginState"             //!< The key to retrieve the login state in the user defaults.
@@ -25,11 +23,11 @@
 //__________________________________________________________________________________________________
 
 #define FIRST_LABEL_TOP_OFFSET        40  //!< Position of the top of the first label.
-#define SECOND_LABEL_TOP_OFFSET      SECOND_SEPARATOR_TOP_OFFSET + 10  //!< Position of the top of the second label.
+#define SECOND_LABEL_TOP_OFFSET       FIRST_LABEL_TOP_OFFSET + 34  //!< Position of the top of the second label.
 #define SEPARATOR_END_MARGIN          20  //!< Right margin of the separator lines.
 #define SEPARATOR_LINE_WIDTH          0.40   //!< Width of the separator lines.
-#define FIRST_SEPARATOR_TOP_OFFSET    FIRST_LABEL_TOP_OFFSET + 40 //!< Vertical position of the first separator line.
-#define SECOND_SEPARATOR_TOP_OFFSET   FIRST_SEPARATOR_TOP_OFFSET + 60//!< Vertical position of the second separator line.
+#define FIRST_SEPARATOR_TOP_OFFSET    130 //!< Vertical position of the first separator line.
+#define SECOND_SEPARATOR_TOP_OFFSET   170 //!< Vertical position of the second separator line.
 #define EDITOR_VERTICAL_CENTER        ((FIRST_SEPARATOR_TOP_OFFSET + SECOND_SEPARATOR_TOP_OFFSET) / 2)  //!< Vertical position of the phone number editor center line.
 #define PREFIX_LEFT_MARGIN            40  //!< Phone number prefix label left margin.
 #define PREFIX_WIDTH                  60  //!< Phone number prefix label width.
@@ -38,25 +36,24 @@
 #define BUTTON_BOTTOM_MARGIN          10  //!< Distance from the keyboard top position for the left and right buttons.
 #define BUTTON_MARGIN                 20  //!< Distance from the border for the left and right buttons.
 #define BUTTON_WIDTH                  100 //!< Width of the left and right buttons.
-#define POLICY_TEXT_TOP_MARGIN        300 //!< Vertical position of the policy text.
-#define POLICY_TEXT_WIDTH             250 //!< Width of the policy text.
-#define POLICY_TEXT_HEIGHT            160  //!< Height of the policy text.
+#define POLICY_TEXT_TOP_MARGIN        180 //!< Vertical position of the policy text.
+#define POLICY_TEXT_WIDTH             300 //!< Width of the policy text.
+#define POLICY_TEXT_HEIGHT            60  //!< Height of the policy text.
 #define DEFAULT_KEYBOARD_HEIGHT       216 //!< Default keyboard height.
 #define ROLL_DOWN_VIEW_HEIGHT         60  //!< Roll down error message view height.
 #define PARSE_ERROR_CODE              141 //!< Error code specific to the Parse library.
-#define PREFIX_LABEL_TAP_MARGIN       20  //!< Margin to make easier to tap on the country code label.
-#define THIRD_SEPARATOR_TOP_OFFSET    SECOND_SEPARATOR_TOP_OFFSET + 60
-
+#define PREFIX_LABEL_TAP_MARGIN       10  //!< Margin to make easier to tap on the country code label.
+#define THIRD_SEPARATOR_TOP_OFFSET    90
 //__________________________________________________________________________________________________
 
 //! States of the login state machine.
 typedef enum
 {
-  E_LoginState_LoggedOut = 0,
-  E_LoginState_PhoneNumber,
-  E_LoginState_VerificationCode,
-  E_LoginState_Username,
-  E_LoginState_LoggedIn
+    E_LoginState_LoggedOut = 0,
+    E_LoginState_PhoneNumber,
+    E_LoginState_VerificationCode,
+    E_LoginState_Username,
+    E_LoginState_LoggedIn
 } LoginState;
 //__________________________________________________________________________________________________
 
@@ -72,88 +69,88 @@ typedef enum
 //! CardView based class that handle user registration and login.
 @implementation LoginView
 {
-  LoginState              State;                  //!< Current state of the login state machine.
-  RollDownView*           RollDownErrorView;      //!< The roll down error message view.
-  UILabel*                FirstLabel;             //!< The label at the top of the view.
-  UILabel*                SecondLabel;            //!< The second label from the top of the view.
-  UIView*                 FirstSeparatorView;     //!< The first separator line view.
-  UILabel*                PrefixLabel;            //!< The country prefix label.
-  UITextField*            UpperEditor;            //!< The user's full name editor.
-  UITextField*            LowerEditor;            //!< The phone number, verification code and username editor.
-  UIView*                 SecondSeparatorView;    //!< The second separator line view.
-  UIView*                 ThirdSeparatorView;
-  UIWebView*              PolicyText;             //!< The policy text view.
-  IntlPhonePrefixPicker*  PickerView;             //!< The country selector view.
-  UIButton*               LeftButton;             //!< The left button control.
-  UIButton*               RightButton;            //!< The right button control.
-  CGFloat                 KeyboardHeight;         //!< The height of the currently displayed keyboard.
-  CGFloat                 KeyboardTop;            //!< The vertical position of the top of the keyboard.
-  CGFloat                 EditorHeight;           //!< The height of the editor views.
-  CGFloat                 UpperEditorTop;         //!< Vertical position of the top of the upper editor.
-  CGFloat                 LowerEditorTop;         //!< Vertical position of the top of the lower editor.
-  BlockBoolAction         LoginDoneAction;        //!< Action block called when the login process has terminated.
+    LoginState              State;                  //!< Current state of the login state machine.
+    RollDownView*           RollDownErrorView;      //!< The roll down error message view.
+    UILabel*                FirstLabel;             //!< The label at the top of the view.
+    UILabel*                SecondLabel;            //!< The second label from the top of the view.
+    UIView*                 FirstSeparatorView;     //!< The first separator line view.
+    UILabel*                PrefixLabel;            //!< The country prefix label.
+    UITextField*            UpperEditor;            //!< The user's full name editor.
+    UITextField*            LowerEditor;            //!< The phone number, verification code and username editor.
+    UIView*                 SecondSeparatorView;    //!< The second separator line view.
+    UIView*                 ThirdSeparatorView;
+    UIWebView*              PolicyText;             //!< The policy text view.
+    IntlPhonePrefixPicker*  PickerView;             //!< The country selector view.
+    UIButton*               LeftButton;             //!< The left button control.
+    UIButton*               RightButton;            //!< The right button control.
+    CGFloat                 KeyboardHeight;         //!< The height of the currently displayed keyboard.
+    CGFloat                 KeyboardTop;            //!< The vertical position of the top of the keyboard.
+    CGFloat                 EditorHeight;           //!< The height of the editor views.
+    CGFloat                 UpperEditorTop;         //!< Vertical position of the top of the upper editor.
+    CGFloat                 LowerEditorTop;         //!< Vertical position of the top of the lower editor.
 
-  NSInteger               SelectedCountryIndex;   //!< Index of the selected country.
-  NSString*               SelectedCountryName;    //!< Name of the selected country.
-  NSString*               SelectedCountryPrefix;  //!< Prefix code of the selected country.
-  NSString*               PhoneNumber;            //!< The edited phone number.
-  NSString*               FullPhoneNumber;        //!< The complete phone number with the country code.
-  NSString*               VerificationCode;       //!< The edited verification code.
-  NSString*               FullName;               //!< The edited user's full name.
-  NSString*               Username;               //!< The edited username.
-  NSString*               UserObjectId;           //!< The existing user objectId.
-  ParseUser*              RecoveredUser;
+    BlockBoolAction         LoginDoneAction;        //!< Action block called when the login process has terminated.
 
-  GlobalParameters*       GlobalParams;           //!< Copy of the global parameters object pointer.
+    NSInteger               SelectedCountryIndex;   //!< Index of the selected country.
+    NSString*               SelectedCountryName;    //!< Name of the selected country.
+    NSString*               SelectedCountryPrefix;  //!< Prefix code of the selected country.
+    NSString*               PhoneNumber;            //!< The edited phone number.
+    NSString*               FullPhoneNumber;        //!< The complete phone number with the country code.
+    NSString*               VerificationCode;       //!< The edited verification code.
+    NSString*               FullName;               //!< The edited user's full name.
+    NSString*               Username;               //!< The edited username.
+    NSString*               UserObjectId;           //!< The existing user objectId.
+    ParseUser*              RecoveredUser;
 
-  UIColor*                TextColor;              //!< Color of the user's full name texts.
-  BOOL                    Animated;               //!< Temporary value for the animated flag for some methods when performed on main thread.
+    GlobalParameters*       GlobalParams;           //!< Copy of the global parameters object pointer.
+
+    UIColor*                TextColor;              //!< Color of the user's full name texts.
+    BOOL                    Animated;               //!< Temporary value for the animated flag for some methods when performed on main thread.
 }
 //____________________
 
 //! Initialize the object however it has been created.
 -(void)Initialize
 {
-  [super Initialize];
+    [super Initialize];
 
-  KeyboardHeight  = DEFAULT_KEYBOARD_HEIGHT;
-  GlobalParams    = GetGlobalParameters();
+    KeyboardHeight  = DEFAULT_KEYBOARD_HEIGHT;
+    GlobalParams    = GetGlobalParameters();
 
-//  [self.gradientView setInitialGradientColors:[UIColor orangeColor] bottomcolor:[UIColor brownColor]];
+    //  [self.gradientView setInitialGradientColors:[UIColor orangeColor] bottomcolor:[UIColor brownColor]];
 
-  set_myself;
+    set_myself;
 
-  LoginDoneAction = ^(BOOL newUser)
-  { // Default action: do nothing.
-  };
+    LoginDoneAction = ^(BOOL newUser)
+    { // Default action: do nothing.
+    };
 
-  RollDownErrorView         = [RollDownView          new];
-  FirstLabel                = [UILabel               new];
-  SecondLabel               = [UILabel               new];
-  FirstSeparatorView        = [UIView                new];
-  PrefixLabel               = [UILabel               new];
-  UpperEditor               = [UITextField           new];
-  LowerEditor               = [UITextField           new];
-  SecondSeparatorView       = [UIView                new];
-  ThirdSeparatorView        = [UIView                new];
-  PolicyText                = [UIWebView             new];
-  PickerView                = [IntlPhonePrefixPicker new];
-  LeftButton                = [UIButton buttonWithType:UIButtonTypeSystem];
-  RightButton               = [UIButton buttonWithType:UIButtonTypeSystem];
-
+    RollDownErrorView         = [RollDownView          new];
+    FirstLabel                = [UILabel               new];
+    SecondLabel               = [UILabel               new];
+    FirstSeparatorView        = [UIView                new];
+    ThirdSeparatorView        = [UIView                new];
+    PrefixLabel               = [UILabel               new];
+    UpperEditor               = [UITextField           new];
+    LowerEditor               = [UITextField           new];
+    SecondSeparatorView       = [UIView                new];
+    PolicyText                = [UIWebView             new];
+    PickerView                = [IntlPhonePrefixPicker new];
+    LeftButton                = [UIButton buttonWithType:UIButtonTypeSystem];
+    RightButton               = [UIButton buttonWithType:UIButtonTypeSystem];
 
     FirstLabel.font = [UIFont fontWithName:@"AvenirNext-DemiBold" size:20];
     FirstLabel.numberOfLines = 1;
     FirstLabel.textAlignment  = NSTextAlignmentCenter;
     FirstLabel.textColor = WarmGrey;
 
-    SecondLabel.font = [UIFont fontWithName:@"AvenirNext-Medium" size:16];
+    SecondLabel.font = [UIFont fontWithName:@"AvenirNext-Medium" size:14];
     SecondLabel.numberOfLines = 1;
     SecondLabel.textAlignment = NSTextAlignmentCenter;
-    SecondLabel.textColor = [Grey colorWithAlphaComponent:0.4];
+    SecondLabel.textColor = [WarmGrey colorWithAlphaComponent:0.4];
 
-    PrefixLabel.font = [UIFont fontWithName:@"AvenirNext-DemiBold" size:28];
-    PrefixLabel.hidden        = NO;
+    PrefixLabel.font = [UIFont fontWithName:@"AvenirNext-DemiBold" size:26];
+    PrefixLabel.hidden    = NO;
     PrefixLabel.textColor = WarmGrey;
 
     UpperEditor.placeholder        = GlobalParams.fullNamePlaceholder;
@@ -165,7 +162,7 @@ typedef enum
     UpperEditor.spellCheckingType  = UITextSpellCheckingTypeNo;
 
     [UpperEditor addTarget:self action:@selector(editorTextChanged:) forControlEvents:UIControlEventEditingChanged];
-    [UpperEditor setFont:[UIFont fontWithName:@"AvenirNext-DemiBold" size:28]];
+    [UpperEditor setFont:[UIFont fontWithName:@"AvenirNext-DemiBold" size:26]];
     [UpperEditor setAdjustsFontSizeToFitWidth:NO];
     [UpperEditor setTextColor:WarmGrey];
 
@@ -180,87 +177,88 @@ typedef enum
 
 
     [LowerEditor addTarget:self action:@selector(editorTextChanged:) forControlEvents:UIControlEventEditingChanged];
-    [LowerEditor setFont:[UIFont fontWithName:@"AvenirNext-DemiBold" size:28]];
+    [LowerEditor setFont:[UIFont fontWithName:@"AvenirNext-DemiBold" size:26]];
     [LowerEditor setAdjustsFontSizeToFitWidth:NO];
     [LowerEditor setTextColor:WarmGrey];
 
-    RightButton.titleLabel.font = [UIFont fontWithName:@"AvenirNext-DemiBold" size:30];
-    LeftButton.titleLabel.font = [UIFont fontWithName:@"AvenirNext-DemiBold"  size:16];
+    RightButton.titleLabel.font = [UIFont fontWithName:@"AvenirNext-DemiBold" size:24];
+    LeftButton.titleLabel.font = [UIFont fontWithName:@"AvenirNext-DemiBold"  size:24];
+
+    LowerEditor.delegate            = self;
+    LowerEditor.placeholder         = GlobalParams.phoneNumberPlaceholder;
+    LowerEditor.keyboardType        = UIKeyboardTypePhonePad;
+    LowerEditor.enabled             = NO;
+    //  LowerEditor.autocorrectionType  = UITextAutocorrectionTypeNo;
+    //  LowerEditor.spellCheckingType   = UITextSpellCheckingTypeNo;
+    [LowerEditor addTarget:self action:@selector(editorTextChanged:) forControlEvents:UIControlEventEditingChanged];
 
 
-#if DEBUG
-#if 0 // For debug purpose only: Set to 1 to go directly to the username/fullName edition.
-  State                     = E_LoginState_Username;
-  LowerEditor.placeholder   = GlobalParams.usernamePlaceholder;
-  LowerEditor.keyboardType  = UIKeyboardTypeASCIICapable;
-  [defaults setInteger:State forKey:LOGIN_STATE_DEFAULTS_KEY];
-#endif
-#endif
+    PolicyText.delegate                 = self;
+    PolicyText.backgroundColor          = [UIColor clearColor];
+    PolicyText.opaque                   = NO;
+    PolicyText.scrollView.scrollEnabled = NO;
+    [self InitializeTermsAndPrivacyPolicyMessage];
 
-  PolicyText.delegate                 = self;
-  PolicyText.backgroundColor          = [UIColor clearColor];
-  PolicyText.opaque                   = NO;
-  PolicyText.scrollView.scrollEnabled = NO;
-  [self InitializeTermsAndPrivacyPolicyMessage];
+    FirstSeparatorView.backgroundColor  = [UIColor lightGrayColor];
+    SecondSeparatorView.backgroundColor = [UIColor lightGrayColor];
+    ThirdSeparatorView.backgroundColor = [UIColor lightGrayColor];
 
-  FirstSeparatorView.backgroundColor  = LightGrey;
-  SecondSeparatorView.backgroundColor = LightGrey;
-  ThirdSeparatorView.backgroundColor = LightGrey;
+    [LeftButton   setTitle:GlobalParams.loginLeftButtonLabel  forState:UIControlStateNormal];
+    [RightButton  setTitle:GlobalParams.loginRightButtonLabel forState:UIControlStateNormal];
+    LeftButton.tintColor = TextColor;
+    RightButton.tintColor = TextColor;
+    [LeftButton  addTarget:self action:@selector(leftButtonPressed:)  forControlEvents:UIControlEventTouchUpInside];
+    [RightButton addTarget:self action:@selector(rightButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
 
-  [LeftButton   setTitle:GlobalParams.loginLeftButtonLabel  forState:UIControlStateNormal];
-  [RightButton  setTitle:GlobalParams.loginRightButtonLabel forState:UIControlStateNormal];
-  LeftButton.tintColor = TextColor;
-  RightButton.tintColor = TextColor;
-  [LeftButton  addTarget:self action:@selector(leftButtonPressed:)  forControlEvents:UIControlEventTouchUpInside];
-  [RightButton addTarget:self action:@selector(rightButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    LeftButton.hidden   = YES;
+    RightButton.enabled = NO;
 
-  LeftButton.hidden   = YES;
-  RightButton.enabled = NO;
+    [PickerView setBackgroundColor:LightGrey];
 
-  [PickerView setBackgroundColor:LightGrey];
+    [self addSubview:FirstLabel];
+    [self addSubview:SecondLabel];
+    [self addSubview:FirstSeparatorView];
+    [self addSubview:UpperEditor];
+    [self addSubview:LowerEditor];
+    [self addSubview:SecondSeparatorView];
+    [self addSubview:ThirdSeparatorView];
+    [self addSubview:PrefixLabel];
+    [self addSubview:PolicyText];
+    [self addSubview:PickerView];
+    [self addSubview:LeftButton];
+    [self addSubview:RightButton];
+    [self addSubview:RollDownErrorView];
+    [self registerForKeyboardNotifications];
 
-  [self addSubview:FirstLabel];
-  [self addSubview:SecondLabel];
-  [self addSubview:FirstSeparatorView];
-  [self addSubview:UpperEditor];
-  [self addSubview:LowerEditor];
-  [self addSubview:SecondSeparatorView];
-  [self addSubview:ThirdSeparatorView];
-  [self addSubview:PrefixLabel];
-  [self addSubview:PolicyText];
-  [self addSubview:PickerView];
-  [self addSubview:LeftButton];
-  [self addSubview:RightButton];
-  [self addSubview:RollDownErrorView];
-  [self registerForKeyboardNotifications];
+    NSUserDefaults* defaults  = [NSUserDefaults standardUserDefaults];
+    PickerView.rowSelectedAction = ^(NSInteger row)
+    {
+        get_myself;
+        myself->SelectedCountryIndex  = row;
+        myself->SelectedCountryName   = [myself->PickerView getCountryNameAtRow:row];
+        myself->SelectedCountryPrefix = [myself->PickerView getCountryPrefixAtRow:row];
+        myself->SecondLabel.text      = myself->SelectedCountryName;
+        myself->PrefixLabel.text      = myself->SelectedCountryPrefix;
+        myself->UpperEditor.enabled   = YES;
+        myself->LowerEditor.enabled   = YES;
+        myself->FullPhoneNumber       = [myself->SelectedCountryPrefix stringByAppendingString:myself->PhoneNumber];
+        [defaults setObject:myself->SelectedCountryName forKey:LOGIN_COUNTRY_NAME_DEFAULTS_KEY];
+        [myself layoutEditorAnimated:NO];
 
-  NSUserDefaults* defaults  = [NSUserDefaults standardUserDefaults];
-  PickerView.rowSelectedAction = ^(NSInteger row)
-  {
-    get_myself;
-    myself->SelectedCountryIndex  = row;
-    myself->SelectedCountryName   = [myself->PickerView getCountryNameAtRow:row];
-    myself->SelectedCountryPrefix = [myself->PickerView getCountryPrefixAtRow:row];
-    myself->SecondLabel.text      = myself->SelectedCountryName;
-    myself->PrefixLabel.text      = myself->SelectedCountryPrefix;
-    myself->UpperEditor.enabled   = YES;
-    myself->LowerEditor.enabled   = YES;
-    myself->FullPhoneNumber       = [myself->SelectedCountryPrefix stringByAppendingString:myself->PhoneNumber];
-    [defaults setObject:myself->SelectedCountryName forKey:LOGIN_COUNTRY_NAME_DEFAULTS_KEY];
-    [myself layoutEditorAnimated:NO];
-  };
 
-  UITapGestureRecognizer* prefixGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(prefixTapped:)];
-  [PrefixLabel addGestureRecognizer:prefixGestureRecognizer];
-  PrefixLabel.userInteractionEnabled = YES;
-//  self.backgroundColor = White;
+    };
+
+    UITapGestureRecognizer* prefixGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(prefixTapped:)];
+    [PrefixLabel addGestureRecognizer:prefixGestureRecognizer];
+    PrefixLabel.userInteractionEnabled = YES;
+    //  self.backgroundColor = White;
 }
 //__________________________________________________________________________________________________
 
 - (void)dealloc
 {
-  [self unregisterFromKeyboardNotifications];
-  [self cleanup];
+    [self unregisterFromKeyboardNotifications];
+    [self cleanup];
 }
 //__________________________________________________________________________________________________
 
@@ -271,394 +269,396 @@ typedef enum
 
 - (void)layoutSubviews
 {
-  [super layoutSubviews];
-  CGFloat width             = self.frame.size.width;
-  CGFloat height            = self.frame.size.height;
-  EditorHeight              = [UpperEditor sizeThatFits:self.frame.size].height;
-  UpperEditorTop            = SECOND_LABEL_TOP_OFFSET;
-  LowerEditorTop            = EDITOR_VERTICAL_CENTER - EditorHeight / 2;
-  KeyboardTop               = height - KeyboardHeight;
-  RollDownErrorView.frame   = CGRectMake(0, 0, width, [RollDownErrorView sizeThatFits:self.frame.size].height);
-  FirstLabel.frame          = CGRectMake(0, FIRST_LABEL_TOP_OFFSET , width, [FirstLabel  sizeThatFits:self.frame.size].height);
-  SecondLabel.frame         = CGRectMake(0, SECOND_LABEL_TOP_OFFSET, width, [SecondLabel sizeThatFits:self.frame.size].height);
-//  UpperEditor.frame         = CGRectMake(0, UpperEditorTop         , width, [UpperEditor sizeThatFits:self.frame.size].height);
-  FirstSeparatorView.frame  = CGRectMake(SEPARATOR_END_MARGIN, FIRST_SEPARATOR_TOP_OFFSET , width - 2 * SEPARATOR_END_MARGIN, SEPARATOR_LINE_WIDTH);
-ThirdSeparatorView.frame =  CGRectMake(SEPARATOR_END_MARGIN, THIRD_SEPARATOR_TOP_OFFSET , width - 2 * SEPARATOR_END_MARGIN, SEPARATOR_LINE_WIDTH);
-
+    [super layoutSubviews];
+    CGFloat width             = self.frame.size.width;
+    CGFloat height            = self.frame.size.height;
+    EditorHeight              = [UpperEditor sizeThatFits:self.frame.size].height;
+    UpperEditorTop            = SECOND_LABEL_TOP_OFFSET + 20;
+    LowerEditorTop            = EDITOR_VERTICAL_CENTER - EditorHeight / 2;
+    KeyboardTop               = height - KeyboardHeight;
+    RollDownErrorView.frame   = CGRectMake(0, 0, width, [RollDownErrorView sizeThatFits:self.frame.size].height);
+    FirstLabel.frame          = CGRectMake(0, FIRST_LABEL_TOP_OFFSET , width, [FirstLabel  sizeThatFits:self.frame.size].height);
+    SecondLabel.frame         = CGRectMake(0, SECOND_LABEL_TOP_OFFSET, width, [SecondLabel sizeThatFits:self.frame.size].height);
+    //  UpperEditor.frame         = CGRectMake(0, UpperEditorTop         , width, [UpperEditor sizeThatFits:self.frame.size].height);
+    FirstSeparatorView.frame  = CGRectMake(SEPARATOR_END_MARGIN, FIRST_SEPARATOR_TOP_OFFSET , width - 2 * SEPARATOR_END_MARGIN, SEPARATOR_LINE_WIDTH);
     if (!self.hidden)
-  {
-    [self layoutEditorAnimated:NO];
-  }
-//  PrefixLabel.frame         = CGRectMake(PREFIX_LEFT_MARGIN, EditorTop, PREFIX_WIDTH, EditorHeight);
-//  CGFloat prefixWidth       = PrefixLabel.frame.size.width;
-//  CGFloat editorWidth       = width - PREFIX_LEFT_MARGIN - prefixWidth - EDITOR_GAP - EDITOR_RIGHT_MARGIN;
-//  Editor.frame              = CGRectMake(PREFIX_LEFT_MARGIN + PrefixLabel.frame.size.width + EDITOR_GAP, EditorTop, editorWidth, EditorHeight);
-  SecondSeparatorView.frame = CGRectMake(SEPARATOR_END_MARGIN, SECOND_SEPARATOR_TOP_OFFSET, width - 2 * SEPARATOR_END_MARGIN, SEPARATOR_LINE_WIDTH);
-  PolicyText.frame          = CGRectMake((width-POLICY_TEXT_WIDTH) / 2, KeyboardTop - POLICY_TEXT_HEIGHT - 40, POLICY_TEXT_WIDTH, POLICY_TEXT_HEIGHT);
-  CGFloat pickerHeight      = [PickerView sizeThatFits:self.frame.size].height;
-  PickerView.frame          = CGRectMake(0, height - pickerHeight, width, pickerHeight);
-  CGFloat buttonHeight      = [LeftButton   sizeThatFits:self.frame.size].height;
-  //CGFloat leftButtonWidth   = [LeftButton   sizeThatFits:self.frame.size].width;
-  //CGFloat rightButtonWidth  = [RightButton  sizeThatFits:self.frame.size].width;
-  LeftButton.frame          = CGRectMake(0, SECOND_LABEL_TOP_OFFSET, width, [RightButton sizeThatFits:self.frame.size].height + 20);
-  RightButton.frame         = CGRectMake(0, KeyboardTop - BUTTON_BOTTOM_MARGIN - buttonHeight, width, buttonHeight);
-  LeftButton.titleLabel.textAlignment   = NSTextAlignmentCenter;
-  RightButton.titleLabel.textAlignment  = NSTextAlignmentCenter;
+    {
+        [self layoutEditorAnimated:NO];
+    }
+    //  PrefixLabel.frame         = CGRectMake(PREFIX_LEFT_MARGIN, EditorTop, PREFIX_WIDTH, EditorHeight);
+    //  CGFloat prefixWidth       = PrefixLabel.frame.size.width;
+    //  CGFloat editorWidth       = width - PREFIX_LEFT_MARGIN - prefixWidth - EDITOR_GAP - EDITOR_RIGHT_MARGIN;
+    //  Editor.frame              = CGRectMake(PREFIX_LEFT_MARGIN + PrefixLabel.frame.size.width + EDITOR_GAP, EditorTop, editorWidth, EditorHeight);
+    SecondSeparatorView.frame = CGRectMake(SEPARATOR_END_MARGIN, SECOND_SEPARATOR_TOP_OFFSET, width - 2 * SEPARATOR_END_MARGIN, SEPARATOR_LINE_WIDTH);
+    ThirdSeparatorView.frame  = CGRectMake(SEPARATOR_END_MARGIN, THIRD_SEPARATOR_TOP_OFFSET, width - 2 * SEPARATOR_END_MARGIN, SEPARATOR_LINE_WIDTH);
+    PolicyText.frame          = CGRectMake(10, POLICY_TEXT_TOP_MARGIN, POLICY_TEXT_WIDTH, POLICY_TEXT_HEIGHT);
+    CGFloat pickerHeight      = [PickerView sizeThatFits:self.frame.size].height;
+    PickerView.frame          = CGRectMake(0, height - pickerHeight, width, pickerHeight);
+    CGFloat buttonHeight      = [LeftButton   sizeThatFits:self.frame.size].height;
+    CGFloat leftButtonWidth   = [LeftButton   sizeThatFits:self.frame.size].width;
+    CGFloat rightButtonWidth  = [RightButton  sizeThatFits:self.frame.size].width;
+    LeftButton.frame          = CGRectMake(BUTTON_MARGIN                           , KeyboardTop - BUTTON_BOTTOM_MARGIN - buttonHeight, leftButtonWidth , buttonHeight);
+    RightButton.frame         = CGRectMake(width - BUTTON_MARGIN - rightButtonWidth, KeyboardTop - BUTTON_BOTTOM_MARGIN - buttonHeight, rightButtonWidth, buttonHeight);
+    LeftButton.titleLabel.textAlignment   = NSTextAlignmentLeft;
+    RightButton.titleLabel.textAlignment  = NSTextAlignmentRight;
 }
 //__________________________________________________________________________________________________
 
 - (void)recoverSavedState:(BlockAction)completion
 {
-  NSUserDefaults* defaults  = [NSUserDefaults standardUserDefaults];
-  State                     = (LoginState)[defaults integerForKey:LOGIN_STATE_DEFAULTS_KEY];
-  SelectedCountryName       = [defaults stringForKey:LOGIN_COUNTRY_NAME_DEFAULTS_KEY];
-  PhoneNumber               = [defaults stringForKey:LOGIN_PHONE_NUMBER_DEFAULTS_KEY];
-  VerificationCode          = [defaults stringForKey:LOGIN_VERIFICATION_CODE_DEFAULTS_KEY];
-  UserObjectId              = [defaults stringForKey:LOGIN_USER_OBJECT_ID_DEFAULTS_KEY];
-  Username                  = [defaults stringForKey:LOGIN_USER_NAME_DEFAULTS_KEY];
-  FullName                  = [defaults stringForKey:LOGIN_FULL_NAME_DEFAULTS_KEY];
-  if (UserObjectId != nil)
-  {
-    [ParseUser findUserWithObjectId:UserObjectId completion:^(ParseUser* user, NSError* error)
+    NSUserDefaults* defaults  = [NSUserDefaults standardUserDefaults];
+    State                     = (LoginState)[defaults integerForKey:LOGIN_STATE_DEFAULTS_KEY];
+    SelectedCountryName       = [defaults stringForKey:LOGIN_COUNTRY_NAME_DEFAULTS_KEY];
+    PhoneNumber               = [defaults stringForKey:LOGIN_PHONE_NUMBER_DEFAULTS_KEY];
+    VerificationCode          = [defaults stringForKey:LOGIN_VERIFICATION_CODE_DEFAULTS_KEY];
+    UserObjectId              = [defaults stringForKey:LOGIN_USER_OBJECT_ID_DEFAULTS_KEY];
+    Username                  = [defaults stringForKey:LOGIN_USER_NAME_DEFAULTS_KEY];
+    FullName                  = [defaults stringForKey:LOGIN_FULL_NAME_DEFAULTS_KEY];
+    if (UserObjectId != nil)
     {
-      RecoveredUser = user;
-      completion();
-    }];
-  }
-  else
-  {
-    completion();
-  }
+        [ParseUser findUserWithObjectId:UserObjectId completion:^(ParseUser* user, NSError* error)
+         {
+             RecoveredUser = user;
+             completion();
+         }];
+    }
+    else
+    {
+        completion();
+    }
 }
 //__________________________________________________________________________________________________
 
 - (void)layoutEditorAnimatedInMainThread
 {
-  NSUserDefaults* defaults  = [NSUserDefaults standardUserDefaults];
-  if (SelectedCountryName == nil)
-  {
-    SelectedCountryName = GlobalParams.initialCountry;
-    PhoneNumber         = @"";
-    VerificationCode    = @"";
-    Username            = @"";
-    FullName            = @"";
-  }
-  else
-  {
-    SecondLabel.text    = @"We need to text you a verification \n code to log you in";
-    UpperEditor.enabled = YES;
-    LowerEditor.enabled = YES;
-  }
-  SelectedCountryPrefix = [PickerView getCountryPrefixAtRow:[PickerView getRowForCountryName:SelectedCountryName]];
-  if (PhoneNumber == nil)
-  {
-    PhoneNumber         = @"";
-    VerificationCode    = @"";
-    Username            = @"";
-    FullName            = @"";
-  }
-  if (VerificationCode == nil)
-  {
-    VerificationCode    = @"";
-    Username            = @"";
-    FullName            = @"";
-  }
-  if (Username == nil)
-  {
-    Username = @"";
-  }
-  if (FullName == nil)
-  {
-    FullName = @"";
-  }
-  RightButton.enabled     = ![PhoneNumber isEqualToString:@""];
-  switch (State)
-  {
-  case E_LoginState_LoggedOut:
-    State = E_LoginState_PhoneNumber;
-    [defaults setInteger:State forKey:LOGIN_STATE_DEFAULTS_KEY];
-    // Fall into the next case!
-  case E_LoginState_PhoneNumber:
-    [PickerView selectRow:[PickerView getRowForCountryName:SelectedCountryName] inComponent:0 animated:NO];
-    LowerEditor.keyboardType  = UIKeyboardTypePhonePad;
-    LowerEditor.text  = PhoneNumber;
-    LowerEditor.placeholder = GlobalParams.phoneNumberPlaceholder;
-    break;
-  case E_LoginState_VerificationCode:
-    FullPhoneNumber = [SelectedCountryPrefix stringByAppendingString:PhoneNumber];
-    LowerEditor.placeholder = GlobalParams.verificationCodePlaceholder;
-    RightButton.enabled = NO;
-    break;
-  case E_LoginState_Username:
-    LowerEditor.keyboardType  = UIKeyboardTypeASCIICapable;
-    LowerEditor.placeholder   = GlobalParams.usernamePlaceholder;
-    UpperEditor.placeholder   = GlobalParams.fullNamePlaceholder;
-    RightButton.enabled = NO;
-    [LowerEditor becomeFirstResponder];
-
-    break;
-  case E_LoginState_LoggedIn:
-    break;
-  }
-
-  // Now, we can really layout the view.
-  CGFloat width   = self.frame.size.width;
-  //  CGFloat height  = self.frame.size.height;
-  CGFloat prefixAlpha;
-  CGFloat policyAlpha;
-  CGFloat prefixWidth;
-  CGFloat editorWidth;
-  CGFloat pickerAlpha;
-  CGRect  prefixFrame;
-  CGRect  upperEditorFrame;
-  CGRect  lowerEditorFrame;
-  switch (State)
-  {
-  case E_LoginState_PhoneNumber:
-    UpperEditor.hidden  = YES;
-    SecondLabel.hidden  = NO;
-    if ([SelectedCountryPrefix isEqual:@""])
+    NSUserDefaults* defaults  = [NSUserDefaults standardUserDefaults];
+    if (SelectedCountryName == nil)
     {
-      prefixWidth = 0;
+        SelectedCountryName = GlobalParams.initialCountry;
+        PhoneNumber         = @"";
+        VerificationCode    = @"";
+        Username            = @"";
+        FullName            = @"";
     }
     else
     {
-      prefixWidth = [PrefixLabel sizeThatFits:self.frame.size].width + EDITOR_GAP;
+        SecondLabel.text    = @"We'll text you a verification\n code to log you in";
+        UpperEditor.enabled = YES;
+        LowerEditor.enabled = YES;
     }
-    editorWidth = width - PREFIX_LEFT_MARGIN - EDITOR_RIGHT_MARGIN;
-    prefixFrame = CGRectMake(PREFIX_LEFT_MARGIN - PREFIX_LABEL_TAP_MARGIN, LowerEditorTop - PREFIX_LABEL_TAP_MARGIN, prefixWidth + 2 * PREFIX_LABEL_TAP_MARGIN, EditorHeight + 2 * PREFIX_LABEL_TAP_MARGIN);
-    upperEditorFrame = CGRectMake(PREFIX_LEFT_MARGIN, UpperEditorTop, editorWidth, EditorHeight);
-    lowerEditorFrame = CGRectMake(PREFIX_LEFT_MARGIN, LowerEditorTop, editorWidth, EditorHeight);
-    prefixAlpha = 1.0;
-    policyAlpha = 0.0;
-    pickerAlpha = 1.0;
-    UpperEditor.textAlignment = NSTextAlignmentCenter;
-    LowerEditor.textAlignment = NSTextAlignmentCenter;
-    RightButton.tintColor = TypePink;
-    LeftButton.tintColor =TypePink;
-    FirstLabel.text           = @"Welcome to Typeface! 🙆🏼";
-    SecondLabel.text = @"We need to text you a verification \n code to log you in.";
-    SecondLabel.numberOfLines = 2;
-    ThirdSeparatorView.hidden = YES;
-    [RightButton setTitle:@"Continue" forState:UIControlStateNormal];
-    [RightButton setTitleColor:[TypePink colorWithAlphaComponent: 0.5] forState:UIControlStateDisabled];
-    break;
-  case E_LoginState_VerificationCode:
-    UpperEditor.hidden  = YES;
-    SecondLabel.hidden  = NO;
-    editorWidth         = width - PREFIX_LEFT_MARGIN - EDITOR_RIGHT_MARGIN;
-    prefixFrame         = PrefixLabel.frame;
-    upperEditorFrame    = CGRectMake(PREFIX_LEFT_MARGIN, UpperEditorTop, editorWidth, EditorHeight);
-    lowerEditorFrame    = CGRectMake(PREFIX_LEFT_MARGIN, LowerEditorTop, editorWidth, EditorHeight);
-    prefixAlpha         = 0.0;
-    policyAlpha         = 0.0;
-    pickerAlpha         = 0.0;
-    UpperEditor.textAlignment = NSTextAlignmentCenter;
-    LowerEditor.textAlignment = NSTextAlignmentCenter;
-    FirstLabel.text = @"Perfect, thanks! 👊🏼";
-    SecondLabel.text = @"We sent the verification code. \n";
-    SecondLabel.numberOfLines = 2;
-    LeftButton.hidden = NO;
-    RightButton.tintColor = TypePink;
-    LeftButton.tintColor = TypePink;
-    ThirdSeparatorView.hidden = YES;
-    [RightButton setTitle:@"Next" forState:UIControlStateNormal];
-    [RightButton setTitleColor:[TypePink colorWithAlphaComponent: 0.5] forState:UIControlStateDisabled];
-    break;
-  case E_LoginState_Username:
-    UpperEditor.hidden  = NO;
-    SecondLabel.hidden  = YES;
-    editorWidth       	= width - PREFIX_LEFT_MARGIN - EDITOR_RIGHT_MARGIN;
-    prefixFrame         = PrefixLabel.frame;
-    upperEditorFrame  	= CGRectMake(PREFIX_LEFT_MARGIN, UpperEditorTop, editorWidth, EditorHeight);
-    lowerEditorFrame    = CGRectMake(PREFIX_LEFT_MARGIN, LowerEditorTop, editorWidth, EditorHeight);
-    prefixAlpha         = 0.0;
-    policyAlpha       	= 0.0;
-    pickerAlpha         = 0.0;
-    UpperEditor.placeholder = GlobalParams.usernamePlaceholder;
-    LowerEditor.placeholder = GlobalParams.fullNamePlaceholder;
-    ThirdSeparatorView.hidden = NO;
-    LeftButton.hidden = YES;
-    UpperEditor.textAlignment = NSTextAlignmentCenter;
-    LowerEditor.textAlignment = NSTextAlignmentCenter;
-    FirstLabel.text = @"How Friends See You 👀";
-    LowerEditor.autocapitalizationType = UITextAutocapitalizationTypeWords;
-    UpperEditor.autocapitalizationType = UITextAutocapitalizationTypeNone;
-    RightButton.tintColor = TypePink;
-    [RightButton setTitle:@"Done!" forState:UIControlStateNormal];
-    [RightButton setTitleColor:[TypePink colorWithAlphaComponent: 0.5] forState:UIControlStateDisabled];
-    break;
-  case E_LoginState_LoggedIn:
-    editorWidth       = width - PREFIX_LEFT_MARGIN - EDITOR_RIGHT_MARGIN;
-    prefixFrame       = PrefixLabel.frame;
-    upperEditorFrame  = CGRectMake(PREFIX_LEFT_MARGIN, UpperEditorTop, editorWidth, EditorHeight);
-    lowerEditorFrame  = CGRectMake(PREFIX_LEFT_MARGIN, LowerEditorTop, editorWidth, EditorHeight);
-    prefixAlpha       = 0.0;
-    policyAlpha       = 0.0;
-    pickerAlpha       = 0.0;
-    break;
-  case E_LoginState_LoggedOut:
-    break;
-  }
-  if (Animated)
-  {
-    [UIView animateWithDuration:0.5 animations:^
-     {
-       PrefixLabel.frame = prefixFrame;
-       UpperEditor.frame = upperEditorFrame;
-       LowerEditor.frame = lowerEditorFrame;
-       PrefixLabel.alpha = prefixAlpha;
-       PolicyText.alpha  = policyAlpha;
-       PickerView.alpha  = pickerAlpha;
-     }];
-  }
-  else
-  {
-    PrefixLabel.frame = prefixFrame;
-    UpperEditor.frame = upperEditorFrame;
-    LowerEditor.frame = lowerEditorFrame;
-    PrefixLabel.alpha = prefixAlpha;
-    PolicyText.alpha  = policyAlpha;
-    PickerView.alpha  = pickerAlpha;
-  }
+    SelectedCountryPrefix = [PickerView getCountryPrefixAtRow:[PickerView getRowForCountryName:SelectedCountryName]];
+    if (PhoneNumber == nil)
+    {
+        PhoneNumber         = @"";
+        VerificationCode    = @"";
+        Username            = @"";
+        FullName            = @"";
+    }
+
+    if (VerificationCode == nil)
+    {
+        VerificationCode    = @"";
+        Username            = @"";
+        FullName            = @"";
+    }
+    if (Username == nil)
+    {
+        Username = @"";
+    }
+    if (FullName == nil)
+    {
+        FullName = @"";
+    }
+    RightButton.enabled     = ![PhoneNumber isEqualToString:@""];
+    switch (State)
+    {
+        case E_LoginState_LoggedOut:
+            State = E_LoginState_PhoneNumber;
+            [defaults setInteger:State forKey:LOGIN_STATE_DEFAULTS_KEY];
+            // Fall into the next case!
+        case E_LoginState_PhoneNumber:
+            [PickerView selectRow:[PickerView getRowForCountryName:SelectedCountryName] inComponent:0 animated:NO];
+            LowerEditor.keyboardType  = UIKeyboardTypePhonePad;
+            LowerEditor.text  = PhoneNumber;
+            LowerEditor.placeholder = GlobalParams.phoneNumberPlaceholder;
+            break;
+        case E_LoginState_VerificationCode:
+            FullPhoneNumber = [SelectedCountryPrefix stringByAppendingString:PhoneNumber];
+            LowerEditor.placeholder = GlobalParams.verificationCodePlaceholder;
+            RightButton.enabled = NO;
+            break;
+        case E_LoginState_Username:
+            LowerEditor.keyboardType  = UIKeyboardTypeASCIICapable;
+            LowerEditor.placeholder   = GlobalParams.usernamePlaceholder;
+            UpperEditor.placeholder   = GlobalParams.fullNamePlaceholder;
+            RightButton.enabled = NO;
+            break;
+        case E_LoginState_LoggedIn:
+            break;
+    }
+
+    // Now, we can really layout the view.
+    CGFloat width   = self.frame.size.width;
+    //  CGFloat height  = self.frame.size.height;
+    CGFloat prefixAlpha;
+    CGFloat policyAlpha;
+    CGFloat prefixWidth;
+    CGFloat editorWidth;
+    CGFloat pickerAlpha;
+    CGRect  prefixFrame;
+    CGRect  upperEditorFrame;
+    CGRect  lowerEditorFrame;
+    switch (State)
+    {
+        case E_LoginState_PhoneNumber:
+            UpperEditor.hidden  = YES;
+            SecondLabel.hidden  = NO;
+
+            if ([SelectedCountryPrefix isEqual:@""])
+            {
+                prefixWidth = 0;
+            }
+            else
+            {
+                prefixWidth = [PrefixLabel sizeThatFits:self.frame.size].width + EDITOR_GAP;
+            }
+            editorWidth = width - PREFIX_LEFT_MARGIN - EDITOR_RIGHT_MARGIN;
+            prefixFrame = CGRectMake(PREFIX_LEFT_MARGIN - PREFIX_LABEL_TAP_MARGIN, LowerEditorTop - PREFIX_LABEL_TAP_MARGIN, prefixWidth + 2 * PREFIX_LABEL_TAP_MARGIN, EditorHeight + 2 * PREFIX_LABEL_TAP_MARGIN);
+            upperEditorFrame = CGRectMake(PREFIX_LEFT_MARGIN, UpperEditorTop, editorWidth, EditorHeight);
+            lowerEditorFrame = CGRectMake(PREFIX_LEFT_MARGIN, LowerEditorTop, editorWidth, EditorHeight);
+
+            prefixAlpha = 1.0;
+            policyAlpha = 0.0;
+            pickerAlpha = 1.0;
+            UpperEditor.textAlignment = NSTextAlignmentCenter;
+            LowerEditor.textAlignment = NSTextAlignmentCenter;
+            RightButton.tintColor = TypePink;
+            LeftButton.tintColor = TypePink;
+            FirstLabel.text     = @"Welcome to Typeface! 🙆🏼";
+            SecondLabel.text = @"We'll text you a verification \n code to log you in.";
+            SecondLabel.numberOfLines = 2;
+            FirstSeparatorView.hidden = YES;
+            ThirdSeparatorView.hidden = YES;
+            [RightButton setTitle:@"Next" forState:UIControlStateNormal];
+            [RightButton setTitleColor:[TypePink colorWithAlphaComponent: 0.5] forState:UIControlStateDisabled];
+            break;
+        case E_LoginState_VerificationCode:
+            UpperEditor.hidden  = YES;
+            SecondLabel.hidden  = NO;
+            editorWidth         = width - PREFIX_LEFT_MARGIN - EDITOR_RIGHT_MARGIN;
+            prefixFrame         = PrefixLabel.frame;
+            upperEditorFrame    = CGRectMake(PREFIX_LEFT_MARGIN, UpperEditorTop, editorWidth, EditorHeight);
+            lowerEditorFrame    = CGRectMake(PREFIX_LEFT_MARGIN, LowerEditorTop, editorWidth, EditorHeight);
+            prefixAlpha         = 0.0;
+            policyAlpha         = 0.0;
+            pickerAlpha         = 0.0;
+            UpperEditor.textAlignment = NSTextAlignmentCenter;
+            LowerEditor.textAlignment = NSTextAlignmentCenter;
+            FirstLabel.text = @"Perfect, thanks! 👊🏼";
+            SecondLabel.text = @"We sent the verification code. \n";
+            SecondLabel.numberOfLines = 2;
+            LeftButton.hidden = NO;
+            RightButton.tintColor = TypePink;
+            LeftButton.tintColor = TypePink;
+            ThirdSeparatorView.hidden = YES;
+            [RightButton setTitle:@"Next" forState:UIControlStateNormal];
+            [RightButton setTitleColor:[TypePink colorWithAlphaComponent: 0.5] forState:UIControlStateDisabled];
+            break;
+        case E_LoginState_Username:
+            UpperEditor.hidden  = NO;
+            SecondLabel.hidden  = YES;
+            editorWidth       	= width - PREFIX_LEFT_MARGIN - EDITOR_RIGHT_MARGIN;
+            prefixFrame         = PrefixLabel.frame;
+            upperEditorFrame  	= CGRectMake(PREFIX_LEFT_MARGIN, UpperEditorTop, editorWidth, EditorHeight);
+            lowerEditorFrame    = CGRectMake(PREFIX_LEFT_MARGIN, LowerEditorTop, editorWidth, EditorHeight);
+            prefixAlpha         = 0.0;
+            policyAlpha       	= 0.0;
+            pickerAlpha         = 0.0;
+            ThirdSeparatorView.hidden = NO;
+            LeftButton.hidden = YES;
+            UpperEditor.textAlignment = NSTextAlignmentCenter;
+            LowerEditor.textAlignment = NSTextAlignmentCenter;
+            FirstLabel.text = @"How Friends See You 👀";
+            ThirdSeparatorView.hidden = YES;
+            SecondSeparatorView.hidden = YES;
+            FirstSeparatorView.hidden = NO;
+            UpperEditor.autocapitalizationType = UITextAutocapitalizationTypeWords;
+            LowerEditor.autocapitalizationType = UITextAutocapitalizationTypeNone;
+            RightButton.tintColor = TypePink;
+            [RightButton setTitle:@"Done" forState:UIControlStateNormal];
+            [RightButton setTitleColor:[TypePink colorWithAlphaComponent: 0.5] forState:UIControlStateDisabled];
+            break;
+        case E_LoginState_LoggedIn:
+            editorWidth       = width - PREFIX_LEFT_MARGIN - EDITOR_RIGHT_MARGIN;
+            prefixFrame       = PrefixLabel.frame;
+            upperEditorFrame  = CGRectMake(PREFIX_LEFT_MARGIN, UpperEditorTop, editorWidth, EditorHeight);
+            lowerEditorFrame  = CGRectMake(PREFIX_LEFT_MARGIN, LowerEditorTop, editorWidth, EditorHeight);
+            prefixAlpha       = 0.0;
+            policyAlpha       = 0.0;
+            pickerAlpha       = 0.0;
+            break;
+        case E_LoginState_LoggedOut:
+            break;
+    }
+    if (Animated)
+    {
+        [UIView animateWithDuration:0.5 animations:^
+         {
+             PrefixLabel.frame = prefixFrame;
+             UpperEditor.frame = upperEditorFrame;
+             LowerEditor.frame = lowerEditorFrame;
+             PrefixLabel.alpha = prefixAlpha;
+             PolicyText.alpha  = policyAlpha;
+             PickerView.alpha  = pickerAlpha;
+         }];
+    }
+    else
+    {
+        PrefixLabel.frame = prefixFrame;
+        UpperEditor.frame = upperEditorFrame;
+        LowerEditor.frame = lowerEditorFrame;
+        PrefixLabel.alpha = prefixAlpha;
+        PolicyText.alpha  = policyAlpha;
+        PickerView.alpha  = pickerAlpha;
+    }
 }
 //__________________________________________________________________________________________________
 
 - (void)layoutEditorAnimated:(BOOL)animated
 {
-  Animated = animated;
-  [self performSelectorOnMainThread:@selector(layoutEditorAnimatedInMainThread) withObject:nil waitUntilDone:YES];
+    Animated = animated;
+    [self performSelectorOnMainThread:@selector(layoutEditorAnimatedInMainThread) withObject:nil waitUntilDone:YES];
 }
 //__________________________________________________________________________________________________
 
-
 - (void)InitializeTermsAndPrivacyPolicyMessage
 {
-  NSString* htmlString = @"<STYLE TYPE='text/css'>\n<!--\nP { margin-left: 0.35cm; margin-right: 0.35cm; margin-bottom: 0.0cm; text-align:center; font-family:'Helvetica Neue'; font-size: 10pt }\n-->\n </STYLE>\n <P>";
-  htmlString = [htmlString stringByAppendingString:GlobalParams.termsAndPrivacyPolicyMessage];
-  [PolicyText loadHTMLString:htmlString baseURL:nil];
+    NSString* htmlString = @"<STYLE TYPE='text/css'>\n<!--\nP { margin-left: 0.35cm; margin-right: 0.35cm; margin-bottom: 0.0cm; text-align:center; font-family:'Helvetica Neue'; font-size: 10pt }\n-->\n </STYLE>\n <P>";
+    htmlString = [htmlString stringByAppendingString:GlobalParams.termsAndPrivacyPolicyMessage];
+    [PolicyText loadHTMLString:htmlString baseURL:nil];
 }
 //__________________________________________________________________________________________________
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
-  NSString* str = request.URL.lastPathComponent;
-  if ((navigationType == UIWebViewNavigationTypeLinkClicked) && (str != nil))
-  {
-    GlobalParams.termsAndPolicyLinkAction(str);
-  }
-  return YES;
+    NSString* str = request.URL.lastPathComponent;
+    if ((navigationType == UIWebViewNavigationTypeLinkClicked) && (str != nil))
+    {
+        GlobalParams.termsAndPolicyLinkAction(str);
+    }
+    return YES;
 }
 //__________________________________________________________________________________________________
 
 - (void)startVerification
 {
-  ParseStartVerification(FullPhoneNumber, ^(BOOL success, NSError* error)
-  {
-    if (success)
-    {
+    ParseStartVerification(FullPhoneNumber, ^(BOOL success, NSError* error)
+                           {
+                               if (success)
+                               {
 
-        Mixpanel *mixpanel = [Mixpanel sharedInstance];
+                                           Mixpanel *mixpanel = [Mixpanel sharedInstance];
+                                   
+                                           [mixpanel track:@"twillio sent"];
+                                   
+                                           [mixpanel.people increment:@"twillio sent" by:[NSNumber numberWithInt:1]];
 
-        [mixpanel track:@"startVerification"];
 
-        [mixpanel.people increment:@"startVerification" by:[NSNumber numberWithInt:1]];
-
-      LeftButton.hidden       = NO;
-      RightButton.enabled     = NO;
-      LowerEditor.placeholder = GlobalParams.verificationCodePlaceholder;
-      LowerEditor.text        = @"";
-      [LowerEditor becomeFirstResponder];
-      State                   = E_LoginState_VerificationCode;
-      [[NSUserDefaults standardUserDefaults] setInteger:State forKey:LOGIN_STATE_DEFAULTS_KEY];
-    }
-    else if (ParseExtractErrorCode(error) == 21211)
-    {
-      [RollDownErrorView showWithTitle:GlobalParams.loginRollDownViewTitle andMessage:GlobalParams.loginRollDownPhoneNumberFormatErrorMessage];
-    }
-    else
-    {
-      [RollDownErrorView showWithTitle:GlobalParams.loginRollDownViewTitle andMessage:GlobalParams.loginRollDownPhoneNumberErrorMessage];
-    }
-    [self layoutEditorAnimated:YES];
-  });
+                                   LeftButton.hidden       = NO;
+                                   RightButton.enabled     = NO;
+                                   LowerEditor.placeholder = GlobalParams.verificationCodePlaceholder;
+                                   LowerEditor.text        = @"";
+                                   [LowerEditor becomeFirstResponder];
+                                   State                   = E_LoginState_VerificationCode;
+                                   [[NSUserDefaults standardUserDefaults] setInteger:State forKey:LOGIN_STATE_DEFAULTS_KEY];
+                               }
+                               else if (ParseExtractErrorCode(error) == 21211)
+                               {
+                                   [RollDownErrorView showWithTitle:GlobalParams.loginRollDownViewTitle andMessage:GlobalParams.loginRollDownPhoneNumberFormatErrorMessage];
+                               }
+                               else
+                               {
+                                   [RollDownErrorView showWithTitle:GlobalParams.loginRollDownViewTitle andMessage:GlobalParams.loginRollDownPhoneNumberErrorMessage];
+                               }
+                               [self layoutEditorAnimated:YES];
+                           });
 }
 //__________________________________________________________________________________________________
 
 - (void)prefixTapped:(UIGestureRecognizer *)gestureRecognizer
 {
-  [LowerEditor resignFirstResponder];
- SecondLabel.text = @"We need to text you a verification \n code to log you in";
-//  [RollDownErrorView performSelectorOnMainThread:@selector(hide) withObject:nil waitUntilDone:NO];
-  [RollDownErrorView hide];
+    [LowerEditor resignFirstResponder];
+    SecondLabel.text = @"We need to text you a verification \n code to log you in.";
+    //  [RollDownErrorView performSelectorOnMainThread:@selector(hide) withObject:nil waitUntilDone:NO];
+    [RollDownErrorView hide];
 }
 //__________________________________________________________________________________________________
 
 -(void)editorTextChanged:(UITextField *)textField
 {
-  NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-  switch (State)
-  {
-  case E_LoginState_PhoneNumber:
-    PhoneNumber = textField.text;
-    [defaults setObject:PhoneNumber forKey:LOGIN_PHONE_NUMBER_DEFAULTS_KEY];
-    if ([PhoneNumber isEqualToString:@""])
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    switch (State)
     {
-      RightButton.enabled = NO;
+        case E_LoginState_PhoneNumber:
+            PhoneNumber = textField.text;
+            [defaults setObject:PhoneNumber forKey:LOGIN_PHONE_NUMBER_DEFAULTS_KEY];
+            if ([PhoneNumber isEqualToString:@""])
+            {
+                RightButton.enabled = NO;
+            }
+            else
+            {
+                RightButton.enabled = YES;
+            }
+            FullPhoneNumber = [SelectedCountryPrefix stringByAppendingString:PhoneNumber];
+            FullPhoneNumber = [FullPhoneNumber stringByReplacingOccurrencesOfString:@" "withString:@""]; // Remove all blank spaces from the string.
+            break;
+        case E_LoginState_VerificationCode:
+            VerificationCode = textField.text;
+            [defaults setObject:VerificationCode forKey:LOGIN_VERIFICATION_CODE_DEFAULTS_KEY];
+            if ([VerificationCode isEqualToString:@""])
+            {
+                RightButton.enabled = NO;
+            }
+            else
+            {
+                RightButton.enabled = YES;
+            }
+            break;
+        case E_LoginState_Username:
+            if (textField == UpperEditor)
+            {
+                FullName  = UpperEditor.text;
+                [defaults setObject:FullName forKey:LOGIN_FULL_NAME_DEFAULTS_KEY];
+            }
+            else if (textField == LowerEditor)
+            {
+                Username = LowerEditor.text;
+                [defaults setObject:Username forKey:LOGIN_USER_NAME_DEFAULTS_KEY];
+            }
+            if ([Username isEqualToString:@""] || [FullName isEqualToString:@""])
+            {
+                RightButton.enabled = NO;
+            }
+            else
+            {
+                RightButton.enabled = YES;
+            }
+            break;
+        case E_LoginState_LoggedIn:
+            break;
+        case E_LoginState_LoggedOut:
+            break;
     }
-    else
-    {
-      RightButton.enabled = YES;
-    }
-    FullPhoneNumber = [SelectedCountryPrefix stringByAppendingString:PhoneNumber];
-    FullPhoneNumber = [FullPhoneNumber stringByReplacingOccurrencesOfString:@" " withString:@""]; // Remove all blank spaces from the string.
-    break;
-  case E_LoginState_VerificationCode:
-    VerificationCode = textField.text;
-    [defaults setObject:VerificationCode forKey:LOGIN_VERIFICATION_CODE_DEFAULTS_KEY];
-    if ([VerificationCode isEqualToString:@""])
-    {
-      RightButton.enabled = NO;
-    }
-    else
-    {
-      RightButton.enabled = YES;
-    }
-    break;
-  case E_LoginState_Username:
-    if (textField == LowerEditor)
-    {
-      FullName  = LowerEditor.text;
-      [defaults setObject:FullName forKey:LOGIN_FULL_NAME_DEFAULTS_KEY];
-    }
-    else if (textField == UpperEditor)
-    {
-      Username = UpperEditor.text;
-      [defaults setObject:Username forKey:LOGIN_USER_NAME_DEFAULTS_KEY];
-    }
-    if ([Username isEqualToString:@""] || [FullName isEqualToString:@""])
-    {
-      RightButton.enabled = NO;
-    }
-    else
-    {
-      RightButton.enabled = YES;
-    }
-    break;
-  case E_LoginState_LoggedIn:
-    break;
-  case E_LoginState_LoggedOut:
-    break;
-  }
-//  [RollDownErrorView performSelectorOnMainThread:@selector(hide) withObject:nil waitUntilDone:NO];
-  [RollDownErrorView hide];
-//  NSLog(@"editorTextChanged: %@", FullPhoneNumber);
+    //  [RollDownErrorView performSelectorOnMainThread:@selector(hide) withObject:nil waitUntilDone:NO];
+    [RollDownErrorView hide];
+    //  NSLog(@"editorTextChanged: %@", FullPhoneNumber);
 }
 //__________________________________________________________________________________________________
 
 - (BOOL)textFieldShouldEndEditing:(UITextField *)textField
 {
-  return YES;
+    return YES;
 }
 //__________________________________________________________________________________________________
 
@@ -670,326 +670,325 @@ ThirdSeparatorView.frame =  CGRectMake(SEPARATOR_END_MARGIN, THIRD_SEPARATOR_TOP
 // Action when the left button (BACK) is pressed.
 -(void)leftButtonPressed:(UIButton*)button
 {
-  NSLog(@"leftButtonPressed");
+    NSLog(@"leftButtonPressed");
 
-    Mixpanel *mixpanel = [Mixpanel sharedInstance];
+        Mixpanel *mixpanel = [Mixpanel sharedInstance];
+    
+        [mixpanel track:@"didn't see code"];
+    
+        [mixpanel.people increment:@"didn't see code" by:[NSNumber numberWithInt:1]];
 
-    [mixpanel track:@"leftButtonPressed"];
-
-    [mixpanel.people increment:@"leftButtonPressed" by:[NSNumber numberWithInt:1]];
-
-  switch (State)
-  {
-  case E_LoginState_PhoneNumber:
-    // Should never happen.
-    break;
-  case E_LoginState_VerificationCode:
-    LeftButton.hidden       = YES;
-    RightButton.enabled     = YES;
-    UpperEditor.placeholder = GlobalParams.fullNamePlaceholder;
-    UpperEditor.text        = @"";
-    LowerEditor.placeholder = GlobalParams.phoneNumberPlaceholder;
-    LowerEditor.text        = PhoneNumber;
-    State                   = E_LoginState_PhoneNumber;
-    FirstLabel.text           = @"Welcome to Typeface! 🙆🏼";
-    SecondLabel.text = @"We need to text you a code \n to verify your identity";
-
-    [[NSUserDefaults standardUserDefaults] setInteger:State forKey:LOGIN_STATE_DEFAULTS_KEY];
-    break;
-  case E_LoginState_Username:
-    [LowerEditor resignFirstResponder];  // Resign first responder to let change keyboard type.
-    UpperEditor.placeholder   = GlobalParams.fullNamePlaceholder;
-    UpperEditor.text          = FullName;
-    LowerEditor.placeholder   = GlobalParams.verificationCodePlaceholder;
-    LowerEditor.text          = VerificationCode;
-    LowerEditor.keyboardType  = UIKeyboardTypePhonePad;
-    State                     = E_LoginState_VerificationCode;
-    [[NSUserDefaults standardUserDefaults] setInteger:State forKey:LOGIN_STATE_DEFAULTS_KEY];
-    [LowerEditor becomeFirstResponder];  // Becomes first responder with the new keyboard type.
-   break;
-  case E_LoginState_LoggedIn:
-    break;
-  case E_LoginState_LoggedOut:
-    break;
-  }
-  [self layoutEditorAnimated:YES];
+    switch (State)
+    {
+        case E_LoginState_PhoneNumber:
+            // Should never happen.
+            break;
+        case E_LoginState_VerificationCode:
+            LeftButton.hidden       = YES;
+            RightButton.enabled     = YES;
+            UpperEditor.placeholder = GlobalParams.fullNamePlaceholder;
+            UpperEditor.text        = @"";
+            LowerEditor.placeholder = GlobalParams.phoneNumberPlaceholder;
+            LowerEditor.text        = PhoneNumber;
+            State                   = E_LoginState_PhoneNumber;
+            FirstLabel.text           = @"Welcome to Typeface! 🙆🏼";
+            SecondLabel.text = @"We need to text you a code \n to verify your identity";
+            [[NSUserDefaults standardUserDefaults] setInteger:State forKey:LOGIN_STATE_DEFAULTS_KEY];
+            break;
+        case E_LoginState_Username:
+            [LowerEditor resignFirstResponder];  // Resign first responder to let change keyboard type.
+            UpperEditor.placeholder   = GlobalParams.fullNamePlaceholder;
+            UpperEditor.text          = FullName;
+            LowerEditor.placeholder   = GlobalParams.verificationCodePlaceholder;
+            LowerEditor.text          = VerificationCode;
+            LowerEditor.keyboardType  = UIKeyboardTypePhonePad;
+            State                     = E_LoginState_VerificationCode;
+            [[NSUserDefaults standardUserDefaults] setInteger:State forKey:LOGIN_STATE_DEFAULTS_KEY];
+            [LowerEditor becomeFirstResponder];  // Becomes first responder with the new keyboard type.
+            break;
+        case E_LoginState_LoggedIn:
+            break;
+        case E_LoginState_LoggedOut:
+            break;
+    }
+    [self layoutEditorAnimated:YES];
 }
 //__________________________________________________________________________________________________
 
 // Action when the right button (NEXT) is pressed.
 -(void)rightButtonPressed:(UIButton*)button
 {
-  NSLog(@"rightButtonPressed");
+    NSLog(@"rightButtonPressed");
 
-    Mixpanel *mixpanel = [Mixpanel sharedInstance];
 
-    [mixpanel track:@"rightButtonPressed"];
+        Mixpanel *mixpanel = [Mixpanel sharedInstance];
+    
+        [mixpanel track:@"Next"];
+    
+        [mixpanel.people increment:@"Next" by:[NSNumber numberWithInt:1]];
 
-    [mixpanel.people increment:@"rightButtonPressed" by:[NSNumber numberWithInt:1]];
-
-  switch (State)
-  {
-  case E_LoginState_PhoneNumber:
-    // Transition from phone number to verification code.
+    switch (State)
     {
-      [self startVerification];
+        case E_LoginState_PhoneNumber:
+            // Transition from phone number to verification code.
+        {
+            [self startVerification];
+        }
+            break;
+        case E_LoginState_VerificationCode:
+            // Transition from verification code to username.
+        {
+            ParseCompleteVerification(VerificationCode, ^(BOOL success, NSError* error)
+                                      {
+                                          if (success)
+                                          { // The verification code has been validated.
+                                              ParseFindUserByPhoneNumber(FullPhoneNumber, ^(id obj, NSError* find_error)
+                                                                         {
+                                                                             RecoveredUser             = obj;
+                                                                             NSUserDefaults* defaults  = [NSUserDefaults standardUserDefaults];
+                                                                             [defaults setObject:RecoveredUser.objectId forKey:LOGIN_USER_NAME_DEFAULTS_KEY];
+                                                                             if (RecoveredUser != nil)
+                                                                             {
+                                                                                 Username  = RecoveredUser.username;
+                                                                                 FullName  = RecoveredUser.fullName;
+                                                                                 if ((RecoveredUser.fullName != nil) && (![RecoveredUser.fullName isEqualToString:@""]))
+                                                                                 {
+                                                                                     [self loginExistingUser];
+                                                                                 }
+                                                                                 else
+                                                                                 {
+                                                                                     LeftButton.enabled  = YES;
+                                                                                     RightButton.enabled = NO;
+                                                                                 }
+                                                                                 [LowerEditor resignFirstResponder];
+                                                                                 LowerEditor.keyboardType  = UIKeyboardTypeASCIICapable;
+                                                                                 LowerEditor.placeholder   = GlobalParams.usernamePlaceholder;
+                                                                                 LowerEditor.text          = Username;
+                                                                                 UpperEditor.placeholder   = GlobalParams.fullNamePlaceholder;
+                                                                                 UpperEditor.text          = FullName;
 
-    }
-    break;
-  case E_LoginState_VerificationCode:
-    // Transition from verification code to username.
-    {
-      ParseCompleteVerification(VerificationCode, ^(BOOL success, NSError* error)
-      {
-        if (success)
-        { // The verification code has been validated.
-          ParseFindUserByPhoneNumber(FullPhoneNumber, ^(id obj, NSError* find_error)
-          {
-            RecoveredUser             = obj;
-            NSUserDefaults* defaults  = [NSUserDefaults standardUserDefaults];
-            [defaults setObject:RecoveredUser.objectId forKey:LOGIN_USER_NAME_DEFAULTS_KEY];
-            if (RecoveredUser != nil)
+                                                                                 if ([Username isEqualToString:@""])
+                                                                                 {
+                                                                                     LowerEditor.enabled = YES;
+                                                                                     [LowerEditor becomeFirstResponder];
+                                                                                 }
+                                                                                 else
+                                                                                 {
+                                                                                     LowerEditor.enabled = NO;
+                                                                                     [UpperEditor becomeFirstResponder];
+                                                                                 }
+                                                                             }
+                                                                             else
+                                                                             {
+                                                                                 [LowerEditor resignFirstResponder];  // Resign first responder to let change keyboard type.
+                                                                                 LeftButton.enabled        = YES;
+                                                                                 RightButton.enabled       = NO;
+                                                                                 UpperEditor.placeholder   = GlobalParams.fullNamePlaceholder;
+                                                                                 UpperEditor.text          = @"";
+                                                                                 LowerEditor.placeholder   = GlobalParams.usernamePlaceholder;
+                                                                                 LowerEditor.text          = @"";
+                                                                                 LowerEditor.keyboardType  = UIKeyboardTypeASCIICapable;
+                                                                                 [LowerEditor becomeFirstResponder];  // Becomes first responder with the new keyboard type.
+                                                                             }
+                                                                             State = E_LoginState_Username;
+                                                                             [[NSUserDefaults standardUserDefaults] setInteger:State forKey:LOGIN_STATE_DEFAULTS_KEY];
+                                                                             [self layoutEditorAnimated:YES];
+
+                                                                         });
+                                          }
+                                          else if ((error != nil) && ([error.domain isEqualToString:@"Parse"]) && (error.code == PARSE_ERROR_CODE))
+                                          {
+                                              // The verification code is wrong.
+                                              LeftButton.enabled  = YES;
+                                              RightButton.enabled = NO;
+                                              [RollDownErrorView showWithTitle:GlobalParams.loginRollDownViewTitle andMessage:GlobalParams.loginRollDownVerificationCodeErrorMessage];
+
+                                              [mixpanel track:@"wrong twillio code"];
+
+                                              [self layoutEditorAnimated:YES];
+                                          }
+                                          else
+                                          {
+                                              NSLog(@"Success: %d, error: %@", success, error);
+                                          }
+                                      });
+        }
+            break;
+        case E_LoginState_Username:
+
+            // Transition from username to LoggedIn.
+            if ((RecoveredUser != nil))
             {
-              Username  = RecoveredUser.username;
-              FullName  = RecoveredUser.fullName;
-              if ((RecoveredUser.fullName != nil) && (![RecoveredUser.fullName isEqualToString:@""]))
-              {
                 [self loginExistingUser];
-              }
-              else
-              {
-                LeftButton.enabled  = YES;
-                RightButton.enabled = NO;
-              }
-              [LowerEditor resignFirstResponder];
-              LowerEditor.keyboardType  = UIKeyboardTypeASCIICapable;
-              LowerEditor.placeholder   = GlobalParams.usernamePlaceholder;
-              LowerEditor.text          = Username;
-              UpperEditor.placeholder   = GlobalParams.fullNamePlaceholder;
-              UpperEditor.text          = FullName;
-
-              if ([Username isEqualToString:@""])
-              {
-                LowerEditor.enabled = YES;
-                [LowerEditor becomeFirstResponder];
-              }
-              else
-              {
-                LowerEditor.enabled = NO;
-                [UpperEditor becomeFirstResponder];
-              }
             }
             else
             {
-              [LowerEditor resignFirstResponder];  // Resign first responder to let change keyboard type.
-              LeftButton.enabled        = YES;
-              RightButton.enabled       = NO;
-              UpperEditor.placeholder   = GlobalParams.fullNamePlaceholder;
-              UpperEditor.text          = @"";
-              LowerEditor.placeholder   = GlobalParams.usernamePlaceholder;
-              LowerEditor.text          = @"";
-              LowerEditor.keyboardType  = UIKeyboardTypeASCIICapable;
-              [LowerEditor becomeFirstResponder];  //first responder with the new keyboard type.
+                [self loginNewUser];
             }
-            State = E_LoginState_Username;
-            [[NSUserDefaults standardUserDefaults] setInteger:State forKey:LOGIN_STATE_DEFAULTS_KEY];
-            [self layoutEditorAnimated:YES];
-          });
-        }
-        else if ((error != nil) && ([error.domain isEqualToString:@"Parse"]) && (error.code == PARSE_ERROR_CODE))
-        {
-          // The verification code is wrong.
-          LeftButton.enabled  = YES;
-          RightButton.enabled = NO;
-          [RollDownErrorView showWithTitle:GlobalParams.loginRollDownViewTitle andMessage:GlobalParams.loginRollDownVerificationCodeErrorMessage];
-            NSLog(@"WRONG Code");
-
-            [mixpanel track:@"RollDownErrorView"];
-
-          [self layoutEditorAnimated:YES];
-        }
-        else
-        {
-          NSLog(@"Success: %d, error: %@", success, error);
-        }
-      });
+            break;
+        case E_LoginState_LoggedIn:
+            // Transition from logged in to ...?
+            // Should never happen.
+            break;
+        case E_LoginState_LoggedOut:
+            // Transition from logged out to ...?
+            // Should never happen here. Should happen only in the Initialize method.
+            break;
     }
-    break;
-  case E_LoginState_Username:
-    // Transition from username to LoggedIn.
-    if ((RecoveredUser != nil))
-    {
-      [self loginExistingUser];
-    }
-          
-    else
-    {
-      [self loginNewUser];
-    }
-    break;
-  case E_LoginState_LoggedIn:
-    // Transition from logged in to ...?
-    // Should never happen.
-    break;
-  case E_LoginState_LoggedOut:
-    // Transition from logged out to ...?
-    // Should never happen here. Should happen only in the Initialize method.
-    break;
-  }
 }
 //__________________________________________________________________________________________________
 
 - (void)loginExistingUser
 {
-  ParseUser* user = GetCurrentParseUser();
-  // First, delete the temporary anonymous user.
-  NSLog(@"0 loginExistingUser");
-  [user deleteInBackgroundWithBlock:^(BOOL success, NSError* deleteError)
-  {
-    NSLog(@"success: %d, error: %@", success, deleteError);
-  }];
-  // Try to login using the phone number as password.
-  [ParseUser logInWithUsernameInBackground:Username password:FullPhoneNumber block:^(PFUser* loginUser, NSError* loginError)
-  {
-    NSLog(@"1 loginExistingUser");
-    if (loginError == nil)
-    {
-      NSLog(@"2 loginExistingUser");
-      ParseUser* loggedUser = (ParseUser*)loginUser;
-      if ((loggedUser.fullName == nil) && (FullName != nil) && (![FullName isEqualToString:@""]))
-      {
-        NSLog(@"3 loginExistingUser");
-        loggedUser.fullName = FullName;
-        [loggedUser saveEventually];
-      }
-      [self terminateLogin:NO];
-    }
-    else
-    { // This username is binded to another phone number.
-      NSLog(@"4 loginExistingUser");
-      [RollDownErrorView showWithTitle:GlobalParams.loginRollDownViewTitle andMessage:GlobalParams.loginRollDownUsernameErrorMessage];
-    }
-  }];
+    ParseUser* user = GetCurrentParseUser();
+    // First, delete the temporary anonymous user.
+    NSLog(@"0 loginExistingUser");
+    [user deleteInBackgroundWithBlock:^(BOOL success, NSError* deleteError)
+     {
+         NSLog(@"success: %d, error: %@", success, deleteError);
+     }];
+    // Try to login using the phone number as password.
+    [ParseUser logInWithUsernameInBackground:Username password:FullPhoneNumber block:^(PFUser* loginUser, NSError* loginError)
+     {
+         NSLog(@"1 loginExistingUser");
+         if (loginError == nil)
+         {
+             NSLog(@"2 loginExistingUser");
+             ParseUser* loggedUser = (ParseUser*)loginUser;
+             if ((loggedUser.fullName == nil) && (FullName != nil) && (![FullName isEqualToString:@""]))
+             {
+                 NSLog(@"3 loginExistingUser");
+                 loggedUser.fullName = FullName;
+                 [loggedUser saveEventually];
+             }
+             [self terminateLogin:NO];
+         }
+         else
+         { // This username is binded to another phone number.
+             NSLog(@"4 loginExistingUser");
+             [RollDownErrorView showWithTitle:GlobalParams.loginRollDownViewTitle andMessage:GlobalParams.loginRollDownUsernameErrorMessage];
+         }
+     }];
 }
 //__________________________________________________________________________________________________
 
 - (void)loginNewUser
 {
-  NSLog(@"0 loginNewUser");
+    NSLog(@"0 loginNewUser");
+    
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        formatter.dateFormat = @"dd MMM YYYY HH:mm:ss";
+        NSString *string = [formatter stringFromDate:[NSDate date]];
+    
+        Mixpanel *mixpanel = [Mixpanel sharedInstance];
+    
+        [mixpanel identify:mixpanel.distinctId];
+    
+        [mixpanel.people set:@{@"$name": FullName, @"username": Username, @"$phone": PhoneNumber, @"$created": string}];
 
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    formatter.dateFormat = @"dd MMM YYYY HH:mm:ss";
-    NSString *string = [formatter stringFromDate:[NSDate date]];
-
-    Mixpanel *mixpanel = [Mixpanel sharedInstance];
-
-    [mixpanel identify:mixpanel.distinctId];
-
-    [mixpanel.people set:@{@"$name": FullName, @"username": Username, @"$phone": PhoneNumber, @"$created": string}];
-
-  ParseIsUsernameAlreadyInUse(Username, ^(BOOL alreadyExists, NSError* error)
-  {
-    NSLog(@"ParseIsUsernameAlreadyInUse success: %d, error: %@", alreadyExists, error);
-    ParseUser* user = GetCurrentParseUser();
-    if (alreadyExists)
-    { // This username is already bound to another phone number.
-      [RollDownErrorView showWithTitle:GlobalParams.loginRollDownViewTitle andMessage:GlobalParams.loginRollDownUsernameErrorMessage];
-    }
-    else
-    {
-      user.username     = Username;
-      user.password     = FullPhoneNumber;
-      user.fullName     = FullName;
-      user.phoneNumber  = FullPhoneNumber;
-      [user saveInBackgroundWithBlock:^(BOOL success, NSError* save_error)
-      {
-        if (success)
-        {
-          [self terminateLogin:YES];
-        }
-        else
-        {
-          NSLog(@"failed to save username in user object: %@", error);
-        }
-        [self layoutEditorAnimated:YES];
-      }];
-    }
-  });
+    ParseIsUsernameAlreadyInUse(Username, ^(BOOL alreadyExists, NSError* error)
+                                {
+                                    NSLog(@"ParseIsUsernameAlreadyInUse success: %d, error: %@", alreadyExists, error);
+                                    ParseUser* user = GetCurrentParseUser();
+                                    if (alreadyExists)
+                                    { // This username is already bound to another phone number.
+                                        [RollDownErrorView showWithTitle:GlobalParams.loginRollDownViewTitle andMessage:GlobalParams.loginRollDownUsernameErrorMessage];
+                                    }
+                                    else
+                                    {
+                                        user.username     = Username;
+                                        user.password     = FullPhoneNumber;
+                                        user.fullName     = FullName;
+                                        user.phoneNumber  = FullPhoneNumber;
+                                        [user saveInBackgroundWithBlock:^(BOOL success, NSError* save_error)
+                                         {
+                                             if (success)
+                                             {
+                                                 [self terminateLogin:YES];
+                                             }
+                                             else
+                                             {
+                                                 NSLog(@"failed to save username in user object: %@", error);
+                                             }
+                                             [self layoutEditorAnimated:YES];
+                                         }];
+                                    }
+                                });
 }
 //__________________________________________________________________________________________________
 
 - (void)terminateLogin:(BOOL)newUser
 {
-  ParseFinalizeLogIn();
-  State = E_LoginState_LoggedIn;
-  [[NSUserDefaults standardUserDefaults] setInteger:State forKey:LOGIN_STATE_DEFAULTS_KEY];
-  [UpperEditor resignFirstResponder];
-  [LowerEditor resignFirstResponder];
-  LoginDoneAction(newUser);
+    ParseFinalizeLogIn();
+    State = E_LoginState_LoggedIn;
+    [[NSUserDefaults standardUserDefaults] setInteger:State forKey:LOGIN_STATE_DEFAULTS_KEY];
+    [UpperEditor resignFirstResponder];
+    [LowerEditor resignFirstResponder];
+    LoginDoneAction(newUser);
 }
 //__________________________________________________________________________________________________
 
 - (void)setLoginDoneAction:(BlockBoolAction)loginDoneAction
 {
-  LoginDoneAction = loginDoneAction;
+    LoginDoneAction = loginDoneAction;
 }
 //__________________________________________________________________________________________________
 
 - (BlockBoolAction)loginDoneAction
 {
-  return LoginDoneAction;
+    return LoginDoneAction;
 }
 //__________________________________________________________________________________________________
 
 //! Show the login view.
 - (void)showAnimated:(BOOL)animated fromStart:(BOOL)fromStart
 {
-  if (fromStart)
-  {
-    State = E_LoginState_LoggedOut;
-  }
-  [self recoverSavedState:^
-  {
-    [self layoutEditorAnimated:NO];
-    [LowerEditor becomeFirstResponder];
-    if (animated)
+    if (fromStart)
     {
-      self.alpha  = 0.0;
-      self.hidden = NO;
-      [UIView animateWithDuration:0.5 animations:^
-      {
-        self.alpha = 1.0;
-      } completion:^(BOOL finished)
-      {
-      }];
+        State = E_LoginState_LoggedOut;
     }
-    else
-    {
-      self.hidden = NO;
-      self.alpha  = 1.0;
-    }
-  }];
+    [self recoverSavedState:^
+     {
+         [self layoutEditorAnimated:NO];
+         [LowerEditor becomeFirstResponder];
+         if (animated)
+         {
+             self.alpha  = 0.0;
+             self.hidden = NO;
+             [UIView animateWithDuration:0.5 animations:^
+              {
+                  self.alpha = 1.0;
+              } completion:^(BOOL finished)
+              {
+              }];
+         }
+         else
+         {
+             self.hidden = NO;
+             self.alpha  = 1.0;
+         }
+     }];
 }
 //__________________________________________________________________________________________________
 
 //! Hide the login view.
 - (void)hideAnimated:(BOOL)animated
 {
-  if (animated)
-  {
-    [UIView animateWithDuration:0.5 animations:^
+    if (animated)
     {
-      self.alpha = 0.0;
-    } completion:^(BOOL finished)
+        [UIView animateWithDuration:0.5 animations:^
+         {
+             self.alpha = 0.0;
+         } completion:^(BOOL finished)
+         {
+             self.hidden = YES;
+         }];
+    }
+    else
     {
-      self.hidden = YES;
-    }];
-  }
-  else
-  {
-    self.hidden = YES;
-    self.alpha  = 0.0;
-  }
+        self.hidden = YES;
+        self.alpha  = 0.0;
+    }
 }
 //__________________________________________________________________________________________________
 
@@ -998,51 +997,51 @@ ThirdSeparatorView.frame =  CGRectMake(SEPARATOR_END_MARGIN, THIRD_SEPARATOR_TOP
 // Call this method somewhere in your view controller setup code.
 - (void)registerForKeyboardNotifications
 {
-  [[NSNotificationCenter defaultCenter] addObserver:self
-                                           selector:@selector(keyboardWillShow:)
-                                               name:UIKeyboardWillShowNotification object:nil];
-
-  [[NSNotificationCenter defaultCenter] addObserver:self
-                                           selector:@selector(keyboardDidShow:)
-                                               name:UIKeyboardDidShowNotification object:nil];
-
-  [[NSNotificationCenter defaultCenter] addObserver:self
-                                           selector:@selector(keyboardWillBeHidden:)
-                                               name:UIKeyboardWillHideNotification object:nil];
-
-  [[NSNotificationCenter defaultCenter] addObserver:self
-                                           selector:@selector(keyboardDidHide:)
-                                               name:UIKeyboardDidHideNotification object:nil];
-
-  [[NSNotificationCenter defaultCenter] addObserver:self
-                                           selector:@selector(keyboardHasChangedFrame:)
-                                               name:UIKeyboardDidChangeFrameNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardDidShow:)
+                                                 name:UIKeyboardDidShowNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillBeHidden:)
+                                                 name:UIKeyboardWillHideNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardDidHide:)
+                                                 name:UIKeyboardDidHideNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardHasChangedFrame:)
+                                                 name:UIKeyboardDidChangeFrameNotification object:nil];
 }
 //__________________________________________________________________________________________________
 
 - (void)unregisterFromKeyboardNotifications
 {
-  [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification       object:nil];
-  [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidShowNotification        object:nil];
-  [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification       object:nil];
-  [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidHideNotification        object:nil];
-  [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidChangeFrameNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification       object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidShowNotification        object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification       object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidHideNotification        object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidChangeFrameNotification object:nil];
 }
 //__________________________________________________________________________________________________
 
 //! Called when the UIKeyboardDidChangeFrameNotification is sent:
 - (void)keyboardHasChangedFrame:(NSNotification*)notification
 {
-  NSDictionary* info        = [notification userInfo];
-  CGRect keyboard_frame     = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
-  keyboard_frame            = [self convertRect:keyboard_frame fromView:nil];
-  if ((keyboard_frame.origin.x == 0) && (keyboard_frame.origin.y != self.bounds.size.height))
-  {
-    KeyboardHeight  = keyboard_frame.size.height;
-    KeyboardTop     = keyboard_frame.origin.y;
-    [self setNeedsLayout];
-  }
-  //  NSLog(@"keyboard_frame: %f, %f, %f, %f", keyboard_frame.origin.x, keyboard_frame.origin.y, keyboard_frame.size.width, keyboard_frame.size.height);
+    NSDictionary* info        = [notification userInfo];
+    CGRect keyboard_frame     = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    keyboard_frame            = [self convertRect:keyboard_frame fromView:nil];
+    if ((keyboard_frame.origin.x == 0) && (keyboard_frame.origin.y != self.bounds.size.height))
+    {
+        KeyboardHeight  = keyboard_frame.size.height;
+        KeyboardTop     = keyboard_frame.origin.y;
+        [self setNeedsLayout];
+    }
+    //  NSLog(@"keyboard_frame: %f, %f, %f, %f", keyboard_frame.origin.x, keyboard_frame.origin.y, keyboard_frame.size.width, keyboard_frame.size.height);
 }
 //__________________________________________________________________________________________________
 
@@ -1069,5 +1068,4 @@ ThirdSeparatorView.frame =  CGRectMake(SEPARATOR_END_MARGIN, THIRD_SEPARATOR_TOP
 {
 }
 //__________________________________________________________________________________________________
-
 @end

@@ -32,7 +32,7 @@ parameters.blockedUserReasonMessage       = NSLocalizedString(@"You have been bl
   parameters.phoneNumberPlaceholder       	= NSLocalizedString(@"Phone #", @"");
   parameters.verificationCodePlaceholder  	= NSLocalizedString(@"Enter Code", @"");
   parameters.termsAndPrivacyPolicyMessage 	= NSLocalizedString(@"By continuing, you agree to our <a href=\"1\">Terms</a> and\n <a href=\"2\">Privacy Policy</a>", @"");
-  parameters.loginLeftButtonLabel         	= NSLocalizedString(@"Didn't get it?", @"");
+  parameters.loginLeftButtonLabel         	= NSLocalizedString(@"Back", @"");
   parameters.loginRightButtonLabel          = NSLocalizedString(@"Next", @"");
   parameters.initialCountry                 = @"United States";
   parameters.termsAndPolicyLinkAction       = ^(id obj)
@@ -289,7 +289,7 @@ parameters.blockedUserReasonMessage       = NSLocalizedString(@"You have been bl
   parameters.typingValidatedBackgroundColor       = Transparent;
   parameters.typingTopBarBorderOffset             = 42;
   parameters.typingTopBarTopOffset                = -3;
-  parameters.typingCursorColor                    = Grey;
+  parameters.typingCursorColor                    = TypePink;
   parameters.typingFont                           = [UIFont fontWithName:@"AvenirNext-Medium" size:18];
 
 

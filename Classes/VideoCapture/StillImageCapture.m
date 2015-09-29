@@ -69,9 +69,9 @@ static StillImageCapture* SharedStillImageCapture = nil;
 
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
 
-    [mixpanel track:@"takeSnapshot"];
+    [mixpanel track:@"selfies"];
 
-    [mixpanel.people increment:@"takeSnapshot" by:[NSNumber numberWithInt:1]];
+    [mixpanel.people increment:@"selfies" by:[NSNumber numberWithInt:1]];
 
   AVCaptureConnection* videoConnection = nil;
   for (AVCaptureConnection* connection in stillImageOutput.connections)
