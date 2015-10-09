@@ -309,7 +309,7 @@
   if ([attrString.string isEqualToString:SEPARATOR_STRING])
   {
   }
-  CGFloat editorMaxHeight     = 4242; // Some arbitrary big value.
+  CGFloat editorMaxHeight     = 424; // Some arbitrary big value.
   CGSize size                 = CGSizeMake(Editor.width - 2 * Editor.textContainer.lineFragmentPadding, editorMaxHeight);
 //  NSLog(@"EditorWidth: %f, %f", Editor.width, Editor.textContainer.size.width);
   Editor.height               = editorMaxHeight;

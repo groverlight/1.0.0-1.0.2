@@ -11,6 +11,7 @@
 #import "Tools.h"
 #import "Colors.h"
 #import "Mixpanel.h"
+#import <AudioToolbox/AudioToolbox.h>
 //__________________________________________________________________________________________________
 
 #define LOGIN_STATE_DEFAULTS_KEY              @"LoginState"             //!< The key to retrieve the login state in the user defaults.
@@ -106,6 +107,8 @@ typedef enum
 
     UIColor*                TextColor;              //!< Color of the user's full name texts.
     BOOL                    Animated;               //!< Temporary value for the animated flag for some methods when performed on main thread.
+    SystemSoundID           soundEffect;
+
 }
 //____________________
 
@@ -113,6 +116,10 @@ typedef enum
 -(void)Initialize
 {
     [super Initialize];
+
+//    NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"stab" ofType:@"wav"];
+//    NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
+//    AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
 
     KeyboardHeight  = DEFAULT_KEYBOARD_HEIGHT;
     GlobalParams    = GetGlobalParameters();
@@ -670,6 +677,13 @@ typedef enum
 // Action when the left button (BACK) is pressed.
 -(void)leftButtonPressed:(UIButton*)button
 {
+
+    NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"rewind"ofType:@"wav"];
+    NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
+    AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
+
+    AudioServicesPlaySystemSound(soundEffect);
+
     NSLog(@"leftButtonPressed");
 
         Mixpanel *mixpanel = [Mixpanel sharedInstance];
@@ -718,6 +732,13 @@ typedef enum
 // Action when the right button (NEXT) is pressed.
 -(void)rightButtonPressed:(UIButton*)button
 {
+
+    NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"stab" ofType:@"wav"];
+    NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
+    AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
+
+    AudioServicesPlaySystemSound(soundEffect);
+
     NSLog(@"rightButtonPressed");
 
 
@@ -842,6 +863,8 @@ typedef enum
 {
     ParseUser* user = GetCurrentParseUser();
     // First, delete the temporary anonymous user.
+
+
     NSLog(@"0 loginExistingUser");
     [user deleteInBackgroundWithBlock:^(BOOL success, NSError* deleteError)
      {
@@ -855,6 +878,11 @@ typedef enum
          {
              NSLog(@"2 loginExistingUser");
              ParseUser* loggedUser = (ParseUser*)loginUser;
+
+             Mixpanel *mixpanel = [Mixpanel sharedInstance];
+
+             [mixpanel identify:@"$phone"];
+
              if ((loggedUser.fullName == nil) && (FullName != nil) && (![FullName isEqualToString:@""]))
              {
                  NSLog(@"3 loginExistingUser");
@@ -881,9 +909,11 @@ typedef enum
         NSString *string = [formatter stringFromDate:[NSDate date]];
     
         Mixpanel *mixpanel = [Mixpanel sharedInstance];
-    
+
         [mixpanel identify:mixpanel.distinctId];
-    
+
+        [mixpanel createAlias:@"$phone" forDistinctID:mixpanel.distinctId];
+
         [mixpanel.people set:@{@"$name": FullName, @"username": Username, @"$phone": PhoneNumber, @"$created": string}];
 
     ParseIsUsernameAlreadyInUse(Username, ^(BOOL alreadyExists, NSError* error)

@@ -97,6 +97,8 @@
 		F4F5854C1B82A9C80016D180 /* AppViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F585471B82A9C80016D180 /* AppViewController.m */; };
 		F4F5854D1B82A9C80016D180 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F4F585481B82A9C80016D180 /* Images.xcassets */; };
 		F4F5854E1B82A9C80016D180 /* InitGlobalParameters.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F5854A1B82A9C80016D180 /* InitGlobalParameters.m */; };
+		F4F824551BC5AD8B00506144 /* stab.wav in Resources */ = {isa = PBXBuildFile; fileRef = F4F824541BC5AD8B00506144 /* stab.wav */; settings = {ASSET_TAGS = (); }; };
+		F4F8245B1BC5AFC000506144 /* rewind.wav in Resources */ = {isa = PBXBuildFile; fileRef = F4F8245A1BC5AFC000506144 /* rewind.wav */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -283,6 +285,8 @@
 		F4F585481B82A9C80016D180 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Typeface/Images.xcassets; sourceTree = SOURCE_ROOT; };
 		F4F585491B82A9C80016D180 /* InitGlobalParameters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = InitGlobalParameters.h; path = Typeface/InitGlobalParameters.h; sourceTree = SOURCE_ROOT; };
 		F4F5854A1B82A9C80016D180 /* InitGlobalParameters.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = InitGlobalParameters.m; path = Typeface/InitGlobalParameters.m; sourceTree = SOURCE_ROOT; };
+		F4F824541BC5AD8B00506144 /* stab.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = stab.wav; sourceTree = SOURCE_ROOT; };
+		F4F8245A1BC5AFC000506144 /* rewind.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = rewind.wav; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -670,6 +674,8 @@
 				F4F585481B82A9C80016D180 /* Images.xcassets */,
 				F4F585491B82A9C80016D180 /* InitGlobalParameters.h */,
 				F4F5854A1B82A9C80016D180 /* InitGlobalParameters.m */,
+				F4F824541BC5AD8B00506144 /* stab.wav */,
+				F4F8245A1BC5AFC000506144 /* rewind.wav */,
 				B6A0219C195C59EE00C1BEA3 /* Images */,
 				B6E7AAC81868512800DBB0EB /* Supporting Files */,
 			);
@@ -783,8 +789,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F4F824551BC5AD8B00506144 /* stab.wav in Resources */,
 				B652A13E1A9E7D1F006222EE /* ImageAssets in Resources */,
 				F4F5854D1B82A9C80016D180 /* Images.xcassets in Resources */,
+				F4F8245B1BC5AFC000506144 /* rewind.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -935,8 +943,8 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Grover Light (4THJ5Z3YGF)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Grover Light (4THJ5Z3YGF)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Grover Light (4MBTY8L594)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Grover Light (4MBTY8L594)";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -956,7 +964,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "48295b09-b129-4682-8ee8-7a67f71565a4";
+				PROVISIONING_PROFILE = "dc4ecb4f-0bde-4a51-9957-96122474669c";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -978,8 +986,8 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Grover Light (4THJ5Z3YGF)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Grover Light (4THJ5Z3YGF)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Grover Light (4MBTY8L594)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Grover Light (4MBTY8L594)";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_TESTABILITY = YES;
@@ -991,7 +999,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
-				PROVISIONING_PROFILE = "48295b09-b129-4682-8ee8-7a67f71565a4";
+				PROVISIONING_PROFILE = "dc4ecb4f-0bde-4a51-9957-96122474669c";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -1004,8 +1012,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Grover Light (4THJ5Z3YGF)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Grover Light (4THJ5Z3YGF)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Grover Light (4MBTY8L594)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Grover Light (4MBTY8L594)";
 				ENABLE_TESTABILITY = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1026,7 +1034,7 @@
 					"$(PROJECT_DIR)/Frameworks",
 				);
 				PRODUCT_NAME = Typeface;
-				PROVISIONING_PROFILE = "48295b09-b129-4682-8ee8-7a67f71565a4";
+				PROVISIONING_PROFILE = "dc4ecb4f-0bde-4a51-9957-96122474669c";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -1038,8 +1046,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Grover Light (4THJ5Z3YGF)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Grover Light (4THJ5Z3YGF)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Grover Light (4MBTY8L594)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Grover Light (4MBTY8L594)";
 				ENABLE_TESTABILITY = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1060,7 +1068,7 @@
 					"$(PROJECT_DIR)/Frameworks",
 				);
 				PRODUCT_NAME = Typeface;
-				PROVISIONING_PROFILE = "48295b09-b129-4682-8ee8-7a67f71565a4";
+				PROVISIONING_PROFILE = "dc4ecb4f-0bde-4a51-9957-96122474669c";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -1082,8 +1090,8 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Grover Light (4THJ5Z3YGF)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Grover Light (4THJ5Z3YGF)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Grover Light (4MBTY8L594)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Grover Light (4MBTY8L594)";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_TESTABILITY = YES;
@@ -1095,7 +1103,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
-				PROVISIONING_PROFILE = "48295b09-b129-4682-8ee8-7a67f71565a4";
+				PROVISIONING_PROFILE = "dc4ecb4f-0bde-4a51-9957-96122474669c";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -1108,8 +1116,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Grover Light (4THJ5Z3YGF)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Grover Light (4THJ5Z3YGF)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Grover Light (4MBTY8L594)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Grover Light (4MBTY8L594)";
 				ENABLE_TESTABILITY = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1130,7 +1138,7 @@
 					"$(PROJECT_DIR)/Frameworks",
 				);
 				PRODUCT_NAME = Typeface;
-				PROVISIONING_PROFILE = "48295b09-b129-4682-8ee8-7a67f71565a4";
+				PROVISIONING_PROFILE = "dc4ecb4f-0bde-4a51-9957-96122474669c";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
