@@ -97,6 +97,8 @@
 		F4F5854C1B82A9C80016D180 /* AppViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F585471B82A9C80016D180 /* AppViewController.m */; };
 		F4F5854D1B82A9C80016D180 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F4F585481B82A9C80016D180 /* Images.xcassets */; };
 		F4F5854E1B82A9C80016D180 /* InitGlobalParameters.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F5854A1B82A9C80016D180 /* InitGlobalParameters.m */; };
+		F4F70A0E1BCC79DD00AAA14A /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4F70A0D1BCC79DD00AAA14A /* AddressBook.framework */; };
+		F4F70A101BCC79E800AAA14A /* Contacts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4F70A0F1BCC79E800AAA14A /* Contacts.framework */; };
 		F4F824551BC5AD8B00506144 /* stab.wav in Resources */ = {isa = PBXBuildFile; fileRef = F4F824541BC5AD8B00506144 /* stab.wav */; settings = {ASSET_TAGS = (); }; };
 		F4F8245B1BC5AFC000506144 /* rewind.wav in Resources */ = {isa = PBXBuildFile; fileRef = F4F8245A1BC5AFC000506144 /* rewind.wav */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
@@ -285,6 +287,8 @@
 		F4F585481B82A9C80016D180 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Typeface/Images.xcassets; sourceTree = SOURCE_ROOT; };
 		F4F585491B82A9C80016D180 /* InitGlobalParameters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = InitGlobalParameters.h; path = Typeface/InitGlobalParameters.h; sourceTree = SOURCE_ROOT; };
 		F4F5854A1B82A9C80016D180 /* InitGlobalParameters.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = InitGlobalParameters.m; path = Typeface/InitGlobalParameters.m; sourceTree = SOURCE_ROOT; };
+		F4F70A0D1BCC79DD00AAA14A /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
+		F4F70A0F1BCC79E800AAA14A /* Contacts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Contacts.framework; path = System/Library/Frameworks/Contacts.framework; sourceTree = SDKROOT; };
 		F4F824541BC5AD8B00506144 /* stab.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = stab.wav; sourceTree = SOURCE_ROOT; };
 		F4F8245A1BC5AFC000506144 /* rewind.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = rewind.wav; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
@@ -294,6 +298,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F4F70A0E1BCC79DD00AAA14A /* AddressBook.framework in Frameworks */,
+				F4F70A101BCC79E800AAA14A /* Contacts.framework in Frameworks */,
 				F45A1AA51B857B220004B506 /* Accounts.framework in Frameworks */,
 				F45A1AA31B857B1A0004B506 /* Social.framework in Frameworks */,
 				B6B982BB1AECD619009A8423 /* MobileCoreServices.framework in Frameworks */,
@@ -644,6 +650,8 @@
 		B6E7AAC01868512800DBB0EB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F4F70A0F1BCC79E800AAA14A /* Contacts.framework */,
+				F4F70A0D1BCC79DD00AAA14A /* AddressBook.framework */,
 				F45A1AA41B857B220004B506 /* Accounts.framework */,
 				F45A1AA21B857B1A0004B506 /* Social.framework */,
 				B6B982B51AEB7B25009A8423 /* Bolts.framework */,
