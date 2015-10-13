@@ -30,7 +30,7 @@ typedef void(^BlockBfrAction)(UIBackgroundFetchResult result);
 - (BOOL)application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions
 {
 
-#define MIXPANEL_TOKEN @"bfcb77fdbcaaa747ac994c1bdba999aa"
+#define MIXPANEL_TOKEN @"b3152c0c9f9d07b8b65bfcfe849194c0"
 
     // Initialize the library with your
     // Mixpanel project token, MIXPANEL_TOKEN
