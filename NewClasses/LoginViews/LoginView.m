@@ -447,7 +447,7 @@ typedef enum
             FirstSeparatorView.hidden = YES;
             ThirdSeparatorView.hidden = YES;
             [RightButton setTitle:@"Next" forState:UIControlStateNormal];
-            [RightButton setTitleColor:[TypePink colorWithAlphaComponent: 0.5] forState:UIControlStateDisabled];
+            [RightButton setTitleColor:[TypePink colorWithAlphaComponent: 0.25] forState:UIControlStateDisabled];
             break;
         case E_LoginState_VerificationCode:
             UpperEditor.hidden  = YES;
@@ -469,7 +469,7 @@ typedef enum
             LeftButton.tintColor = TypePink;
             ThirdSeparatorView.hidden = YES;
             [RightButton setTitle:@"Next" forState:UIControlStateNormal];
-            [RightButton setTitleColor:[TypePink colorWithAlphaComponent: 0.5] forState:UIControlStateDisabled];
+            [RightButton setTitleColor:[TypePink colorWithAlphaComponent: 0.25] forState:UIControlStateDisabled];
             break;
         case E_LoginState_Username:
             UpperEditor.hidden  = NO;
@@ -485,7 +485,7 @@ typedef enum
             LeftButton.hidden = YES;
             UpperEditor.textAlignment = NSTextAlignmentCenter;
             LowerEditor.textAlignment = NSTextAlignmentCenter;
-            FirstLabel.text = @"How Friends See You 👀";
+            FirstLabel.text = @"Write your Full Name 📇";
             ThirdSeparatorView.hidden = YES;
             SecondSeparatorView.hidden = YES;
             FirstSeparatorView.hidden = NO;
@@ -493,7 +493,7 @@ typedef enum
             LowerEditor.autocapitalizationType = UITextAutocapitalizationTypeNone;
             RightButton.tintColor = TypePink;
             [RightButton setTitle:@"Done" forState:UIControlStateNormal];
-            [RightButton setTitleColor:[TypePink colorWithAlphaComponent: 0.5] forState:UIControlStateDisabled];
+            [RightButton setTitleColor:[TypePink colorWithAlphaComponent: 0.25] forState:UIControlStateDisabled];
             break;
         case E_LoginState_LoggedIn:
             editorWidth       = width - PREFIX_LEFT_MARGIN - EDITOR_RIGHT_MARGIN;
@@ -633,23 +633,51 @@ typedef enum
             }
             break;
         case E_LoginState_Username:
+
             if (textField == UpperEditor)
             {
+                [UpperEditor becomeFirstResponder];
+                [LowerEditor resignFirstResponder];
+                [UpperEditor setAutocapitalizationType:UITextAutocapitalizationTypeWords];
+                NSCharacterSet *invalidCharSet = [[NSCharacterSet characterSetWithCharactersInString:@"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ "] invertedSet];
+                NSString *text = [[UpperEditor.text componentsSeparatedByCharactersInSet:invalidCharSet] componentsJoinedByString:@""];
+
+                UpperEditor.text = text;
+
                 FullName  = UpperEditor.text;
+
                 [defaults setObject:FullName forKey:LOGIN_FULL_NAME_DEFAULTS_KEY];
             }
             else if (textField == LowerEditor)
             {
+                [UpperEditor resignFirstResponder];
+                [LowerEditor becomeFirstResponder];
+                // take away upppercase and spaces
+
+                NSCharacterSet *invalidCharSet2 = [[NSCharacterSet characterSetWithCharactersInString:@"abcdefghijklmnopqrstuvwxyz1234567890"] invertedSet];
+                NSString *text2 = [[LowerEditor.text componentsSeparatedByCharactersInSet:invalidCharSet2] componentsJoinedByString:@""];
+
+                LowerEditor.text = text2;
                 Username = LowerEditor.text;
                 [defaults setObject:Username forKey:LOGIN_USER_NAME_DEFAULTS_KEY];
             }
-            if ([Username isEqualToString:@""] || [FullName isEqualToString:@""])
+
+            if ([FullName containsString:@" "])
             {
-                RightButton.enabled = NO;
+                NSLog(@"FirstName: %@ and LastName: %@",[FullName componentsSeparatedByString:@" "][0],[FullName componentsSeparatedByString:@" "][1]);
+                if (![Username isEqualToString:@""] && ([FullName componentsSeparatedByString:@" "][0].length > 1) && ([FullName componentsSeparatedByString:@" "][1].length > 1))
+                {
+                    RightButton.enabled = YES;//
+                }
+                else
+                {
+                    RightButton.enabled = NO;
+                }
+
             }
             else
             {
-                RightButton.enabled = YES;
+                RightButton.enabled = NO;
             }
             break;
         case E_LoginState_LoggedIn:
@@ -657,10 +685,12 @@ typedef enum
         case E_LoginState_LoggedOut:
             break;
     }
+
     //  [RollDownErrorView performSelectorOnMainThread:@selector(hide) withObject:nil waitUntilDone:NO];
     [RollDownErrorView hide];
     //  NSLog(@"editorTextChanged: %@", FullPhoneNumber);
 }
+//
 //__________________________________________________________________________________________________
 
 - (BOOL)textFieldShouldEndEditing:(UITextField *)textField
