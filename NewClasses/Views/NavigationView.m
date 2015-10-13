@@ -419,16 +419,21 @@ static NavigationView* Myself;
     [myself->SendToListView clearSelection];
     UpdateFriendRecordListForUser(friend, myself->MessageToSend->Timestamp);
     [myself updateFriendsLists];
-    ParseSendMessage(myself->MessageToSend, ^(BOOL success, NSError *error)
-    {
+      ParseSendMessage(myself->MessageToSend, ^(BOOL success, NSError *error)
+        {
       NSLog(@"2 ParseSendMessage success: %d, error: %@", success, error);
-      if (success)
-      {
-        ParseSendPushNotificationToUser(friend.objectId, [NSString stringWithFormat:GetGlobalParameters().parseNotificationFormatString, GetCurrentParseUser().fullName]);
-      }
-      else
-      {
-        NSLog(@"Failed to save animation with error: %@", error);
+       if (success)
+       {
+           NSString * result = [[myself->MessageToSend->Texts valueForKey:@"description"] componentsJoinedByString:@""];
+           NSString * shortresult = [[result substringToIndex: MIN(30, [result length])] stringByAppendingString:@"..."];
+           NSLog(@"Here is the message: %@", [NSString stringWithFormat:GetGlobalParameters().parseNotificationFormatString, GetCurrentParseUser().fullName, shortresult]);
+
+           ParseSendPushNotificationToUser(friend.objectId, [NSString stringWithFormat:GetGlobalParameters().parseNotificationFormatString, GetCurrentParseUser().fullName, shortresult]);
+       }
+       else
+       {
+         NSLog(@"Failed to save animation with error: %@", error);
+
       }
     });
     [myself->TypingMessageView clearText];
