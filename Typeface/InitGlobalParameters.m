@@ -229,12 +229,12 @@ parameters.blockedUserReasonMessage       = NSLocalizedString(@"You have been bl
 
   parameters.friendsInviteButtonBottomGap           = 43;
   parameters.friendsAddButtonBottomGap              = 5;
-  parameters.friendsInviteButtonTitle               = NSLocalizedString(@"INVITE", @"");
+  parameters.friendsInviteButtonTitle               = NSLocalizedString(@"SHARE", @"");
   parameters.friendsAddButtonTitle                  = NSLocalizedString(@"ADD", @"");
 
   parameters.addFriendAutoSearch                    = NO;
   parameters.addFriendIgnoreBlankSpaces             = YES;
-  parameters.addFriendAllLowercase                  = NO;
+  parameters.addFriendAllLowercase                  = YES;
 
   parameters.friendStateViewCircleLineWidth               = 1.5;
   parameters.friendStateViewCircleRadius                  = 10.5;
@@ -328,7 +328,7 @@ parameters.blockedUserReasonMessage       = NSLocalizedString(@"You have been bl
   parameters.typingLeftButtonAlertMessage         = NSLocalizedString(@"Tapping 🔴 attaches a selfie to your current text blurb", @"");
   parameters.typingLeftButtonAlertOkString        = NSLocalizedString(@"Use It", @"");
   parameters.typingLeftButtonAlertCancelString    = NSLocalizedString(@"Do Over", @"");
-  parameters.typingRightButtonAlertTitle          = NSLocalizedString(@"All done?", @"");
+  parameters.typingRightButtonAlertTitle          = NSLocalizedString(@"Done typing?", @"");
   parameters.typingRightButtonAlertMessage        = NSLocalizedString(@"Tapping 🔵 means you're ready to pick the recipient of the message", @"");
   parameters.typingRightButtonAlertOkString       = NSLocalizedString(@"Yup", @"");
   parameters.typingRightButtonAlertCancelString   = NSLocalizedString(@"Not Yet", @"");
