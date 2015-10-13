@@ -947,7 +947,6 @@ void ParseDidFailToRegisterForRemoteNotificationsWithError(NSError* error)
 void ParseDidReceiveRemoteNotification(NSDictionary* userInfo)
 {
   NSLog(@"ParseDidReceiveRemoteNotification");
-  NSLog(@"%@",userInfo);
   [PFPush handlePush:userInfo];
 }
 //__________________________________________________________________________________________________
@@ -994,7 +993,7 @@ void ParseSendPushNotificationToUser(NSString* destUserObjectId, NSString* text)
     [push setData:data];
     [push sendPushInBackgroundWithBlock:^(BOOL succeeded, NSError *sendError)
     {
-      NSLog(@"succeeded: %d, error: %@", succeeded, sendError);
+//      NSLog(@"succeeded: %d, error: %@", succeeded, sendError);
     }];
   }];
 }

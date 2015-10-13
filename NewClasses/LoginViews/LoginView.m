@@ -1,3 +1,4 @@
+
 //! \file   LoginView.m
 //! \brief  Class that handle user registration and login.
 //__________________________________________________________________________________________________
@@ -632,51 +633,23 @@ typedef enum
             }
             break;
         case E_LoginState_Username:
-
             if (textField == UpperEditor)
             {
-                [UpperEditor becomeFirstResponder];
-                [LowerEditor resignFirstResponder];
-                [UpperEditor setAutocapitalizationType:UITextAutocapitalizationTypeWords];
-                NSCharacterSet *invalidCharSet = [[NSCharacterSet characterSetWithCharactersInString:@"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ "] invertedSet];
-                NSString *text = [[UpperEditor.text componentsSeparatedByCharactersInSet:invalidCharSet] componentsJoinedByString:@""];
-
-                UpperEditor.text = text;
-
                 FullName  = UpperEditor.text;
-
                 [defaults setObject:FullName forKey:LOGIN_FULL_NAME_DEFAULTS_KEY];
             }
             else if (textField == LowerEditor)
             {
-                [UpperEditor resignFirstResponder];
-                [LowerEditor becomeFirstResponder];
-                // take away upppercase and spaces
-
-                NSCharacterSet *invalidCharSet2 = [[NSCharacterSet characterSetWithCharactersInString:@"abcdefghijklmnopqrstuvwxyz1234567890"] invertedSet];
-                NSString *text2 = [[LowerEditor.text componentsSeparatedByCharactersInSet:invalidCharSet2] componentsJoinedByString:@""];
-
-                LowerEditor.text = text2;
                 Username = LowerEditor.text;
                 [defaults setObject:Username forKey:LOGIN_USER_NAME_DEFAULTS_KEY];
             }
-
-            if ([FullName containsString:@" "])
+            if ([Username isEqualToString:@""] || [FullName isEqualToString:@""])
             {
-                NSLog(@"FirstName: %@ and LastName: %@",[FullName componentsSeparatedByString:@" "][0],[FullName componentsSeparatedByString:@" "][1]);
-                if (![Username isEqualToString:@""] && ([FullName componentsSeparatedByString:@" "][0].length > 1) && ([FullName componentsSeparatedByString:@" "][1].length > 1))
-                {
-                    RightButton.enabled = YES;//
-                }
-                else
-                {
-                    RightButton.enabled = NO;
-                }
-
+                RightButton.enabled = NO;
             }
             else
             {
-                RightButton.enabled = NO;
+                RightButton.enabled = YES;
             }
             break;
         case E_LoginState_LoggedIn:
@@ -684,7 +657,6 @@ typedef enum
         case E_LoginState_LoggedOut:
             break;
     }
-
     //  [RollDownErrorView performSelectorOnMainThread:@selector(hide) withObject:nil waitUntilDone:NO];
     [RollDownErrorView hide];
     //  NSLog(@"editorTextChanged: %@", FullPhoneNumber);
@@ -791,7 +763,7 @@ typedef enum
                                       {
                                           if (success)
                                           { // The verification code has been validated.
-                                              ParseFindUserByPhoneNumber(PhoneNumber, ^(id obj, NSError* find_error)
+                                              ParseFindUserByPhoneNumber(FullPhoneNumber, ^(id obj, NSError* find_error)
                                                                          {
                                                                              RecoveredUser             = obj;
                                                                              NSUserDefaults* defaults  = [NSUserDefaults standardUserDefaults];
@@ -891,6 +863,8 @@ typedef enum
 {
     ParseUser* user = GetCurrentParseUser();
     // First, delete the temporary anonymous user.
+
+
     NSLog(@"0 loginExistingUser");
     [user deleteInBackgroundWithBlock:^(BOOL success, NSError* deleteError)
      {
@@ -955,9 +929,7 @@ typedef enum
                                         user.username     = Username;
                                         user.password     = FullPhoneNumber;
                                         user.fullName     = FullName;
-                                        user.phoneNumber  = PhoneNumber;
-                                        [user setObject:SelectedCountryPrefix forKey:@"CountryPrefix"];
-                                        NSLog(@"%@",SelectedCountryPrefix);
+                                        user.phoneNumber  = FullPhoneNumber;
                                         [user saveInBackgroundWithBlock:^(BOOL success, NSError* save_error)
                                          {
                                              if (success)
