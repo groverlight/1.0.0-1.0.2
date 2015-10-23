@@ -23,7 +23,7 @@
 @property NSInteger       numUnreadMessages;
 //____________________
 
-- (instancetype)initWithUser:(ParseUser*)user andTime:(NSTimeInterval)time;
+- (instancetype)initWithUser:(ParseUser*)user andTime:(NSTimeInterval)time; 
 //____________________
 
 @end

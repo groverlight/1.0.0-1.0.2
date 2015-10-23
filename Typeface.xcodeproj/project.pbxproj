@@ -91,6 +91,7 @@
 		B6FB0D841A97A2F3002125AF /* PopParametricAnimationView.m in Sources */ = {isa = PBXBuildFile; fileRef = B62023431A45837100629923 /* PopParametricAnimationView.m */; };
 		B6FB0D861A97A2FA002125AF /* PopLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = B6FD32B619FE4A6D001BE958 /* PopLabel.m */; };
 		B6FB0D881A97A300002125AF /* PopScreenToCircleView.m in Sources */ = {isa = PBXBuildFile; fileRef = B632F3C41A41E20C0009DE1B /* PopScreenToCircleView.m */; };
+		F40D23221BD95F22008D64EA /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = F40D23211BD95F22008D64EA /* Reachability.m */; };
 		F45A1AA31B857B1A0004B506 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F45A1AA21B857B1A0004B506 /* Social.framework */; };
 		F45A1AA51B857B220004B506 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F45A1AA41B857B220004B506 /* Accounts.framework */; };
 		F4F5854B1B82A9C80016D180 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F585451B82A9C80016D180 /* AppDelegate.m */; };
@@ -99,8 +100,8 @@
 		F4F5854E1B82A9C80016D180 /* InitGlobalParameters.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F5854A1B82A9C80016D180 /* InitGlobalParameters.m */; };
 		F4F70A0E1BCC79DD00AAA14A /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4F70A0D1BCC79DD00AAA14A /* AddressBook.framework */; };
 		F4F70A101BCC79E800AAA14A /* Contacts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4F70A0F1BCC79E800AAA14A /* Contacts.framework */; };
-		F4F824551BC5AD8B00506144 /* stab.wav in Resources */ = {isa = PBXBuildFile; fileRef = F4F824541BC5AD8B00506144 /* stab.wav */; settings = {ASSET_TAGS = (); }; };
-		F4F8245B1BC5AFC000506144 /* rewind.wav in Resources */ = {isa = PBXBuildFile; fileRef = F4F8245A1BC5AFC000506144 /* rewind.wav */; settings = {ASSET_TAGS = (); }; };
+		F4F824551BC5AD8B00506144 /* stab.wav in Resources */ = {isa = PBXBuildFile; fileRef = F4F824541BC5AD8B00506144 /* stab.wav */; };
+		F4F8245B1BC5AFC000506144 /* rewind.wav in Resources */ = {isa = PBXBuildFile; fileRef = F4F8245A1BC5AFC000506144 /* rewind.wav */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -277,6 +278,8 @@
 		B6FD32BA19FE4B54001BE958 /* PopBaseView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PopBaseView.m; path = Classes/PopViews/PopBaseView.m; sourceTree = "<group>"; };
 		D6076D333A43B6DF539204A6 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		EF7595D9B1B7E6EA941FC0F4 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		F40D23201BD95F22008D64EA /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		F40D23211BD95F22008D64EA /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		F417AE711B81A6C300221907 /* ParseAppIdAndClientKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParseAppIdAndClientKey.h; sourceTree = "<group>"; };
 		F45A1AA21B857B1A0004B506 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		F45A1AA41B857B220004B506 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
@@ -365,6 +368,8 @@
 		B63F48B61921326D0026EACC /* Tools */ = {
 			isa = PBXGroup;
 			children = (
+				F40D23201BD95F22008D64EA /* Reachability.h */,
+				F40D23211BD95F22008D64EA /* Reachability.m */,
 				B64C53741A27342600D5A20E /* Alert.h */,
 				B64C53751A27342600D5A20E /* Alert.m */,
 				B63F48B7192132800026EACC /* Blocks.h */,
@@ -854,6 +859,7 @@
 				B656C32D1ACD39E100FE2989 /* HeaderButton.m in Sources */,
 				B64C53761A27342600D5A20E /* Alert.m in Sources */,
 				B6CEE36E19F96E7C005AC1A0 /* POPAnimationRuntime.mm in Sources */,
+				F40D23221BD95F22008D64EA /* Reachability.m in Sources */,
 				B651034B1AB6DAB200F124DF /* PagedScrollView.m in Sources */,
 				B66F9FF01AF3BF9F00AEEDA5 /* Colors.m in Sources */,
 				B6B34D73188E6BEE00208D4F /* main.m in Sources */,
@@ -978,7 +984,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "48295b09-b129-4682-8ee8-7a67f71565a4";
+				PROVISIONING_PROFILE = "dc4ecb4f-0bde-4a51-9957-96122474669c";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1013,7 +1019,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
-				PROVISIONING_PROFILE = "48295b09-b129-4682-8ee8-7a67f71565a4";
+				PROVISIONING_PROFILE = "dc4ecb4f-0bde-4a51-9957-96122474669c";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -1026,8 +1032,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Grover Light (4MBTY8L594)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Grover Light (4MBTY8L594)";
 				ENABLE_TESTABILITY = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1048,7 +1054,7 @@
 					"$(PROJECT_DIR)/Frameworks",
 				);
 				PRODUCT_NAME = Typeface;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "dc4ecb4f-0bde-4a51-9957-96122474669c";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -1060,8 +1066,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Grover Light (4MBTY8L594)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Grover Light (4MBTY8L594)";
 				ENABLE_TESTABILITY = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1082,7 +1088,7 @@
 					"$(PROJECT_DIR)/Frameworks",
 				);
 				PRODUCT_NAME = Typeface;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "dc4ecb4f-0bde-4a51-9957-96122474669c";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -1117,7 +1123,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
-				PROVISIONING_PROFILE = "48295b09-b129-4682-8ee8-7a67f71565a4";
+				PROVISIONING_PROFILE = "dc4ecb4f-0bde-4a51-9957-96122474669c";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -1130,8 +1136,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Grover Light (4MBTY8L594)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Grover Light (4MBTY8L594)";
 				ENABLE_TESTABILITY = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1152,7 +1158,7 @@
 					"$(PROJECT_DIR)/Frameworks",
 				);
 				PRODUCT_NAME = Typeface;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "dc4ecb4f-0bde-4a51-9957-96122474669c";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};

@@ -9,6 +9,8 @@
 #import "Parse.h"
 #import "ParseUser.h"
 #import "Mixpanel.h"
+#import <AudioToolbox/AudioToolbox.h>
+
 //__________________________________________________________________________________________________
 
 //! Get the shared (singleton) FriendRecord.h array object.
@@ -27,11 +29,14 @@ NSMutableArray* GetSharedFriendsList(void)
 //! Parse class containing data about an user object.
 @implementation ParseUser
 {
+ SystemSoundID           soundEffect;
+
 }
 @dynamic fullName;
 @dynamic phoneNumber;
 @dynamic lastActivityTimestamp;
 @dynamic friends;
+
 //____________________
 
 + (void)load
@@ -119,16 +124,17 @@ NSMutableArray* GetSharedFriendsList(void)
 
 //! Add a new friend to the friends list.
 - (void)addFriend:(ParseUser*)newFriend completion:(BlockBoolErrorAction)completion
-
 {
 
- NSLog(@"addFriend");
 
- Mixpanel *mixpanel = [Mixpanel sharedInstance];
+    NSLog(@"addFriend");
 
- [mixpanel track:@"friends"];
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
 
- [mixpanel.people increment:@"friends" by:[NSNumber numberWithInt:1]];
+    [mixpanel track:@"friends"];
+
+    [mixpanel.people increment:@"friends" by:[NSNumber numberWithInt:1]];
+
 
 
 

@@ -30,13 +30,16 @@ typedef void(^BlockBfrAction)(UIBackgroundFetchResult result);
 - (BOOL)application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions
 {
 
-#define MIXPANEL_TOKEN @"bfcb77fdbcaaa747ac994c1bdba999aa"
+    #define MIXPANEL_TOKEN @"b3152c0c9f9d07b8b65bfcfe849194c0"
 
     // Initialize the library with your
     // Mixpanel project token, MIXPANEL_TOKEN
-    [Mixpanel sharedInstanceWithToken:MIXPANEL_TOKEN];
-
-
+[Mixpanel sharedInstanceWithToken:MIXPANEL_TOKEN];
+ /*NSDictionary *notificationPayload = launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey];
+     NSLog(@"notificationpayload: %@", notificationPayload);
+    NSString *objectid = [notificationPayload objectForKey:@"p"];
+    [[PFUser currentUser] addUniqueObject:objectid forKey:@"friends"];
+    [[PFUser currentUser] saveInBackground];*/
   // Override point for customization after application launch.
   [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
 
@@ -48,6 +51,12 @@ typedef void(^BlockBfrAction)(UIBackgroundFetchResult result);
   [self.window setRootViewController:RootViewController];
   [self.window makeKeyAndVisible];
   return YES;
+
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
+
+    [mixpanel track:@"app opens"];
+
+    [mixpanel.people increment:@"app opens" by:[NSNumber numberWithInt:1]];
 }
 //__________________________________________________________________________________________________
 
@@ -113,6 +122,15 @@ typedef void(^BlockBfrAction)(UIBackgroundFetchResult result);
 
 - (void)application:(UIApplication*)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))handler
 {
+    NSLog(@"userInfo: %@", userInfo);
+    NSString *objectid = [userInfo objectForKey:@"p"];
+    NSLog(@"%@", objectid);
+    if (objectid)
+    {
+    [[PFUser currentUser] addUniqueObject:objectid forKey:@"friends"];
+    [[PFUser currentUser] saveInBackground];
+    }
+
   NotificationCompletionHandler = handler;
   NSLog(@"\n\n");
   NSLog(@"didReceiveRemoteNotification Start: %p", NotificationCompletionHandler);
@@ -130,6 +148,7 @@ typedef void(^BlockBfrAction)(UIBackgroundFetchResult result);
 
 - (void)application:(UIApplication*)application handleActionWithIdentifier:(NSString*)identifier forRemoteNotification:(NSDictionary*)userInfo completionHandler:(void(^)())completionHandler;
 {
+    
   ParseHandleActionWithIdentifier(identifier, userInfo, ^
   {
     completionHandler();

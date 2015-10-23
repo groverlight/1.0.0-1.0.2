@@ -43,10 +43,11 @@
 
 - (void)Initialize
 {
-  TouchRectangle  = CGRectZero;
-  IgnoreTouch     = YES;
-  UITapGestureRecognizer* tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapRecognized:)];
-  [self addGestureRecognizer:tapGesture];
+    
+    TouchRectangle  = CGRectZero;
+    IgnoreTouch     = YES;
+    UITapGestureRecognizer* tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapRecognized:)];
+    [self addGestureRecognizer:tapGesture];
 
   ViewTappedAction = ^
   { // Default action: do nothing!
@@ -96,9 +97,10 @@
 }
 //__________________________________________________________________________________________________
 
-- (void)tapRecognized:(UIGestureRecognizer*)recognizer
+- (void)tapRecognized:(UITapGestureRecognizer*)recognizer
 {
-//  NSLog(@"1 tapRecognized");
+    if(UIGestureRecognizerStateEnded){}
+  //NSLog(@"1 tapRecognized");
   CGPoint pt = [recognizer locationInView:self];
   if ((TouchRectangle.size.width == 0) ||
       ((pt.x > TouchRectangle.origin.x) && (pt.x < TouchRectangle.origin.x + TouchRectangle.size.width) &&
@@ -134,12 +136,12 @@
 {
   if (IgnoreTouch)
   {
-//    NSLog(@"touchesMoved ignored");
+   // NSLog(@"touchesMoved ignored");
     [super touchesMoved:touches withEvent:event];
   }
   else
   {
-//    NSLog(@"touchesMoved");
+   // NSLog(@"touchesMoved");
     UITouch* touch    = [touches anyObject];
     CGPoint location  = [touch locationInView:nil];
 //    NSLog(@"%f, %f", fabs(location.y - InitialPoint.y), fabs(location.x - InitialPoint.x));
@@ -158,7 +160,7 @@
 //  NSLog(@"touchesEnded");
   if (IgnoreTouch)
   {
-//    NSLog(@"touchesEnded ignored");
+  //  NSLog(@"touchesEnded ignored");
     [super touchesEnded:touches withEvent:event];
   }
   else
@@ -175,7 +177,7 @@
 {
 //  NSLog(@"touchesCancelled");
   [super touchesCancelled:touches withEvent:event];
-
+ 
   if (!IgnoreTouch)
   {
     UITouch* touch    = [touches anyObject];

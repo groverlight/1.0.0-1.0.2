@@ -35,34 +35,6 @@ bool IsIpad(void)
 }
 //__________________________________________________________________________________________________
 
-//! Check if this device is an iPhone with a 3.5" screen.
-bool IsIphone3_5(void)
-{
-  return (!IsIpad() && ([UIScreen mainScreen].applicationFrame.size.height == 480));
-}
-//__________________________________________________________________________________________________
-
-//! Check if this device is an iPhone with a 4.0" screen.
-bool IsIphone4_0(void)
-{
-  return (!IsIpad() && ([UIScreen mainScreen].applicationFrame.size.height == 568));
-}
-//__________________________________________________________________________________________________
-
-//! Check if this device is an iPhone with a 4.7" screen.
-bool IsIphone4_7(void)
-{
-  return (!IsIpad() && ([UIScreen mainScreen].applicationFrame.size.height == 667));
-}
-//__________________________________________________________________________________________________
-
-//! Check if this device is an iPhone with a 5.5" screen.
-bool IsIphone5_5(void)
-{
-  return (!IsIpad() && ([UIScreen mainScreen].applicationFrame.size.height == 1104));
-}
-//__________________________________________________________________________________________________
-
 //! Return YES if the device is curently in portrait orientation.
 bool IsPortraitOrientation(void)
 {

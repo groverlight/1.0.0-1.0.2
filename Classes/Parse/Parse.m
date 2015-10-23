@@ -13,6 +13,7 @@
 #import "Tools.h"
 #import "UnreadMessages.h"
 #import "Mixpanel.h"
+#import <AudioToolbox/AudioToolbox.h>
 //__________________________________________________________________________________________________
 
 #define PARSE_USER_TOKEN_DEFAULTS_KEY @"ParseUserToken" //!< The key to retrieve the Parse token in the user defaults.
@@ -53,6 +54,8 @@ static BlockBoolAction  RegisterCompletionAction;
   return [self base64EncodedStringWithOptions: 0];
 } // -PF_base64EncodedString
 
+ SystemSoundID           soundEffect;
+
 @end
 //==================================================================================================
 
@@ -73,9 +76,8 @@ void ResetLoginDefaults(void)
 //! Perform the primary Parse initialization stuff.
 void ParseAppDelegateInitialization(NSDictionary* launchOptions)
 {
-//  NSLog(@"ParseAppDelegateInitialization");
+  NSLog(@"ParseAppDelegateInitialization");
   [Parse setApplicationId:PARSE_APPLICATION_ID clientKey:PARSE_CLIENT_KEY];
-
   // Parse Analytics initialization.
   [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
 
@@ -126,7 +128,8 @@ BOOL ParseInitialization
   }
   else
   {
-//    NSLog(@"--- currentUser: %p", GetCurrentParseUser());
+      
+// NSLog(@"--- currentUser: %p", GetCurrentParseUser());
     [ParseUser becomeInBackground:parseUserToken block:^(PFUser* user, NSError* error)
     {
 //      NSLog(@"--- user: %p", user);
@@ -273,6 +276,7 @@ static void ParseSendMessageBody
   BlockBoolErrorAction  completion      //!< The block to call when the message has been sent.
 )
 {
+
   NSLog(@"1 ParseSendMessageBody");
   ParseMessage* parse_message           = [ParseMessage object];
   parse_message.time                    = msg->Timestamp;
@@ -347,10 +351,11 @@ static void ParseSendMessageSnapshots
 //! Save to Parse storage the specified message.
 void ParseSendMessage
 (
-  Message*              msg,        //!< The message to send.
+  Message*              msg,        //!< The message to send. 
   BlockBoolErrorAction  completion  //!< The block to call when the message has been sent.
 )
 {
+
   NSLog(@"1 ParseSendMessage start");
 
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
@@ -358,6 +363,13 @@ void ParseSendMessage
     [mixpanel track:@"messages sent"];
 
     [mixpanel.people increment:@"messages sent" by:[NSNumber numberWithInt:1]];
+
+    NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"rewind"ofType:@"wav"];
+    NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
+    AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
+
+    AudioServicesPlaySystemSound(soundEffect);
+
 
 
   if (msg == nil)
@@ -479,6 +491,12 @@ void ParseRemoveFriend
   BlockBoolErrorAction  completion              //!< The block to call when the message has been sent.
 )
 {
+    NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"rewind"ofType:@"wav"];
+    NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
+    AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
+
+    AudioServicesPlaySystemSound(soundEffect);
+
     NSLog(@"ParseRemoveFriend start");
 
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
@@ -486,6 +504,7 @@ void ParseRemoveFriend
     [mixpanel track:@"friends removed"];
 
     [mixpanel.people increment:@"friends removed" by:[NSNumber numberWithInt:1]];
+
 
   // Send the message to parse.
   ParseMessage* parse_message           = [ParseMessage object];
@@ -947,6 +966,8 @@ void ParseDidFailToRegisterForRemoteNotificationsWithError(NSError* error)
 void ParseDidReceiveRemoteNotification(NSDictionary* userInfo)
 {
   NSLog(@"ParseDidReceiveRemoteNotification");
+    NSLog(@"%@",userInfo);
+   
   [PFPush handlePush:userInfo];
 }
 //__________________________________________________________________________________________________
@@ -993,7 +1014,7 @@ void ParseSendPushNotificationToUser(NSString* destUserObjectId, NSString* text)
     [push setData:data];
     [push sendPushInBackgroundWithBlock:^(BOOL succeeded, NSError *sendError)
     {
-//      NSLog(@"succeeded: %d, error: %@", succeeded, sendError);
+      NSLog(@"succeeded: %d, error: %@", succeeded, sendError);
     }];
   }];
 }

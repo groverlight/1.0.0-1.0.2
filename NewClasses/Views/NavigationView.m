@@ -19,6 +19,8 @@
 #import "TypingView.h"
 #import "Tools.h"
 #import "UnreadMessages.h"
+#import "Mixpanel.h"
+#import <AudioToolbox/AudioToolbox.h>
 //__________________________________________________________________________________________________
 
 //! \brief  BaseView based class that manages the navigation between the main views.
@@ -55,6 +57,8 @@ static NavigationView* Myself;
 
 //! \brief  UIView based class that manages navigation through a stack of card views.
 @implementation NavigationView
+
+SystemSoundID           soundEffect;
 
 //! Initialize the object however it has been created.
 -(void)Initialize
@@ -109,6 +113,7 @@ static NavigationView* Myself;
   };
   ScrolledToFriendsPage = ^
   { // Default action: do nothing!
+      
   };
   PleaseBlurByThisFactorAction = ^(CGFloat blurFactor)
   { // Default action: do nothing!
@@ -167,7 +172,9 @@ static NavigationView* Myself;
       break;
     case 2:
       {
-//        NSLog(@"Activity: %p, typing: %p, AZ: %p, Send: %p", myself->ActivityListView, myself->TypingMessageView, myself->AzFriendsListView, myself->SendToListView);
+          
+          myself.top = myself->RightVerticalOffset;
+       /*   NSLog(@"Activity: %p, typing: %p, AZ: %p, Send: %p", myself->ActivityListView, myself->TypingMessageView, myself->AzFriendsListView, myself->SendToListView);*/
         [UIView animateWithDuration:0.2 animations:^
         {
           myself.top = myself->RightVerticalOffset;
@@ -321,12 +328,23 @@ static NavigationView* Myself;
   {
     get_myself;
     myself->ScrollView.scrollView.scrollEnabled = NO;
-    NSLog(@"ActivityListView->TouchStarted disable scroll: %d", myself->ScrollView.scrollView.scrollEnabled);
+//    NSLog(@"ActivityListView->TouchStarted disable scroll: %d", myself->ScrollView.scrollView.scrollEnabled);
+//      NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"rewind"ofType:@"wav"];
+//      NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
+//      AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
+//         AudioServicesPlaySystemSound(soundEffect);
+
   };
 
   ActivityListView->TouchEnded = ^(CGPoint point, NSInteger tableIndex)
   {
     NSLog(@"1 ActivityListView->TouchEnded");
+
+      NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"rewind"ofType:@"wav"];
+      NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
+      AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
+
+      AudioServicesPlaySystemSound(soundEffect);
     FinalPlayerPoint = point;
     get_myself;
     if (!myself->ScrollView.scrollView.scrollEnabled)
@@ -392,6 +410,7 @@ static NavigationView* Myself;
         myself->ScrollView.scrollView.scrollEnabled = YES;
       }
       NSLog(@"SendToListView->TouchEnded enable scroll: %d", myself->ScrollView.scrollView.scrollEnabled);
+     
       [myself hidePlayer];
       [myself->Player stopPlayer];
     }
@@ -402,6 +421,7 @@ static NavigationView* Myself;
     get_myself;
     myself->ScrollView.scrollView.scrollEnabled = YES;
     NSLog(@"SendToListView->ProgressCancelled enable scroll: %d", myself->ScrollView.scrollView.scrollEnabled);
+    
   };
 
   SendToListView->ProgressCompleted = ^(CGPoint point, NSInteger tableIndex)
@@ -419,21 +439,20 @@ static NavigationView* Myself;
     [myself->SendToListView clearSelection];
     UpdateFriendRecordListForUser(friend, myself->MessageToSend->Timestamp);
     [myself updateFriendsLists];
-      ParseSendMessage(myself->MessageToSend, ^(BOOL success, NSError *error)
-        {
+    ParseSendMessage(myself->MessageToSend, ^(BOOL success, NSError *error)
+    {
       NSLog(@"2 ParseSendMessage success: %d, error: %@", success, error);
-       if (success)
-       {
-           NSString * result = [[myself->MessageToSend->Texts valueForKey:@"description"] componentsJoinedByString:@""];
-           NSString * shortresult = [[result substringToIndex: MIN(30, [result length])] stringByAppendingString:@"..."];
-           NSLog(@"Here is the message: %@", [NSString stringWithFormat:GetGlobalParameters().parseNotificationFormatString, GetCurrentParseUser().fullName, shortresult]);
-
-           ParseSendPushNotificationToUser(friend.objectId, [NSString stringWithFormat:GetGlobalParameters().parseNotificationFormatString, GetCurrentParseUser().fullName, shortresult]);
-       }
-       else
-       {
-         NSLog(@"Failed to save animation with error: %@", error);
-
+      if (success)
+      {
+         NSString * result = [[myself->MessageToSend->Texts valueForKey:@"description"] componentsJoinedByString:@""];
+          NSString * shortresult = [[result substringToIndex: MIN(30, [result length])] stringByAppendingString:@"..."];
+          NSLog(@"Here is the message: %@", [NSString stringWithFormat:GetGlobalParameters().parseNotificationFormatString, GetCurrentParseUser().fullName, shortresult]);
+          
+        ParseSendPushNotificationToUser(friend.objectId, [NSString stringWithFormat:GetGlobalParameters().parseNotificationFormatString, GetCurrentParseUser().fullName, shortresult]);
+      }
+      else
+      {
+        NSLog(@"Failed to save animation with error: %@", error);
       }
     });
     [myself->TypingMessageView clearText];
@@ -461,12 +480,18 @@ static NavigationView* Myself;
     NSLog(@"1 PreviewChunkCompletionAction done: %d", done);
     if (done)
     {
+
       myself->ScrollView.scrollView.scrollEnabled = YES;
       NSLog(@"3 PreviewChunkCompletionAction enable scroll: %d", myself->ScrollView.scrollView.scrollEnabled);
       [myself hidePlayer];
     }
-    else
+    else //a sound each chunk
     {
+        NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"stab" ofType:@"wav"];
+        NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
+        AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
+
+        AudioServicesPlaySystemSound(soundEffect);
       NSLog(@"4 PreviewChunkCompletionAction displayNextChunk");
       [myself->Player displayNextChunk:myself->PreviewChunkCompletionAction];
     }
@@ -501,11 +526,27 @@ static NavigationView* Myself;
       }
       myself->ScrollView.scrollView.scrollEnabled = YES;
       NSLog(@"PlayerChunkCompletionAction enable scroll: %d", myself->ScrollView.scrollView.scrollEnabled);
+
+            NSLog(@"I just watched a message");
+
+        Mixpanel *mixpanel = [Mixpanel sharedInstance];
+
+        [mixpanel track:@"messages read"];
+
+        [mixpanel.people increment:@"messages read" by:[NSNumber numberWithInt:1]];
+
+
       [myself hidePlayer];
     }
     else
     {
+        NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"stab" ofType:@"wav"];
+        NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
+        AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
+
+        AudioServicesPlaySystemSound(soundEffect);
       [myself->Player displayNextChunk:myself->PlayerChunkCompletionAction];
+
     }
   };
 
@@ -529,6 +570,7 @@ static NavigationView* Myself;
   [Player hideAnimatedToPoint:FinalPlayerPoint andInitialRadius:GetGlobalParameters().friendStateViewCircleRadius completion:^
   {
     NSLog(@"[NavigationView HidePlayer] -> hideAnimatedToPoint completed!");
+
   }];
 }
 //__________________________________________________________________________________________________
@@ -558,6 +600,7 @@ static NavigationView* Myself;
   frame                   = FriendsBundleView.bounds;
   AzFriendsListView.frame = frame;
   SendToListView.frame    = frame;
+
 }
 //__________________________________________________________________________________________________
 
@@ -659,21 +702,21 @@ static NavigationView* Myself;
 
 - (void)loadReceivedMessages:(BlockBoolAction)completion
 {
-  NSLog(@"-- loadReceivedMessages");
+ // NSLog(@"-- loadReceivedMessages");
   ParseLoadMessageArray(^
   {
-    NSLog(@"-0 loadReceivedMessages");
+   // NSLog(@"-0 loadReceivedMessages");
     ActivityListView.busy = YES;
   }, ^(BOOL changed, NSError* loadError)
   {
-    NSLog(@"00 loadReceivedMessages change: %d", changed);
+    //NSLog(@"00 loadReceivedMessages change: %d", changed);
     if (changed)
     {
       [self performSelectorInBackground:@selector(locallySaveMessageArrayInBackground) withObject:nil];
     }
-    NSLog(@"00.1 loadReceivedMessages change: %d", changed);
+    //NSLog(@"00.1 loadReceivedMessages change: %d", changed);
     UnreadMessages* messages = GetSharedUnreadMessages();
-    NSLog(@"00.2 loadReceivedMessages change: %d", changed);
+    //NSLog(@"00.2 loadReceivedMessages change: %d", changed);
     ParseLoadUsersForMessages(messages, ^
     {
       UnreadMessages* unreadMsgs = GetSharedUnreadMessages();
@@ -688,14 +731,14 @@ static NavigationView* Myself;
         {
           [self hideLeftItemDot];
         }
-        NSLog(@"01 loadReceivedMessages");
+     //   NSLog(@"01 loadReceivedMessages");
         UpdateFriendRecordListForMessages(unreadMsgs, ^(BOOL activityChanged)
         {
-          NSLog(@"02 loadReceivedMessages");
+       //   NSLog(@"02 loadReceivedMessages");
           RefreshAllFriends(^
           {
             [self updateFriendsLists];
-            NSLog(@"03 loadReceivedMessages");
+         //   NSLog(@"03 loadReceivedMessages");
             ActivityListView.busy = NO;
             completion(YES);
           });
@@ -703,7 +746,7 @@ static NavigationView* Myself;
       }
       else
       {
-        NSLog(@"Failed to load messages with error: %@", loadError);
+     //   NSLog(@"Failed to load messages with error: %@", loadError);
         ActivityListView.busy = NO;
         [self updateFriendsLists];
         completion(NO);

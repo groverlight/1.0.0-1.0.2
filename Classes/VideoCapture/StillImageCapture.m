@@ -9,6 +9,7 @@
 #import "StillImageCapture.h"
 #import "VideoCapture.h"
 #import "Mixpanel.h"
+#import <AudioToolbox/AudioToolbox.h>
 //__________________________________________________________________________________________________
 
 static StillImageCapture* SharedStillImageCapture = nil;
@@ -65,13 +66,19 @@ static StillImageCapture* SharedStillImageCapture = nil;
 
 - (void)takeSnapshot:(BlockIdAction)completion
 {
-    NSLog(@"takeSnapshot 0");
+
+    NSLog(@"selfie");
+
+
+    //NSLog(@"takeSnapshot 0");
 
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
 
     [mixpanel track:@"selfies"];
 
     [mixpanel.people increment:@"selfies" by:[NSNumber numberWithInt:1]];
+
+
 
   AVCaptureConnection* videoConnection = nil;
   for (AVCaptureConnection* connection in stillImageOutput.connections)
@@ -122,6 +129,7 @@ static StillImageCapture* SharedStillImageCapture = nil;
   }
 //  NSLog(@"takeSnapshot 5");
 }
+
 //__________________________________________________________________________________________________
 
 @end

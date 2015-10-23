@@ -53,13 +53,13 @@ parameters.blockedUserReasonMessage       = NSLocalizedString(@"You have been bl
   };
   parameters.invalidParseSessionToken = ^
   {
-    Alert(NSLocalizedString(@"Well, this is embarrassing", @""), NSLocalizedString(@"Looks like our server may be acting up.\nTry loggin in again please 🙏🏼", @""), NSLocalizedString(@"OK", @""), nil, ^(NSInteger pressedButton)
+    Alert(NSLocalizedString(@"Shoot!", @""), NSLocalizedString(@"Looks like our server may be acting up.\nTry loggin in again please.", @""), NSLocalizedString(@"OK", @""), nil, ^(NSInteger pressedButton)
     { // Do nothing!
     });
   };
   parameters.missingInternetConnection = ^(BlockAction retry)
   {
-    Alert(NSLocalizedString(@"The Internet connection appears to be offline 📵", @""), NSLocalizedString(@"Press OK when connection is stronger 💪🏼", @""), NSLocalizedString(@"OK", @""), nil, ^(NSInteger pressedButton)
+    Alert(NSLocalizedString(@"The Internet connection is offline", @""), NSLocalizedString(@"Press OK when connection is stronger", @""), NSLocalizedString(@"OK", @""), nil, ^(NSInteger pressedButton)
     { // Do nothing!
       retry();
     });
@@ -75,7 +75,7 @@ parameters.blockedUserReasonMessage       = NSLocalizedString(@"You have been bl
     [viewController loginDone:newUser];
   };
 
-    parameters.findUserMessagingSampleText          = NSLocalizedString(@"I'm done being misunderstood when we text. I'm on Typeface now. Talk to me there.\nMy username is %@\nhttp://itunes.apple.com/app/id1032193825", @"");  // The %@ is a placeholder for the username.
+    parameters.findUserMessagingSampleText          = NSLocalizedString(@"Don't be misunderstood - add me on typeface. My username is %@. \nitunes.apple.com/app/id1032193825", @"");  // The %@ is a placeholder for the username.
   parameters.findUserMessagingNotSupportedAction  = ^
   {
     Alert(NSLocalizedString(@"Failed to send iMessage", @""), NSLocalizedString(@"Messaging is not supported on this device!", @""), NSLocalizedString(@"OK", @""), nil, ^(NSInteger pressedButton)
@@ -89,19 +89,19 @@ parameters.blockedUserReasonMessage       = NSLocalizedString(@"You have been bl
     });
   };
 
-  parameters.rollDownViewBackgroundColor                = TypePink;
+  parameters.rollDownViewBackgroundColor                = TypeTeal;
 
-  parameters.loginRollDownViewTitle                     = NSLocalizedString(@"Oops, tap backspace ◀️", @"");
-  parameters.loginRollDownPhoneNumberFormatErrorMessage = NSLocalizedString(@"Please double-check your # 📵", @"");
-  parameters.loginRollDownPhoneNumberErrorMessage       = NSLocalizedString(@"Please double-check your # 📵", @"");
-  parameters.loginRollDownVerificationCodeErrorMessage  = NSLocalizedString(@"Please double-check your code 🔑", @"");
-  parameters.loginRollDownUsernameErrorMessage          = NSLocalizedString(@"That username is taken. Try a different one!", @"");
+  parameters.loginRollDownViewTitle                     = NSLocalizedString(@"Oops, tap backspace", @"");
+  parameters.loginRollDownPhoneNumberFormatErrorMessage = NSLocalizedString(@"Please double-check your mobile #", @"");
+  parameters.loginRollDownPhoneNumberErrorMessage       = NSLocalizedString(@"Please double-check your mobile #", @"");
+  parameters.loginRollDownVerificationCodeErrorMessage  = NSLocalizedString(@"Please double-check your code", @"");
+  parameters.loginRollDownUsernameErrorMessage          = NSLocalizedString(@"Sorry, that username is taken", @"");
 
-  parameters.addFriendRollDownViewTitle                         = NSLocalizedString(@"Oops, tap backspace ◀️", @"");
-  parameters.AddFriendRollDownAlreadyFriendErrorMessage         = NSLocalizedString(@"You two are already friends 👥", @"");
-  parameters.AddFriendRollDownBlockedFriendErrorMessage         = NSLocalizedString(@"You blocked this user 🙅🏼", @"");
-  parameters.AddFriendRollDownBlockingUserErrorMessage          = NSLocalizedString(@"We couldn't find that username 🔎 ", @"");
-  parameters.AddFriendRollDownUnknownUsernameErrorMessage       = NSLocalizedString(@"We couldn't find that username 🔎 ", @"");
+  parameters.addFriendRollDownViewTitle                         = NSLocalizedString(@"Oops, tap backspace", @"");
+  parameters.AddFriendRollDownAlreadyFriendErrorMessage         = NSLocalizedString(@"You two are already friends", @"");
+  parameters.AddFriendRollDownBlockedFriendErrorMessage         = NSLocalizedString(@"You blocked this user", @"");
+  parameters.AddFriendRollDownBlockingUserErrorMessage          = NSLocalizedString(@"We couldn't find that username", @"");
+  parameters.AddFriendRollDownUnknownUsernameErrorMessage       = NSLocalizedString(@"We couldn't find that username", @"");
 
   parameters.cameraExposureTargetBias             = 0.65;
   parameters.cameraManualExposureEnabled          = NO;
@@ -116,8 +116,8 @@ parameters.blockedUserReasonMessage       = NSLocalizedString(@"You have been bl
   parameters.cameraUseBackCamera                  = NO;
 
   parameters.gradientTopColor                     = ColorWithAlpha(White , 1.0);
-  parameters.gradientBottomColor                  = ColorWithAlpha(White , 0.45);
-  parameters.gradientAlpha                        = 0.9;
+  parameters.gradientBottomColor                  = ColorWithAlpha(White , 0.55);
+  parameters.gradientAlpha                        = 1.0;
 
   parameters.separatorLineWidth                   = 0.40;
   parameters.separatorLineColor                   = LightGrey;
@@ -212,8 +212,8 @@ parameters.blockedUserReasonMessage       = NSLocalizedString(@"You have been bl
   parameters.friendsProgressLineWidth             	= 2;
   parameters.friendsProgressStrokeColor             = Transparent;
   parameters.friendsProgressFillColor               = parameters.secondaryButtonColor;
-  parameters.friendsSendToLabelTitle              	= NSLocalizedString(@"press & hold send", @"");
-  parameters.friendsA_ZLabelTitle                 	= NSLocalizedString(@"tap below to add friends", @"");
+  parameters.friendsSendToLabelTitle              	= NSLocalizedString(@"press & hold to send", @"");
+  parameters.friendsA_ZLabelTitle                 	= NSLocalizedString(@"tap below to find friends", @"");
   parameters.friendsActivityLabelTitle              = NSLocalizedString(@"press & hold to watch", @"");
   parameters.friendsLabelTitleColor                 = LightGrey;
   parameters.friendsLabelTitleFontSize              = 16;
@@ -229,12 +229,12 @@ parameters.blockedUserReasonMessage       = NSLocalizedString(@"You have been bl
 
   parameters.friendsInviteButtonBottomGap           = 43;
   parameters.friendsAddButtonBottomGap              = 5;
-  parameters.friendsInviteButtonTitle               = NSLocalizedString(@"SHARE", @"");
+  parameters.friendsInviteButtonTitle               = NSLocalizedString(@"MORE FRIENDS", @"");
   parameters.friendsAddButtonTitle                  = NSLocalizedString(@"ADD", @"");
 
   parameters.addFriendAutoSearch                    = NO;
   parameters.addFriendIgnoreBlankSpaces             = YES;
-  parameters.addFriendAllLowercase                  = YES;
+  parameters.addFriendAllLowercase                  = NO;
 
   parameters.friendStateViewCircleLineWidth               = 1.5;
   parameters.friendStateViewCircleRadius                  = 10.5;
@@ -293,29 +293,10 @@ parameters.blockedUserReasonMessage       = NSLocalizedString(@"You have been bl
   parameters.typingFont                           = [UIFont fontWithName:@"AvenirNext-Medium" size:18];
 
 
-    if (IsIphone3_5)
-    {
-        parameters.typingSmallFontSize                         = 22;
-        parameters.typingLargeFontSize                         = 30;
-    }
 
-    else if (IsIphone5_5)
-    {
-        parameters.typingSmallFontSize                         = 22;
-        parameters.typingLargeFontSize                         = 30;
-    }
-
-    else if (IsIphone4_7)
-    {
-        parameters.typingSmallFontSize                         = 22;
-        parameters.typingLargeFontSize                         = 30;
-    }
-
-    else if (IsIphone5_5) {
 
         parameters.typingSmallFontSize                         = 22;
         parameters.typingLargeFontSize                         = 30;
-    }
 
   //parameters.TypingButtonFont                     = [UIFont fontWithName:@"AvenirNext-DemiBold" size:17];
   parameters.typingFaceButtonTitle                = NSLocalizedString(@"FACE", @"");
@@ -325,13 +306,13 @@ parameters.blockedUserReasonMessage       = NSLocalizedString(@"You have been bl
     parameters.typingCharacterCountColor            = [White colorWithAlphaComponent:0.5];;
   parameters.typingCharacterCountRightMargin      = 24;
   parameters.typingLeftButtonAlertTitle           = NSLocalizedString(@"Use that selfie?", @"");
-  parameters.typingLeftButtonAlertMessage         = NSLocalizedString(@"Tapping 🔴 attaches a selfie to your current text blurb", @"");
+  parameters.typingLeftButtonAlertMessage         = NSLocalizedString(@"Tapping FACE attaches a selfie to your current text blurb", @"");
   parameters.typingLeftButtonAlertOkString        = NSLocalizedString(@"Use It", @"");
-  parameters.typingLeftButtonAlertCancelString    = NSLocalizedString(@"Do Over", @"");
-  parameters.typingRightButtonAlertTitle          = NSLocalizedString(@"Done typing?", @"");
-  parameters.typingRightButtonAlertMessage        = NSLocalizedString(@"Tapping 🔵 means you're ready to pick the recipient of the message", @"");
-  parameters.typingRightButtonAlertOkString       = NSLocalizedString(@"Yup", @"");
-  parameters.typingRightButtonAlertCancelString   = NSLocalizedString(@"Not Yet", @"");
+  parameters.typingLeftButtonAlertCancelString    = NSLocalizedString(@"Re-shoot", @"");
+  parameters.typingRightButtonAlertTitle          = NSLocalizedString(@"You can type more blurbs!", @"");
+  parameters.typingRightButtonAlertMessage        = NSLocalizedString(@"Tapping GO means you're ready to pick the recipient of the message", @"");
+  parameters.typingRightButtonAlertOkString       = NSLocalizedString(@"Done", @"");
+  parameters.typingRightButtonAlertCancelString   = NSLocalizedString(@"Type More", @"");
 
 
   parameters.faceButtonWidth = 220;
@@ -353,29 +334,8 @@ parameters.blockedUserReasonMessage       = NSLocalizedString(@"You have been bl
   parameters.playerLabelLateralMargin                             = 50;
 
 
-    if (IsIphone3_5)
-    {
-        parameters.playerShortTextFontSize                         = 32;
-        parameters.playerLongTextFontSize                          = 22;
-    }
-
-    else if (IsIphone5_5)
-    {
-        parameters.playerShortTextFontSize                        = 22;
-        parameters.playerLongTextFontSize                         = 30;
-    }
-
-    else if (IsIphone4_7)
-    {
-        parameters.playerShortTextFontSize                        = 22;
-        parameters.playerLongTextFontSize                         = 30;
-    }
-
-    else if (IsIphone5_5) {
-
-        parameters.playerShortTextFontSize                        = 22;
-        parameters.playerLongTextFontSize                         = 30;
-    }
+ parameters.playerShortTextFontSize                         = 32;
+parameters.playerLongTextFontSize                          = 22;
 
   parameters.playerTextColor                                      = WarmGrey;
   parameters.playerFontSizeCharacterCountTrigger                  = 90;

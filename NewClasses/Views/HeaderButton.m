@@ -11,10 +11,14 @@
 #import "StillImageCapture.h"
 #import "Tools.h"
 #import "TopBarView.h"
+#import <AudioToolbox/AudioToolbox.h>
+
+
 //__________________________________________________________________________________________________
 
 @interface DotView : PopParametricAnimationView
 {
+   
 }
 //____________________
 
@@ -22,6 +26,7 @@
 @property UIColor*  color;
 
 - (void)bounceDot;
+
 //____________________
 
 @end
@@ -136,6 +141,8 @@
   BOOL          DotVisible;
   BOOL          InitialSelection;
   BOOL          IsSpringAnimation;
+  SystemSoundID           soundEffect;
+
 }
 //____________________
 
@@ -302,8 +309,15 @@
     if (!self.selected && selected)
     {
       BOOL doNotBounceToSelected = InitialSelection || (CurrentButtonState == E_PopViewState_Highlighted) || IsSpringAnimation;
+
       NSLog(@"1 %p HeaderButton setSelected doNotBounceToSelected: %d", self, doNotBounceToSelected);
       [self animateToState:doNotBounceToSelected? E_PopViewState_Selected: E_PopViewState_BounceToSelected];
+
+        NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"stab" ofType:@"wav"];
+        NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
+        AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
+
+        AudioServicesPlaySystemSound(soundEffect);
     }
     else if (self.selected && !selected)
     {
@@ -373,6 +387,7 @@
 - (void)animateToState:(PopViewState)state
 {
   NSLog(@"1 %p HeaderButton animateToState: %d, CurrentButtonState: %d", self, state, CurrentButtonState);
+
   if ((state != CurrentButtonState) && (!IsSpringAnimation || !((state == E_PopViewState_Selected) && (CurrentButtonState == E_PopViewState_Highlighted))))
   {
     [self stopAnimation];

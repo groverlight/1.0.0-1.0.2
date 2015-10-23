@@ -205,7 +205,7 @@
 - (void)setChunkIsComplete
 {
   [CompleteChunksArray addObject:Editor.text];
-  Editor.text = @"";
+  Editor.text = @" ";
   [self formatChunksAndAlignToBottom];
   self.disableTextEdition  = NO;
   NumUnvalidatedChars = 0;

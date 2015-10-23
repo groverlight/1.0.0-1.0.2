@@ -74,6 +74,7 @@
   CharactersLeftLabel.font          = [UIFont fontWithName:@"AvenirNext-Bold" size:parameters.typingCharacterCountFontSize];
   CharactersLeftLabel.size          = CalculateTextSize(@"999", CGSizeMake(100, 100), CharactersLeftLabel.font);
 
+
   snapshots = [[NSMutableArray alloc] initWithCapacity:10];
   [self reset];
 
@@ -86,122 +87,129 @@
   { // Default action: do nothing!
   };
 
-  FaceButton.pressedAction = ^
-  {
-    get_myself;
-    NSUserDefaults* defaults  = [NSUserDefaults standardUserDefaults];
-    BOOL faceAlertAlreadyDone = [defaults boolForKey:FACE_BUTTON_ALERT_FLAG_DEFAULTS_KEY];
-
-    if (faceAlertAlreadyDone)
+    FaceButton.pressedAction = ^
     {
-      [myself faceButtonPressed];
+        get_myself;
+        NSUserDefaults* defaults  = [NSUserDefaults standardUserDefaults];
+        BOOL faceAlertAlreadyDone = [defaults boolForKey:FACE_BUTTON_ALERT_FLAG_DEFAULTS_KEY];
 
-
-    }
-    else
-    {
-        NSLog(@"Calls the selfie alert!");
-      Alert(parameters.typingLeftButtonAlertTitle   , parameters.typingLeftButtonAlertMessage,
-            parameters.typingLeftButtonAlertOkString, parameters.typingLeftButtonAlertCancelString,
-            ^(NSInteger pressedButtonIndex)
-      {
-        [defaults setBool:YES forKey:FACE_BUTTON_ALERT_FLAG_DEFAULTS_KEY];
-        if (pressedButtonIndex == 1)
+        if (faceAlertAlreadyDone)
         {
-          [myself faceButtonPressed];
+            [myself faceButtonPressed];
 
-            NSLog(@"YUP");
-            Mixpanel *mixpanel = [Mixpanel sharedInstance];
 
-            [mixpanel track:@"selfie understood"];
-
-            [mixpanel.people increment:@"Selfie Understood" by:[NSNumber numberWithInt:1]];
-        }
-        else
-
-            NSLog(@"I did NOT know the button takes a selfie");
-
-      });
-
-        Mixpanel *mixpanel = [Mixpanel sharedInstance];
-
-        [mixpanel track:@"selfie NOT understood"];
-
-        [mixpanel.people increment:@"selfie NOT understood" by:[NSNumber numberWithInt:1]];    }
-  };
-  TextView->DidBeginEditingAction = ^
-  {
-  };
-  TextView->TextDidChangeAction = ^
-  {
-    get_myself;
-    myself->TextView.disableTextEdition = NO;
-    myself->TextView.useSmallFont       = (myself->TextView.totalNumCharacters > parameters.typingFontSizeCharacterCountTrigger);
-
-    myself->FaceButton.enabled = (myself->TextView.numUnvalidatedChars > 0);
-    myself->ChangingReturnButtonType = YES;
-    [myself->TextView showGoKey:((myself->TextView.numUnvalidatedChars == 0) && (myself->TextView.textRecords.count > 0))];
-    myself->ChangingReturnButtonType = NO;
-    [myself updateUI];
-  };
-  TextView->SelectionDidChangeAction = ^
-  {
-  };
-  TextView->DidEndEditingAction = ^
-  {
-  };
-  TextView->ShouldBeginEditingAction = ^BOOL()
-  {
-    return YES;
-  };
-  TextView->DidDeleteLastChunk = ^
-  {
-    get_myself;
-    if (myself->FaceCount > 0)
-    {
-      [myself removeSnapshot];
-      --myself->FaceCount;
-    }
-  };
-  TextView->DidPressGoButton = ^
-  {
-    get_myself;
-    [myself->TextView resignFirstResponder];
-    NSUserDefaults* defaults  = [NSUserDefaults standardUserDefaults];
-    BOOL goAlertAlreadyDone   = [defaults boolForKey:GO_BUTTON_ALERT_FLAG_DEFAULTS_KEY];
-    if (goAlertAlreadyDone)
-    {
-      [myself goButtonPressed];
-    }
-    else
-    {
-        NSLog(@"Calls send message alert");
-      Alert(parameters.typingRightButtonAlertTitle   , parameters.typingRightButtonAlertMessage,
-            parameters.typingRightButtonAlertOkString, parameters.typingRightButtonAlertCancelString,
-            ^(NSInteger pressedButtonIndex)
-      {
-        [defaults setBool:YES forKey:GO_BUTTON_ALERT_FLAG_DEFAULTS_KEY];
-        if (pressedButtonIndex == 1)
-        {
-          [myself goButtonPressed];
-            Mixpanel *mixpanel = [Mixpanel sharedInstance];
-
-            [mixpanel track:@"go understood"];
-
-            [mixpanel.people increment:@"Go understood" by:[NSNumber numberWithInt:1]];
         }
         else
         {
-          [myself->TextView becomeFirstResponder];
-            Mixpanel *mixpanel = [Mixpanel sharedInstance];
+            NSLog(@"Calls the selfie alert!");
+            Alert(parameters.typingLeftButtonAlertTitle   , parameters.typingLeftButtonAlertMessage,
+                  parameters.typingLeftButtonAlertOkString, parameters.typingLeftButtonAlertCancelString,
+                  ^(NSInteger pressedButtonIndex)
+                  {
+                      [defaults setBool:YES forKey:FACE_BUTTON_ALERT_FLAG_DEFAULTS_KEY];
+                      if (pressedButtonIndex == 1)
+                      {
+                          [myself faceButtonPressed];
 
-            [mixpanel track:@"go NOT understood"];
+                          NSLog(@"YES SELFIE");
 
-            [mixpanel.people increment:@"go NOT understood" by:[NSNumber numberWithInt:1]];
+                          Mixpanel *mixpanel = [Mixpanel sharedInstance];
+
+                          [mixpanel track:@"selfie understood"];
+
+                          [mixpanel.people increment:@"Selfie Understood" by:[NSNumber numberWithInt:1]];
+                      }
+                      else {
+
+                      NSLog(@"NO SELFIE");
+
+                      Mixpanel *mixpanel = [Mixpanel sharedInstance];
+
+                      [mixpanel track:@"selfie NOT understood"];
+
+                      [mixpanel.people increment:@"selfie NOT understood" by:[NSNumber numberWithInt:1]];
+
+                      }
+
+                  });
+
+             }
+    };
+    TextView->DidBeginEditingAction = ^
+    {
+
+    };
+    TextView->TextDidChangeAction = ^
+    {
+
+        get_myself;
+        myself->TextView.disableTextEdition = NO;
+        myself->TextView.useSmallFont       = (myself->TextView.totalNumCharacters > parameters.typingFontSizeCharacterCountTrigger);
+
+        myself->FaceButton.enabled = (myself->TextView.numUnvalidatedChars > 0);
+        myself->ChangingReturnButtonType = YES;
+        [myself->TextView showGoKey:((myself->TextView.numUnvalidatedChars == 0) && (myself->TextView.textRecords.count > 0))];
+        myself->ChangingReturnButtonType = NO;
+        [myself updateUI];
+    };
+    TextView->SelectionDidChangeAction = ^
+    {
+    };
+    TextView->DidEndEditingAction = ^
+    {
+    };
+    TextView->ShouldBeginEditingAction = ^BOOL()
+    {
+        return YES;
+    };
+    TextView->DidDeleteLastChunk = ^
+    {
+        get_myself;
+        if (myself->FaceCount > 0)
+        {
+            [myself removeSnapshot];
+            --myself->FaceCount;
         }
-      });
-    }
-  };
+    };
+    TextView->DidPressGoButton = ^
+    {
+        get_myself;
+        [myself->TextView resignFirstResponder];
+        NSUserDefaults* defaults  = [NSUserDefaults standardUserDefaults];
+        BOOL goAlertAlreadyDone   = [defaults boolForKey:GO_BUTTON_ALERT_FLAG_DEFAULTS_KEY];
+        if (goAlertAlreadyDone)
+        {
+            [myself goButtonPressed];
+        }
+        else
+        {
+            NSLog(@"Calls send message alert");
+            Alert(parameters.typingRightButtonAlertTitle   , parameters.typingRightButtonAlertMessage,
+                  parameters.typingRightButtonAlertOkString, parameters.typingRightButtonAlertCancelString,
+                  ^(NSInteger pressedButtonIndex)
+                  {
+                      [defaults setBool:YES forKey:GO_BUTTON_ALERT_FLAG_DEFAULTS_KEY];
+                      if (pressedButtonIndex == 1)
+                      {
+                          [myself goButtonPressed];
+                          Mixpanel *mixpanel = [Mixpanel sharedInstance];
+                          
+                          [mixpanel track:@"go understood"];
+                          
+                          [mixpanel.people increment:@"Go understood" by:[NSNumber numberWithInt:1]];
+                      }
+                      else
+                      {
+                          [myself->TextView becomeFirstResponder];
+                          Mixpanel *mixpanel = [Mixpanel sharedInstance];
+                          
+                          [mixpanel track:@"go NOT understood"];
+                          
+                          [mixpanel.people increment:@"go NOT understood" by:[NSNumber numberWithInt:1]];
+                      }
+                  });
+        }
+    };
 }
 //__________________________________________________________________________________________________
 
@@ -350,6 +358,8 @@
     //TextView.bottom               = FaceButton.top - parameters.typingTextBlockGap;
     TextView.bottom               = FaceButton.top - 30;
   TextView.left                 = parameters.typingEditorLateralMargin;
+    //TextView.backgroundColor = [UIColor grayColor];
+    
   // The CharactersLeftLabel is positioned relative to its superview, the face button.
   CharactersLeftLabel.right     = FaceButton.width - parameters.typingCharacterCountRightMargin;
   [CharactersLeftLabel centerVertically];

@@ -10,7 +10,7 @@
 
 @interface AlertView: UIAlertView <UIAlertViewDelegate>
 {
-  BlockIntAction ClickedButtonAction; //!< The block to call when a button is pressed.
+    BlockIntAction ClickedButtonAction; //!< The block to call when a button is pressed.
 }
 
 @property BlockIntAction clickedButtonBlock; //!< The block to call when a button is pressed.
@@ -25,40 +25,40 @@
 
 - (id)initWithTitle:(NSString*)title message:(NSString*)message cancelButtonTitle:(NSString*)cancelButtonTitle otherButtonTitles:(NSString*)additional_button_title, ...
 {
-  self = [super initWithTitle:title message:message delegate:self cancelButtonTitle:cancelButtonTitle otherButtonTitles:nil];
-  if (self != nil)
-  {
-    self.delegate = self;
-    va_list ap;
-    va_start(ap, additional_button_title);
-    while (additional_button_title != nil)
+    self = [super initWithTitle:title message:message delegate:self cancelButtonTitle:cancelButtonTitle otherButtonTitles:nil];
+    if (self != nil)
     {
-      [self addButtonWithTitle:additional_button_title];
-      additional_button_title = va_arg(ap, NSString*);
+        self.delegate = self;
+        va_list ap;
+        va_start(ap, additional_button_title);
+        while (additional_button_title != nil)
+        {
+            [self addButtonWithTitle:additional_button_title];
+            additional_button_title = va_arg(ap, NSString*);
+        }
+        ClickedButtonAction = ^(NSInteger clickedButton)
+        { // Default action: do nothing!
+        };
     }
-    ClickedButtonAction = ^(NSInteger clickedButton)
-    { // Default action: do nothing!
-    };
-  }
-  return self;
+    return self;
 }
 //__________________________________________________________________________________________________
 
 - (void)setClickedButtonBlock:(BlockIntAction)clickedButtonBlock
 {
-  ClickedButtonAction = clickedButtonBlock;
+    ClickedButtonAction = clickedButtonBlock;
 }
 //__________________________________________________________________________________________________
 
 - (BlockIntAction)clickedButtonBlock
 {
-  return ClickedButtonAction;
+    return ClickedButtonAction;
 }
 //__________________________________________________________________________________________________
 
 - (void)alertView:(UIAlertView*)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-  ClickedButtonAction(buttonIndex);
+    ClickedButtonAction(buttonIndex);
 }
 //__________________________________________________________________________________________________
 
@@ -68,16 +68,16 @@
 //! Display an alert with the specified title and message. Show up to two buttons.
 id Alert
 (
-  NSString*       title,                //!< The title of the alert to display.
-  NSString*       message,              //!< The message of the the alert to display.
-  NSString*       ok_button_title,      //!< The title of the OK button, or nil if not used.
-  NSString*       cancel_button_title,  //!< The title of the Cancel button, or nil if not used.
-  BlockIntAction  clicked_button_block  //!< The block to call when a button is pressed.
+ NSString*       title,                //!< The title of the alert to display.
+ NSString*       message,              //!< The message of the the alert to display.
+ NSString*       ok_button_title,      //!< The title of the OK button, or nil if not used.
+ NSString*       cancel_button_title,  //!< The title of the Cancel button, or nil if not used.
+ BlockIntAction  clicked_button_block  //!< The block to call when a button is pressed.
 )
 {
-  AlertView* alert = [[AlertView alloc] initWithTitle:title message:message cancelButtonTitle:cancel_button_title otherButtonTitles:ok_button_title, nil];
-  alert.clickedButtonBlock = clicked_button_block;
-  [alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
-  return alert;
+    AlertView* alert = [[AlertView alloc] initWithTitle:title message:message cancelButtonTitle:cancel_button_title otherButtonTitles:ok_button_title, nil];
+    alert.clickedButtonBlock = clicked_button_block;
+    [alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
+    return alert;
 }
 //__________________________________________________________________________________________________

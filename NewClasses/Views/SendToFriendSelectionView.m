@@ -25,7 +25,9 @@
   self.showSectionHeaders       = YES;
   self.useBlankState            = NO;
   self.ignoreUnreadMessages     = YES;
+  
   self.maxNumRecentFriends      = GetGlobalParameters().friendsMaxRecentFriends;
+  
 }
 //__________________________________________________________________________________________________
 
@@ -44,6 +46,8 @@
 {
   self.recentFriends  = GetTimeSortedFriendRecords();
   self.allFriends     = GetNameSortedFriendRecords();
+  
+  FriendsList.contentOffset = CGPointMake(0, 0- FriendsList.contentInset.top);
   [FriendsList ReloadTableData];
 }
 //__________________________________________________________________________________________________

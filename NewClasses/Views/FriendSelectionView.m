@@ -14,6 +14,13 @@
 #import "Tools.h"
 #import "TopBarView.h"
 #import "WhiteButton.h"
+#import "Parse.h"
+#import <contacts/contacts.h>
+#import <addressbook/addressbook.h>
+#import "ParseBlocked.h"
+#import "ParseUser.h"
+#import "Mixpanel.h"
+#import <AudioToolbox/AudioToolbox.h>
 //__________________________________________________________________________________________________
 
 #define TOP_OFFSET        120
@@ -40,6 +47,7 @@
   const NSInteger length = [self offsetFromPosition:selectionStart toPosition:selectionEnd];
 
   return NSMakeRange(location, length);
+    
 }
 //____________________
 
@@ -82,8 +90,12 @@
   BOOL                  KeyboardIsVisible;
   BOOL                  UseShowKeyboard;
   BOOL                  UseHideKeyboard;
+  BOOL                  DidDoSync;
   NSString*             CurrentText;
   NSInteger             SelectedFriend;
+  NSArray*              BlockedUsers;
+  NSArray*              BlockingUsers;
+  SystemSoundID           soundEffect;
 }
 //____________________
 
@@ -117,6 +129,8 @@
   KeyboardIsVisible             = NO;
   UseShowKeyboard               = NO;
   UseHideKeyboard               = YES;
+  DidDoSync                     = NO;
+ 
   CurrentText                   = @"";
   self.topOffset                = 0;
 
@@ -132,6 +146,7 @@
   AddButton.title     = parameters.friendsAddButtonTitle;
 
 
+
   FriendsList.maxNumRecentFriends = parameters.friendsMaxRecentFriends;
   TopSeparator.backgroundColor    = parameters.separatorLineColor;
   BottomSeparator.backgroundColor = parameters.separatorLineColor;
@@ -141,7 +156,7 @@
   Editor.returnKeyType            = UIReturnKeyDone;
   Editor.keyboardAppearance = UIKeyboardAppearanceDark;
   Editor.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-  Editor.font                     = [UIFont fontWithName:@"AvenirNext-Regular" size:parameters.friendsEditorFontSize];
+  Editor.font                     = [UIFont fontWithName:@"AvenirNext-Medium" size:parameters.friendsEditorFontSize];
   Editor.autocorrectionType  = UITextAutocorrectionTypeNo;
   Editor.autocapitalizationType  = UITextAutocapitalizationTypeNone;
 
@@ -164,6 +179,24 @@
 
     Editor.textColor = WarmGrey;
   set_myself;
+
+ EditionStarted = ^
+    {
+        
+         [ParseBlocked loadBlockedUserList:GetCurrentParseUser() completion:^(NSArray* array, NSError* error)
+         {
+             BlockedUsers = array;
+         }];
+        [ParseBlocked loadBlockingUserList:GetCurrentParseUser() completion:^(NSArray* array, NSError* error)
+         {
+             BlockingUsers = array;
+         }];
+
+    };
+
+
+    
+
   RefreshRequest = ^
   { //Default action: do nothing!
   };
@@ -412,7 +445,7 @@
   }
   [ListName sizeToFit];
   [ListName centerHorizontally];
-  ListName.top = 86;
+  ListName.top = 81;
 
   CGFloat editorOffset    = -Editor.font.descender / 2;
   TopSeparator.height     = EditorIsVisible? parameters.separatorLineWidth: 0;
@@ -469,6 +502,10 @@
 
 - (void)activate
 {
+  NSLog(@"%@", NSStringFromCGPoint(FriendsList.contentOffset));
+  FriendsList.contentOffset = CGPointMake(0, 0- FriendsList.contentInset.top);
+  
+  
   if (EditorIsOnTop)
   {
     [Editor becomeFirstResponder];
@@ -477,6 +514,7 @@
   {
     [Editor resignFirstResponder];
   }
+   [self contactsync];
 }
 //__________________________________________________________________________________________________
 
@@ -683,13 +721,26 @@
 - (ParseUser*)getFriendAtIndex:(NSInteger)friendIndex
 {
   NSInteger recentFriendsCount = MIN(self.recentFriends.count, GetGlobalParameters().friendsMaxRecentFriends);
+    NSLog(@"%lu",recentFriendsCount);
   if (friendIndex < recentFriendsCount)
-  {
-    return ((FriendRecord*)[self.recentFriends objectAtIndex:friendIndex]).user;
+  { NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"rewind"ofType:@"wav"];
+      NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
+      AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
+
+      AudioServicesPlaySystemSound(soundEffect);
+
+
+      NSLog(@"yo");
+      FriendRecord *friend =(FriendRecord*)[self.recentFriends objectAtIndex:friendIndex];
+    return (friend.user);
   }
   else
   {
-    return ((FriendRecord*)[self.allFriends objectAtIndex:(friendIndex - recentFriendsCount)]).user;
+      NSLog(@"all %@", self.allFriends);
+      NSLog(@"%lu", friendIndex);
+      FriendRecord* friend = (FriendRecord*)[self.allFriends objectAtIndex:(friendIndex - recentFriendsCount)];
+      
+    return (friend.user);
   }
 }
 //__________________________________________________________________________________________________
@@ -776,5 +827,311 @@
   return NO;
 }
 //__________________________________________________________________________________________________
+-(void) contactsync
+{
+    [GetCurrentParseUser() loadFriendsListWithCompletion:^(NSArray* friends, NSError* loadError)
+     {
+         
+         UpdateFriendRecordListForFriends(friends);
+         
+         FriendsList.allFriends = GetNameSortedFriendRecords();
+         
+         [FriendsList ReloadTableData];
+     }];
+    NSMutableArray *fullName = [[NSMutableArray alloc]init];
+    NSMutableArray *phoneNumber = [[NSMutableArray alloc]init];
+            if (![[[PFUser currentUser] objectForKey:@"didContactSync"] boolValue])
+                 {
+            NSLog(@"INITIATING CONTACT SYNC"); // IMPORTANT
+            
+            // NSMutableArray *contacts = [[NSMutableArray alloc]init];
+            
+            if([CNContactStore class]) // this is where you say yes or noiOS 9 or later
+            {
+                
+               
+                CNContactStore* addressBook = [[CNContactStore alloc]init];
+                CNAuthorizationStatus permissions = [CNContactStore authorizationStatusForEntityType:CNEntityTypeContacts];
+                if(permissions == CNAuthorizationStatusNotDetermined) {
+        
+                [addressBook requestAccessForEntityType:CNEntityTypeContacts completionHandler:^(BOOL granted, NSError * _Nullable contactError) {
+                    
+                    if (granted)
+                    {
+                        NSLog(@"Said YES to Contacts Sync");
 
+                        Mixpanel *mixpanel = [Mixpanel sharedInstance];
+
+                         [mixpanel track:@"Said YES to Contacts Sync"];
+
+                         [mixpanel.people increment:@"Said YES to Contacts Sync" by:[NSNumber numberWithInt:1]];
+
+
+                        [addressBook containersMatchingPredicate:[CNContainer predicateForContainersWithIdentifiers: @[addressBook.defaultContainerIdentifier]] error:&contactError];
+                            
+                            
+                            NSArray * keysToFetch =@[CNContactEmailAddressesKey, CNContactPhoneNumbersKey, CNContactFamilyNameKey, CNContactGivenNameKey, CNContactPostalAddressesKey];
+                            CNContactFetchRequest * request = [[CNContactFetchRequest alloc]initWithKeysToFetch:keysToFetch];
+                            
+                            
+                            [addressBook enumerateContactsWithFetchRequest:request error:&contactError usingBlock:^(CNContact * __nonnull contact, BOOL * __nonnull stop){
+                                
+                                NSString *name = [NSString stringWithFormat:@"%@ %@",contact.givenName,contact.familyName];
+                                NSString *phone = [NSString string];
+                                
+                                for (CNLabeledValue *value in contact.phoneNumbers) {
+                                    
+                                    if ([value.label isEqualToString:@"_$!<Mobile>!$_"])
+                                    {
+                                        CNPhoneNumber *phoneNum = value.value;
+                                        phone = phoneNum.stringValue;
+                                    }
+                                    
+                                    if ([phone isEqualToString:@""])
+                                    {
+                                        if ([value.label isEqualToString:@"_$!<Home>!$_"])
+                                        {
+                                            CNPhoneNumber *phoneNum = value.value;
+                                            phone = phoneNum.stringValue;
+                                        }
+                                    }
+                                    if ([phone isEqualToString:@""])
+                                    {
+                                        if ([value.label isEqualToString:@"_$!<Work>!$_"])
+                                        {
+                                            CNPhoneNumber *phoneNum = value.value;
+                                            phone = phoneNum.stringValue;
+                                        }
+                                    }
+                                    
+                                }
+                              
+                                [fullName addObject:name];
+                                [phoneNumber addObject:[self formatNumber:phone]];
+                                
+                                
+                        
+                            }];
+                        [self updateTable:fullName phone:phoneNumber];
+                    }
+                    
+                    else{NSLog(@"You said NO to Contacts");}
+
+                    Mixpanel *mixpanel = [Mixpanel sharedInstance];
+
+                    [mixpanel track:@"Said NO to Contacts Sync"];
+
+                    [mixpanel.people increment:@"Said NO to Contacts Sync" by:[NSNumber numberWithInt:1]];
+
+
+                    }];
+                    
+            }
+        }
+                
+            
+            else
+            {
+              
+                __block NSString *firstName;
+                __block NSString *lastName;
+                ABAddressBookRef addressBookRef = ABAddressBookCreateWithOptions(NULL, NULL);
+                if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
+                    ABAddressBookRequestAccessWithCompletion(addressBookRef, ^(bool granted, CFErrorRef error) { // granted = yes
+                        
+                        CFArrayRef allPeople = ABAddressBookCopyArrayOfAllPeople(addressBookRef);
+                        CFIndex numberOfPeople = CFArrayGetCount(allPeople);
+                        NSLog(@"%lu", numberOfPeople);
+                        for(int  i = 0; i < numberOfPeople; i++) {
+                        
+                            ABRecordRef person = CFArrayGetValueAtIndex( allPeople, i );
+                            // Use a general Core Foundation object.
+                            CFTypeRef generalCFObject = ABRecordCopyValue(person, kABPersonFirstNameProperty);
+                            
+                            // Get the first name.
+                            if (generalCFObject) {
+                                firstName =(__bridge NSString *)generalCFObject;
+                                CFRelease(generalCFObject);
+                            }
+                            
+                            // Get the last name.
+                            generalCFObject = ABRecordCopyValue(person, kABPersonLastNameProperty);
+                            if (generalCFObject) {
+                                lastName =(__bridge NSString *)generalCFObject;
+                                CFRelease(generalCFObject);
+                            }
+                            [fullName addObject: [NSString stringWithFormat:@"%@ %@", firstName, lastName]];
+                            NSLog(@"%@", [fullName objectAtIndex:i]);
+                            ABMultiValueRef phoneNumbers = ABRecordCopyValue(person, kABPersonPhoneProperty);
+                            
+                            for (CFIndex j = 0; j < ABMultiValueGetCount(phoneNumbers); j++) {
+                                CFStringRef currentPhoneLabel = ABMultiValueCopyLabelAtIndex(phoneNumbers, j);
+                                CFStringRef currentPhoneValue = ABMultiValueCopyValueAtIndex(phoneNumbers, j);
+                                
+                                if (CFStringCompare(currentPhoneLabel, kABPersonPhoneMobileLabel, 0) == kCFCompareEqualTo) {
+                                    [phoneNumber addObject:[self formatNumber:(__bridge NSString *)currentPhoneValue]];
+                                }
+                                
+                                else if (CFStringCompare(currentPhoneLabel, kABHomeLabel, 0) == kCFCompareEqualTo) {
+                                    [phoneNumber addObject:[self formatNumber:(__bridge NSString *)currentPhoneValue]];                 }
+                                else if (CFStringCompare(currentPhoneLabel, kABWorkLabel, 0) == kCFCompareEqualTo) {
+                                    [phoneNumber addObject:[self formatNumber:(__bridge NSString *)currentPhoneValue]];
+                                }
+                                
+                                CFRelease(currentPhoneLabel);
+                                CFRelease(currentPhoneValue);
+                            }
+                            CFRelease(phoneNumbers);
+                            
+                        }
+                    
+                    });
+                }
+                else if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusAuthorized)
+                {
+                    
+                    CFArrayRef allPeople = ABAddressBookCopyArrayOfAllPeople(addressBookRef);
+                    CFIndex numberOfPeople = CFArrayGetCount(allPeople);
+                    NSLog(@"%lu", numberOfPeople);
+                    for(int  i = 0; i < numberOfPeople; i++) {
+                    
+                        ABRecordRef person = CFArrayGetValueAtIndex( allPeople, i );
+                        // Use a general Core Foundation object.
+                        CFTypeRef generalCFObject = ABRecordCopyValue(person, kABPersonFirstNameProperty);
+                        
+                        // Get the first name.
+                        if (generalCFObject) {
+                            firstName =(__bridge NSString *)generalCFObject;
+                            CFRelease(generalCFObject);
+                        }
+                        
+                        // Get the last name.
+                        generalCFObject = ABRecordCopyValue(person, kABPersonLastNameProperty);
+                        if (generalCFObject) {
+                            lastName =(__bridge NSString *)generalCFObject;
+                            CFRelease(generalCFObject);
+                        }
+                        [fullName addObject: [NSString stringWithFormat:@"%@ %@", firstName, lastName]];
+                        NSLog(@"%@", [fullName objectAtIndex:i]);
+                        ABMultiValueRef phoneNumbers = ABRecordCopyValue(person, kABPersonPhoneProperty);
+                        
+                        for (CFIndex j = 0; j < ABMultiValueGetCount(phoneNumbers); j++) {
+                            CFStringRef currentPhoneLabel = ABMultiValueCopyLabelAtIndex(phoneNumbers, j);
+                            CFStringRef currentPhoneValue = ABMultiValueCopyValueAtIndex(phoneNumbers, j);
+                            
+                            if (CFStringCompare(currentPhoneLabel, kABPersonPhoneMobileLabel, 0) == kCFCompareEqualTo) {
+                                [phoneNumber addObject:[self formatNumber:(__bridge NSString *)currentPhoneValue]];
+                            }
+                            
+                            else if (CFStringCompare(currentPhoneLabel, kABHomeLabel, 0) == kCFCompareEqualTo) {
+                                [phoneNumber addObject:[self formatNumber:(__bridge NSString *)currentPhoneValue]];                 }
+                            else if (CFStringCompare(currentPhoneLabel, kABWorkLabel, 0) == kCFCompareEqualTo) {
+                                [phoneNumber addObject:[self formatNumber:(__bridge NSString *)currentPhoneValue]];
+                            }
+                            
+                            CFRelease(currentPhoneLabel);
+                            CFRelease(currentPhoneValue);
+                        }
+                        CFRelease(phoneNumbers);
+                        
+                    }
+                    
+                    
+                }
+                
+                [self updateTable:fullName phone:phoneNumber];
+                
+            }
+                [[PFUser currentUser] setObject:@YES forKey:@"didContactSync"];
+        }
+
+    [FriendsList ReloadTableData];
+             
+}
+-(void)updateTable:(NSArray*)fullName phone:(NSArray*)phoneNumber
+                    {
+                                 PFQuery *query = [PFUser query];
+                                 
+                                 [query whereKey:@"phoneNumber" containedIn:phoneNumber];
+                                 // NSLog(@" this %@ ", [query findObjects]);
+                                 NSLog(@"%@, %@",fullName, phoneNumber);
+                                 
+                                 
+                                 [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error){
+                                     if (!error) {
+                                         if(objects)
+                                         {NSLog(@"The find succeeded");
+                                             NSLog(@"%@", objects);}
+                                         
+                                         
+                                         for (PFUser* object in objects)
+                                         {
+                                             
+                                             NSLog(@"%@", object.username);
+                                             PFQuery *pushQuery = [PFInstallation query];
+                                             [pushQuery whereKey:@"user" equalTo:object];
+                                             NSString * Name = [[PFUser currentUser] objectForKey:@"fullName"];
+                                             NSString * Username = [[PFUser currentUser] objectForKey:@"username"];
+                                             
+                                             // Send push notification to query
+                                             NSDictionary *data = @{
+                                                                    @"alert" : [NSString stringWithFormat:@"%@ is now on Typeface! Add %@ in Friends" ,Name, Username],
+                                                                    @"p" :[PFUser currentUser].objectId,
+                                                                    };
+                                             
+                                             PFPush *push = [[PFPush alloc] init];
+                                             [push setQuery:pushQuery];
+                                             [push setMessage:@"this works"];
+                                             [push setData:data];
+                                             [push sendPushInBackgroundWithBlock:^(BOOL succeeded, NSError *sendError)
+                                              {
+                                                  NSLog(@"Sending Push");
+                                              }];
+                                             
+                                             [[PFUser currentUser] addUniqueObject:object.objectId forKey:@"friends"];
+                                             
+                                         }
+                                         
+                                         [GetCurrentParseUser() loadFriendsListWithCompletion:^(NSArray* friends, NSError* loadError)
+                                          {
+                                              
+                                              UpdateFriendRecordListForFriends(friends);
+                                              
+                                              FriendsList.allFriends = GetNameSortedFriendRecords();
+                                              
+                                              [FriendsList ReloadTableData];
+                                          }];
+                                         
+                                         
+                                         [[PFUser currentUser] saveInBackground];
+                                     } else {
+                                         NSLog(@"Did not find anyone");
+                                         
+                                     }
+                                 }];
+
+                }
+-(NSString*)formatNumber:(NSString*)mobileNumber
+{
+    
+    mobileNumber = [mobileNumber stringByReplacingOccurrencesOfString:@"(" withString:@""];
+    mobileNumber = [mobileNumber stringByReplacingOccurrencesOfString:@")" withString:@""];
+    mobileNumber = [mobileNumber stringByReplacingOccurrencesOfString:@" " withString:@""];
+    mobileNumber = [mobileNumber stringByReplacingOccurrencesOfString:@"-" withString:@""];
+    mobileNumber = [mobileNumber stringByReplacingOccurrencesOfString:@"+" withString:@""];
+    mobileNumber = [mobileNumber stringByReplacingOccurrencesOfString:@"\u00a0" withString:@""];
+    
+    
+    
+    
+    NSInteger length = [mobileNumber length];
+    if(length > 10)
+    {
+        mobileNumber = [mobileNumber substringFromIndex: length-10];
+        
+    }
+    
+    
+    return mobileNumber;
+}
 @end

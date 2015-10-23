@@ -42,8 +42,12 @@
 
 - (void)updateFriendsLists
 {
-  self.recentFriends  = @[];
-  self.allFriends     = GetTimeSortedFriendRecords();
+
+    self.recentFriends  = GetTimeSortedFriendRecords();
+    
+ //NSLog(@"INITIATING OTHER SORT");
+    //self.allFriends     = GetNameSortedFriendRecords(); // this makes all of the friends in the alphabetized
+  
   [FriendsList ReloadTableData];
 }
 //__________________________________________________________________________________________________

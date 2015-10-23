@@ -15,6 +15,7 @@
 #import "RollDownView.h"
 #import "Tools.h"
 #import "Mixpanel.h"
+#import <AudioToolbox/AudioToolbox.h>
 //__________________________________________________________________________________________________
 
 #define USE_AUTOSEARCH 1
@@ -38,6 +39,8 @@
   NSArray*              BlockedUsers;
   NSArray*              BlockingUsers;
   RollDownView*         RollDownErrorView;      //!< The roll down error message view.
+  SystemSoundID           soundEffect;
+
 }
 //____________________
 
@@ -153,6 +156,7 @@
 
 - (void)layoutSubviews
 {
+    
   [super layoutSubviews];
   RollDownErrorView.frame = CGRectMake(0, -self.topOffset, self.frame.size.width, [RollDownErrorView sizeThatFits:self.frame.size].height);
 }
@@ -168,8 +172,9 @@
   }
   else
   {
-    self.recentFriends  = @[];
-    self.allFriends     = GetNameSortedFriendRecords();
+    //  NSLog(@"INITIATING SORT");
+    //self.recentFriends  = GetTimeSortedFriendRecords();
+    self.allFriends     = GetNameSortedFriendRecords(); // CHANGED THIS
 #if 0
     for (FriendRecord* record in self.allFriends)
     {
@@ -192,6 +197,13 @@
     [mixpanel track: @"invites"];
 
     [mixpanel.people increment:@"invites" by:[NSNumber numberWithInt:1]];
+
+    NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"rewind"ofType:@"wav"];
+    NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
+    AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
+
+    AudioServicesPlaySystemSound(soundEffect);
+
 
   GlobalParameters* parameters = GetGlobalParameters();
   if(![MFMessageComposeViewController canSendText])
@@ -221,6 +233,13 @@
 // Action when the Add button is pressed.
 -(void)addButtonPressed
 {
+    NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"stab" ofType:@"wav"];
+    NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
+    AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
+
+    AudioServicesPlaySystemSound(soundEffect);
+
+
   GlobalParameters* parameters = GetGlobalParameters();
   if (parameters.addFriendAutoSearch)
   {
@@ -253,14 +272,27 @@
         if ([GetCurrentParseUser() isFriend:user])
         {
           [RollDownErrorView showWithTitle:parameters.addFriendRollDownViewTitle andMessage:parameters.AddFriendRollDownAlreadyFriendErrorMessage];
+            NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"rewind"ofType:@"wav"];
+            NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
+            AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
+            AudioServicesPlaySystemSound(soundEffect);
+            
         }
         else if (IsUserBlocked(user, BlockedUsers))
         {
           [RollDownErrorView showWithTitle:parameters.addFriendRollDownViewTitle andMessage:parameters.AddFriendRollDownBlockedFriendErrorMessage];
+            NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"rewind"ofType:@"wav"];
+            NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
+            AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
+            AudioServicesPlaySystemSound(soundEffect);
         }
         else if (IsUserBlocking(user, BlockingUsers))
         {
           [RollDownErrorView showWithTitle:parameters.addFriendRollDownViewTitle andMessage:parameters.AddFriendRollDownBlockingUserErrorMessage];
+            NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"rewind"ofType:@"wav"];
+            NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
+            AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
+            AudioServicesPlaySystemSound(soundEffect);
         }
         else if ([PendingFriends indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL* stop)
                  {
@@ -269,6 +301,10 @@
                  }] != NSNotFound)
         {
           [RollDownErrorView showWithTitle:parameters.addFriendRollDownViewTitle andMessage:parameters.AddFriendRollDownAlreadyPendingFriendErrorMessage];
+            NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"rewind"ofType:@"wav"];
+            NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
+            AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
+            AudioServicesPlaySystemSound(soundEffect);
         }
         else
         {
@@ -285,6 +321,10 @@
       else
       {
         [RollDownErrorView showWithTitle:parameters.addFriendRollDownViewTitle andMessage:parameters.AddFriendRollDownUnknownUsernameErrorMessage];
+          NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"rewind"ofType:@"wav"];
+          NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
+          AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
+          AudioServicesPlaySystemSound(soundEffect);
 
           NSLog(@"WRONG USERNAME");
           Mixpanel *mixpanel = [Mixpanel sharedInstance];
@@ -301,6 +341,7 @@
 // Action when the edited text is changing.
 -(void)editedStringChanged:(NSString*)editedString
 {
+   
   if (GetGlobalParameters().addFriendAutoSearch)
   {
     if ([editedString isEqualToString:@""])
@@ -324,6 +365,7 @@
                    return [friend.user.objectId isEqualToString:user.objectId];
                  }] != NSNotFound))
             {
+               
               FriendRecord* record    = [FriendRecord new];
               record.user             = user;
               record.objectId         = user.objectId;
@@ -378,6 +420,7 @@
     {
       if (friendSuccess)
       {
+          NSLog(@"REMOVED");
         ParseSendSilentPushNotificationToUser(friend.objectId);
       }
       RefreshAllFriends(^
@@ -392,8 +435,21 @@
 - (void)showMenuForFriendIndex:(NSInteger)friendIndex completion:(BlockAction)completion
 {
   GlobalParameters* parameters = GetGlobalParameters();
+
+
+
+    NSLog(@" this is where we get stuck %lu", friendIndex);
   ParseUser* friend = [self getFriendAtIndex:friendIndex];
-  Menu* menu = [Menu menuWithTitle:friend.username andMessage:nil];
+    NSLog(@"%@", friend.fullName);
+    NSLog(@" this is where we get stuck %lu", friendIndex);
+
+    NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"rewind"ofType:@"wav"];
+    NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
+    AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
+
+    AudioServicesPlaySystemSound(soundEffect);
+
+  Menu* menu = [Menu menuWithTitle:friend.fullName andMessage:nil];
   NSInteger removeIndex = [menu addMenuButtonWithTitle:parameters.friendMenuRemoveFriendTitle];
   NSInteger blockIndex = [menu addMenuButtonWithTitle:parameters.friendMenuBlockFriendTitle];
 
@@ -417,7 +473,7 @@
           [mixpanel track:@"friends blocked"];
 
           [mixpanel.people increment:@"friends blocked" by:[NSNumber numberWithInt:1]];
-          
+
       }];
       [self removeFriend:friend];
     }

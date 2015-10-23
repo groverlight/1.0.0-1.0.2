@@ -25,6 +25,7 @@
   BOOL                UseDotsVsState;
   BOOL                SimulateButton;
   BOOL                IgnoreUnreadMessages;
+    
 }
 //____________________
 

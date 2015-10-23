@@ -25,6 +25,7 @@ typedef void (^InitializationBlockAction)(ParseUser* user, BOOL successed, BOOL 
 @property NSString*       phoneNumber;            //!< The phone number sssociated with this user.
 @property NSTimeInterval  lastActivityTimestamp;  //!< The time of the last activity for this user.
 @property NSArray*        friends;                //!< The list of friends of this user.
+
 //____________________
 
 //! Retrieve an user object given its objectId.

@@ -18,6 +18,7 @@
 @public
   UILabel*              ListName;
   BlockAction           RefreshRequest;
+ // BlockAction          AddFriendStarted;
   BlockIntAction        TouchTapped;
   BlockPointIntAction   TouchStarted;
   BlockPointIntAction   TouchEnded;

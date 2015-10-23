@@ -1,4 +1,3 @@
-
 //! \file   LoginView.m
 //! \brief  Class that handle user registration and login.
 //__________________________________________________________________________________________________
@@ -12,6 +11,7 @@
 #import "Colors.h"
 #import "Mixpanel.h"
 #import <AudioToolbox/AudioToolbox.h>
+
 //__________________________________________________________________________________________________
 
 #define LOGIN_STATE_DEFAULTS_KEY              @"LoginState"             //!< The key to retrieve the login state in the user defaults.
@@ -89,9 +89,9 @@ typedef enum
     CGFloat                 EditorHeight;           //!< The height of the editor views.
     CGFloat                 UpperEditorTop;         //!< Vertical position of the top of the upper editor.
     CGFloat                 LowerEditorTop;         //!< Vertical position of the top of the lower editor.
-
+    
     BlockBoolAction         LoginDoneAction;        //!< Action block called when the login process has terminated.
-
+    
     NSInteger               SelectedCountryIndex;   //!< Index of the selected country.
     NSString*               SelectedCountryName;    //!< Name of the selected country.
     NSString*               SelectedCountryPrefix;  //!< Prefix code of the selected country.
@@ -102,12 +102,14 @@ typedef enum
     NSString*               Username;               //!< The edited username.
     NSString*               UserObjectId;           //!< The existing user objectId.
     ParseUser*              RecoveredUser;
-
+    
     GlobalParameters*       GlobalParams;           //!< Copy of the global parameters object pointer.
-
+    
     UIColor*                TextColor;              //!< Color of the user's full name texts.
     BOOL                    Animated;               //!< Temporary value for the animated flag for some methods when performed on main thread.
     SystemSoundID           soundEffect;
+
+
 
 }
 //____________________
@@ -117,21 +119,18 @@ typedef enum
 {
     [super Initialize];
 
-//    NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"stab" ofType:@"wav"];
-//    NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
-//    AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
-
+    
     KeyboardHeight  = DEFAULT_KEYBOARD_HEIGHT;
     GlobalParams    = GetGlobalParameters();
-
+    
     //  [self.gradientView setInitialGradientColors:[UIColor orangeColor] bottomcolor:[UIColor brownColor]];
-
+    
     set_myself;
-
+    
     LoginDoneAction = ^(BOOL newUser)
     { // Default action: do nothing.
     };
-
+    
     RollDownErrorView         = [RollDownView          new];
     FirstLabel                = [UILabel               new];
     SecondLabel               = [UILabel               new];
@@ -145,21 +144,21 @@ typedef enum
     PickerView                = [IntlPhonePrefixPicker new];
     LeftButton                = [UIButton buttonWithType:UIButtonTypeSystem];
     RightButton               = [UIButton buttonWithType:UIButtonTypeSystem];
-
+    
     FirstLabel.font = [UIFont fontWithName:@"AvenirNext-DemiBold" size:20];
     FirstLabel.numberOfLines = 1;
     FirstLabel.textAlignment  = NSTextAlignmentCenter;
     FirstLabel.textColor = WarmGrey;
-
+    
     SecondLabel.font = [UIFont fontWithName:@"AvenirNext-Medium" size:14];
     SecondLabel.numberOfLines = 1;
     SecondLabel.textAlignment = NSTextAlignmentCenter;
     SecondLabel.textColor = [WarmGrey colorWithAlphaComponent:0.4];
-
+    
     PrefixLabel.font = [UIFont fontWithName:@"AvenirNext-DemiBold" size:26];
     PrefixLabel.hidden    = NO;
     PrefixLabel.textColor = WarmGrey;
-
+    
     UpperEditor.placeholder        = GlobalParams.fullNamePlaceholder;
     UpperEditor.delegate           = self;
     UpperEditor.keyboardType       = UIKeyboardTypeASCIICapable;
@@ -167,12 +166,12 @@ typedef enum
     UpperEditor.enabled            = NO;
     UpperEditor.autocorrectionType = UITextAutocorrectionTypeNo;
     UpperEditor.spellCheckingType  = UITextSpellCheckingTypeNo;
-
+    
     [UpperEditor addTarget:self action:@selector(editorTextChanged:) forControlEvents:UIControlEventEditingChanged];
     [UpperEditor setFont:[UIFont fontWithName:@"AvenirNext-DemiBold" size:26]];
     [UpperEditor setAdjustsFontSizeToFitWidth:NO];
     [UpperEditor setTextColor:WarmGrey];
-
+    
     LowerEditor.delegate            = self;
     LowerEditor.placeholder         = GlobalParams.phoneNumberPlaceholder;
     LowerEditor.keyboardType        = UIKeyboardTypePhonePad;
@@ -181,16 +180,16 @@ typedef enum
     LowerEditor.autocorrectionType  = UITextAutocorrectionTypeNo;
     LowerEditor.spellCheckingType   = UITextSpellCheckingTypeNo;
     LowerEditor.autocapitalizationType = UITextAutocapitalizationTypeWords;
-
-
+    
+    
     [LowerEditor addTarget:self action:@selector(editorTextChanged:) forControlEvents:UIControlEventEditingChanged];
     [LowerEditor setFont:[UIFont fontWithName:@"AvenirNext-DemiBold" size:26]];
     [LowerEditor setAdjustsFontSizeToFitWidth:NO];
     [LowerEditor setTextColor:WarmGrey];
-
+    
     RightButton.titleLabel.font = [UIFont fontWithName:@"AvenirNext-DemiBold" size:24];
     LeftButton.titleLabel.font = [UIFont fontWithName:@"AvenirNext-DemiBold"  size:24];
-
+    
     LowerEditor.delegate            = self;
     LowerEditor.placeholder         = GlobalParams.phoneNumberPlaceholder;
     LowerEditor.keyboardType        = UIKeyboardTypePhonePad;
@@ -198,30 +197,30 @@ typedef enum
     //  LowerEditor.autocorrectionType  = UITextAutocorrectionTypeNo;
     //  LowerEditor.spellCheckingType   = UITextSpellCheckingTypeNo;
     [LowerEditor addTarget:self action:@selector(editorTextChanged:) forControlEvents:UIControlEventEditingChanged];
-
-
+    
+    
     PolicyText.delegate                 = self;
     PolicyText.backgroundColor          = [UIColor clearColor];
     PolicyText.opaque                   = NO;
     PolicyText.scrollView.scrollEnabled = NO;
     [self InitializeTermsAndPrivacyPolicyMessage];
-
+    
     FirstSeparatorView.backgroundColor  = [UIColor lightGrayColor];
     SecondSeparatorView.backgroundColor = [UIColor lightGrayColor];
     ThirdSeparatorView.backgroundColor = [UIColor lightGrayColor];
-
+    
     [LeftButton   setTitle:GlobalParams.loginLeftButtonLabel  forState:UIControlStateNormal];
     [RightButton  setTitle:GlobalParams.loginRightButtonLabel forState:UIControlStateNormal];
     LeftButton.tintColor = TextColor;
     RightButton.tintColor = TextColor;
     [LeftButton  addTarget:self action:@selector(leftButtonPressed:)  forControlEvents:UIControlEventTouchUpInside];
     [RightButton addTarget:self action:@selector(rightButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-
+    
     LeftButton.hidden   = YES;
     RightButton.enabled = NO;
-
+    
     [PickerView setBackgroundColor:LightGrey];
-
+    
     [self addSubview:FirstLabel];
     [self addSubview:SecondLabel];
     [self addSubview:FirstSeparatorView];
@@ -236,7 +235,7 @@ typedef enum
     [self addSubview:RightButton];
     [self addSubview:RollDownErrorView];
     [self registerForKeyboardNotifications];
-
+    
     NSUserDefaults* defaults  = [NSUserDefaults standardUserDefaults];
     PickerView.rowSelectedAction = ^(NSInteger row)
     {
@@ -251,10 +250,10 @@ typedef enum
         myself->FullPhoneNumber       = [myself->SelectedCountryPrefix stringByAppendingString:myself->PhoneNumber];
         [defaults setObject:myself->SelectedCountryName forKey:LOGIN_COUNTRY_NAME_DEFAULTS_KEY];
         [myself layoutEditorAnimated:NO];
-
-
+        
+        
     };
-
+    
     UITapGestureRecognizer* prefixGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(prefixTapped:)];
     [PrefixLabel addGestureRecognizer:prefixGestureRecognizer];
     PrefixLabel.userInteractionEnabled = YES;
@@ -361,7 +360,7 @@ typedef enum
         Username            = @"";
         FullName            = @"";
     }
-
+    
     if (VerificationCode == nil)
     {
         VerificationCode    = @"";
@@ -403,7 +402,7 @@ typedef enum
         case E_LoginState_LoggedIn:
             break;
     }
-
+    
     // Now, we can really layout the view.
     CGFloat width   = self.frame.size.width;
     //  CGFloat height  = self.frame.size.height;
@@ -420,7 +419,7 @@ typedef enum
         case E_LoginState_PhoneNumber:
             UpperEditor.hidden  = YES;
             SecondLabel.hidden  = NO;
-
+            
             if ([SelectedCountryPrefix isEqual:@""])
             {
                 prefixWidth = 0;
@@ -433,7 +432,7 @@ typedef enum
             prefixFrame = CGRectMake(PREFIX_LEFT_MARGIN - PREFIX_LABEL_TAP_MARGIN, LowerEditorTop - PREFIX_LABEL_TAP_MARGIN, prefixWidth + 2 * PREFIX_LABEL_TAP_MARGIN, EditorHeight + 2 * PREFIX_LABEL_TAP_MARGIN);
             upperEditorFrame = CGRectMake(PREFIX_LEFT_MARGIN, UpperEditorTop, editorWidth, EditorHeight);
             lowerEditorFrame = CGRectMake(PREFIX_LEFT_MARGIN, LowerEditorTop, editorWidth, EditorHeight);
-
+            
             prefixAlpha = 1.0;
             policyAlpha = 0.0;
             pickerAlpha = 1.0;
@@ -563,14 +562,14 @@ typedef enum
                            {
                                if (success)
                                {
-
-                                           Mixpanel *mixpanel = [Mixpanel sharedInstance];
                                    
-                                           [mixpanel track:@"twillio sent"];
+                                   Mixpanel *mixpanel = [Mixpanel sharedInstance];
                                    
-                                           [mixpanel.people increment:@"twillio sent" by:[NSNumber numberWithInt:1]];
-
-
+                                   [mixpanel track:@"twillio sent"];
+                                   
+                                   [mixpanel.people increment:@"twillio sent" by:[NSNumber numberWithInt:1]];
+                                   
+                                   
                                    LeftButton.hidden       = NO;
                                    RightButton.enabled     = NO;
                                    LowerEditor.placeholder = GlobalParams.verificationCodePlaceholder;
@@ -582,10 +581,20 @@ typedef enum
                                else if (ParseExtractErrorCode(error) == 21211)
                                {
                                    [RollDownErrorView showWithTitle:GlobalParams.loginRollDownViewTitle andMessage:GlobalParams.loginRollDownPhoneNumberFormatErrorMessage];
+                                   NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"rewind"ofType:@"wav"];
+                                   NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
+                                   AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
+                                   
+                                   AudioServicesPlaySystemSound(soundEffect);
                                }
                                else
                                {
                                    [RollDownErrorView showWithTitle:GlobalParams.loginRollDownViewTitle andMessage:GlobalParams.loginRollDownPhoneNumberErrorMessage];
+                                   NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"rewind"ofType:@"wav"];
+                                   NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
+                                   AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
+                                   
+                                   AudioServicesPlaySystemSound(soundEffect);
                                }
                                [self layoutEditorAnimated:YES];
                            });
@@ -633,7 +642,7 @@ typedef enum
             }
             break;
         case E_LoginState_Username:
-
+            
             if (textField == UpperEditor)
             {
                 [UpperEditor becomeFirstResponder];
@@ -641,11 +650,11 @@ typedef enum
                 [UpperEditor setAutocapitalizationType:UITextAutocapitalizationTypeWords];
                 NSCharacterSet *invalidCharSet = [[NSCharacterSet characterSetWithCharactersInString:@"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ "] invertedSet];
                 NSString *text = [[UpperEditor.text componentsSeparatedByCharactersInSet:invalidCharSet] componentsJoinedByString:@""];
-
+                
                 UpperEditor.text = text;
-
+                
                 FullName  = UpperEditor.text;
-
+                
                 [defaults setObject:FullName forKey:LOGIN_FULL_NAME_DEFAULTS_KEY];
             }
             else if (textField == LowerEditor)
@@ -653,15 +662,15 @@ typedef enum
                 [UpperEditor resignFirstResponder];
                 [LowerEditor becomeFirstResponder];
                 // take away upppercase and spaces
-
+                
                 NSCharacterSet *invalidCharSet2 = [[NSCharacterSet characterSetWithCharactersInString:@"abcdefghijklmnopqrstuvwxyz1234567890"] invertedSet];
                 NSString *text2 = [[LowerEditor.text componentsSeparatedByCharactersInSet:invalidCharSet2] componentsJoinedByString:@""];
-
+                
                 LowerEditor.text = text2;
                 Username = LowerEditor.text;
                 [defaults setObject:Username forKey:LOGIN_USER_NAME_DEFAULTS_KEY];
             }
-
+            
             if ([FullName containsString:@" "])
             {
                 NSLog(@"FirstName: %@ and LastName: %@",[FullName componentsSeparatedByString:@" "][0],[FullName componentsSeparatedByString:@" "][1]);
@@ -673,7 +682,7 @@ typedef enum
                 {
                     RightButton.enabled = NO;
                 }
-
+                
             }
             else
             {
@@ -690,7 +699,6 @@ typedef enum
     [RollDownErrorView hide];
     //  NSLog(@"editorTextChanged: %@", FullPhoneNumber);
 }
-//
 //__________________________________________________________________________________________________
 
 - (BOOL)textFieldShouldEndEditing:(UITextField *)textField
@@ -707,21 +715,17 @@ typedef enum
 // Action when the left button (BACK) is pressed.
 -(void)leftButtonPressed:(UIButton*)button
 {
+    
 
-    NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"rewind"ofType:@"wav"];
-    NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
-    AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
-
-    AudioServicesPlaySystemSound(soundEffect);
-
+    
     NSLog(@"leftButtonPressed");
-
-        Mixpanel *mixpanel = [Mixpanel sharedInstance];
     
-        [mixpanel track:@"didn't see code"];
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
     
-        [mixpanel.people increment:@"didn't see code" by:[NSNumber numberWithInt:1]];
-
+    [mixpanel track:@"didn't see code"];
+    
+    [mixpanel.people increment:@"didn't see code" by:[NSNumber numberWithInt:1]];
+    
     switch (State)
     {
         case E_LoginState_PhoneNumber:
@@ -763,21 +767,16 @@ typedef enum
 -(void)rightButtonPressed:(UIButton*)button
 {
 
-    NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"stab" ofType:@"wav"];
-    NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
-    AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
-
-    AudioServicesPlaySystemSound(soundEffect);
-
+    
     NSLog(@"rightButtonPressed");
-
-
-        Mixpanel *mixpanel = [Mixpanel sharedInstance];
     
-        [mixpanel track:@"Next"];
     
-        [mixpanel.people increment:@"Next" by:[NSNumber numberWithInt:1]];
-
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
+    
+    [mixpanel track:@"Next"];
+    
+    [mixpanel.people increment:@"Next" by:[NSNumber numberWithInt:1]];
+    
     switch (State)
     {
         case E_LoginState_PhoneNumber:
@@ -793,7 +792,7 @@ typedef enum
                                       {
                                           if (success)
                                           { // The verification code has been validated.
-                                              ParseFindUserByPhoneNumber(FullPhoneNumber, ^(id obj, NSError* find_error)
+                                              ParseFindUserByPhoneNumber(PhoneNumber, ^(id obj, NSError* find_error)
                                                                          {
                                                                              RecoveredUser             = obj;
                                                                              NSUserDefaults* defaults  = [NSUserDefaults standardUserDefaults];
@@ -817,7 +816,7 @@ typedef enum
                                                                                  LowerEditor.text          = Username;
                                                                                  UpperEditor.placeholder   = GlobalParams.fullNamePlaceholder;
                                                                                  UpperEditor.text          = FullName;
-
+                                                                                 
                                                                                  if ([Username isEqualToString:@""])
                                                                                  {
                                                                                      LowerEditor.enabled = YES;
@@ -844,7 +843,7 @@ typedef enum
                                                                              State = E_LoginState_Username;
                                                                              [[NSUserDefaults standardUserDefaults] setInteger:State forKey:LOGIN_STATE_DEFAULTS_KEY];
                                                                              [self layoutEditorAnimated:YES];
-
+                                                                             
                                                                          });
                                           }
                                           else if ((error != nil) && ([error.domain isEqualToString:@"Parse"]) && (error.code == PARSE_ERROR_CODE))
@@ -853,9 +852,14 @@ typedef enum
                                               LeftButton.enabled  = YES;
                                               RightButton.enabled = NO;
                                               [RollDownErrorView showWithTitle:GlobalParams.loginRollDownViewTitle andMessage:GlobalParams.loginRollDownVerificationCodeErrorMessage];
-
+                                              NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"rewind"ofType:@"wav"];
+                                              NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
+                                              AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
+                                              
+                                              AudioServicesPlaySystemSound(soundEffect);
+                                              
                                               [mixpanel track:@"wrong twillio code"];
-
+                                              
                                               [self layoutEditorAnimated:YES];
                                           }
                                           else
@@ -866,7 +870,7 @@ typedef enum
         }
             break;
         case E_LoginState_Username:
-
+            
             // Transition from username to LoggedIn.
             if ((RecoveredUser != nil))
             {
@@ -893,8 +897,6 @@ typedef enum
 {
     ParseUser* user = GetCurrentParseUser();
     // First, delete the temporary anonymous user.
-
-
     NSLog(@"0 loginExistingUser");
     [user deleteInBackgroundWithBlock:^(BOOL success, NSError* deleteError)
      {
@@ -925,6 +927,11 @@ typedef enum
          { // This username is binded to another phone number.
              NSLog(@"4 loginExistingUser");
              [RollDownErrorView showWithTitle:GlobalParams.loginRollDownViewTitle andMessage:GlobalParams.loginRollDownUsernameErrorMessage];
+             NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"rewind"ofType:@"wav"];
+             NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
+             AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
+
+             AudioServicesPlaySystemSound(soundEffect);
          }
      }];
 }
@@ -934,18 +941,18 @@ typedef enum
 {
     NSLog(@"0 loginNewUser");
     
-        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-        formatter.dateFormat = @"dd MMM YYYY HH:mm:ss";
-        NSString *string = [formatter stringFromDate:[NSDate date]];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    formatter.dateFormat = @"dd MMM YYYY HH:mm:ss";
+    NSString *string = [formatter stringFromDate:[NSDate date]];
     
-        Mixpanel *mixpanel = [Mixpanel sharedInstance];
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
 
-        [mixpanel identify:mixpanel.distinctId];
+    [mixpanel identify:mixpanel.distinctId];
 
-        [mixpanel createAlias:@"$phone" forDistinctID:mixpanel.distinctId];
+    [mixpanel createAlias:@"$phone" forDistinctID:mixpanel.distinctId];
 
-        [mixpanel.people set:@{@"$name": FullName, @"username": Username, @"$phone": PhoneNumber, @"$created": string}];
-
+    [mixpanel.people set:@{@"$name": FullName, @"username": Username, @"$phone": PhoneNumber, @"$created": string}];
+    
     ParseIsUsernameAlreadyInUse(Username, ^(BOOL alreadyExists, NSError* error)
                                 {
                                     NSLog(@"ParseIsUsernameAlreadyInUse success: %d, error: %@", alreadyExists, error);
@@ -953,13 +960,20 @@ typedef enum
                                     if (alreadyExists)
                                     { // This username is already bound to another phone number.
                                         [RollDownErrorView showWithTitle:GlobalParams.loginRollDownViewTitle andMessage:GlobalParams.loginRollDownUsernameErrorMessage];
+                                        NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"rewind"ofType:@"wav"];
+                                        NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
+                                        AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
+                                        
+                                        AudioServicesPlaySystemSound(soundEffect);
                                     }
                                     else
                                     {
                                         user.username     = Username;
                                         user.password     = FullPhoneNumber;
                                         user.fullName     = FullName;
-                                        user.phoneNumber  = FullPhoneNumber;
+                                        user.phoneNumber  = PhoneNumber;
+                                        [user setObject:SelectedCountryPrefix forKey:@"CountryPrefix"];
+                                        NSLog(@"%@",SelectedCountryPrefix);
                                         [user saveInBackgroundWithBlock:^(BOOL success, NSError* save_error)
                                          {
                                              if (success)
@@ -1129,3 +1143,5 @@ typedef enum
 }
 //__________________________________________________________________________________________________
 @end
+
+
