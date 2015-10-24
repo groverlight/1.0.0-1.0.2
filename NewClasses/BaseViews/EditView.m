@@ -73,7 +73,7 @@
   CompleteChunksLabel.lineBreakMode   = NSLineBreakByWordWrapping;
 
 
-  Editor.keyboardAppearance = UIKeyboardAppearanceDark;
+  //Editor.keyboardAppearance = UIKeyboardAppearanceDark;
 
   self.disableTextEdition = NO;
   UseSmallFont            = NO;

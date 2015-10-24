@@ -92,8 +92,16 @@
 		B6FB0D861A97A2FA002125AF /* PopLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = B6FD32B619FE4A6D001BE958 /* PopLabel.m */; };
 		B6FB0D881A97A300002125AF /* PopScreenToCircleView.m in Sources */ = {isa = PBXBuildFile; fileRef = B632F3C41A41E20C0009DE1B /* PopScreenToCircleView.m */; };
 		F40D23221BD95F22008D64EA /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = F40D23211BD95F22008D64EA /* Reachability.m */; };
+		F4152EDC1BDAF7F600F83627 /* chime_blip_off.aif in Resources */ = {isa = PBXBuildFile; fileRef = F4152EDB1BDAF7F600F83627 /* chime_blip_off.aif */; };
 		F45A1AA31B857B1A0004B506 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F45A1AA21B857B1A0004B506 /* Social.framework */; };
 		F45A1AA51B857B220004B506 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F45A1AA41B857B220004B506 /* Accounts.framework */; };
+		F4CEF4BB1BDAFCF800A1399D /* digi_error_2x.aif in Resources */ = {isa = PBXBuildFile; fileRef = F4CEF4B91BDAFCF800A1399D /* digi_error_2x.aif */; };
+		F4CEF4BC1BDAFCF800A1399D /* beep_prompt_2x.aif in Resources */ = {isa = PBXBuildFile; fileRef = F4CEF4BA1BDAFCF800A1399D /* beep_prompt_2x.aif */; };
+		F4D0F9F41BDAF3420039C51D /* click_pop.aif in Resources */ = {isa = PBXBuildFile; fileRef = F4D0F9F21BDAF3420039C51D /* click_pop.aif */; };
+		F4D0F9F51BDAF3420039C51D /* etc_woosh_mouth.aif in Resources */ = {isa = PBXBuildFile; fileRef = F4D0F9F31BDAF3420039C51D /* etc_woosh_mouth.aif */; };
+		F4D0F9F91BDAF3E40039C51D /* chime_blip_on.aif in Resources */ = {isa = PBXBuildFile; fileRef = F4D0F9F81BDAF3E40039C51D /* chime_blip_on.aif */; };
+		F4D5FDC41BDB06440048910D /* pop_digi_up.aif in Resources */ = {isa = PBXBuildFile; fileRef = F4D5FDC31BDB06440048910D /* pop_digi_up.aif */; };
+		F4D5FDCA1BDB097B0048910D /* zap_fall.aif in Resources */ = {isa = PBXBuildFile; fileRef = F4D5FDC91BDB097B0048910D /* zap_fall.aif */; };
 		F4F5854B1B82A9C80016D180 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F585451B82A9C80016D180 /* AppDelegate.m */; };
 		F4F5854C1B82A9C80016D180 /* AppViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F585471B82A9C80016D180 /* AppViewController.m */; };
 		F4F5854D1B82A9C80016D180 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F4F585481B82A9C80016D180 /* Images.xcassets */; };
@@ -280,9 +288,17 @@
 		EF7595D9B1B7E6EA941FC0F4 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		F40D23201BD95F22008D64EA /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		F40D23211BD95F22008D64EA /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		F4152EDB1BDAF7F600F83627 /* chime_blip_off.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = chime_blip_off.aif; sourceTree = SOURCE_ROOT; };
 		F417AE711B81A6C300221907 /* ParseAppIdAndClientKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParseAppIdAndClientKey.h; sourceTree = "<group>"; };
 		F45A1AA21B857B1A0004B506 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		F45A1AA41B857B220004B506 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
+		F4CEF4B91BDAFCF800A1399D /* digi_error_2x.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = digi_error_2x.aif; sourceTree = SOURCE_ROOT; };
+		F4CEF4BA1BDAFCF800A1399D /* beep_prompt_2x.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = beep_prompt_2x.aif; sourceTree = SOURCE_ROOT; };
+		F4D0F9F21BDAF3420039C51D /* click_pop.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = click_pop.aif; sourceTree = SOURCE_ROOT; };
+		F4D0F9F31BDAF3420039C51D /* etc_woosh_mouth.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = etc_woosh_mouth.aif; sourceTree = SOURCE_ROOT; };
+		F4D0F9F81BDAF3E40039C51D /* chime_blip_on.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = chime_blip_on.aif; sourceTree = SOURCE_ROOT; };
+		F4D5FDC31BDB06440048910D /* pop_digi_up.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = pop_digi_up.aif; sourceTree = SOURCE_ROOT; };
+		F4D5FDC91BDB097B0048910D /* zap_fall.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = zap_fall.aif; sourceTree = SOURCE_ROOT; };
 		F4F585441B82A9C80016D180 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Typeface/AppDelegate.h; sourceTree = SOURCE_ROOT; };
 		F4F585451B82A9C80016D180 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = Typeface/AppDelegate.m; sourceTree = SOURCE_ROOT; };
 		F4F585461B82A9C80016D180 /* AppViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppViewController.h; path = Typeface/AppViewController.h; sourceTree = SOURCE_ROOT; };
@@ -688,7 +704,15 @@
 				F4F585491B82A9C80016D180 /* InitGlobalParameters.h */,
 				F4F5854A1B82A9C80016D180 /* InitGlobalParameters.m */,
 				F4F824541BC5AD8B00506144 /* stab.wav */,
+				F4D5FDC91BDB097B0048910D /* zap_fall.aif */,
+				F4D0F9F81BDAF3E40039C51D /* chime_blip_on.aif */,
+				F4152EDB1BDAF7F600F83627 /* chime_blip_off.aif */,
+				F4D0F9F21BDAF3420039C51D /* click_pop.aif */,
+				F4D0F9F31BDAF3420039C51D /* etc_woosh_mouth.aif */,
+				F4D5FDC31BDB06440048910D /* pop_digi_up.aif */,
 				F4F8245A1BC5AFC000506144 /* rewind.wav */,
+				F4CEF4B91BDAFCF800A1399D /* digi_error_2x.aif */,
+				F4CEF4BA1BDAFCF800A1399D /* beep_prompt_2x.aif */,
 				B6A0219C195C59EE00C1BEA3 /* Images */,
 				B6E7AAC81868512800DBB0EB /* Supporting Files */,
 			);
@@ -808,10 +832,18 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F4D5FDCA1BDB097B0048910D /* zap_fall.aif in Resources */,
 				F4F824551BC5AD8B00506144 /* stab.wav in Resources */,
+				F4CEF4BB1BDAFCF800A1399D /* digi_error_2x.aif in Resources */,
 				B652A13E1A9E7D1F006222EE /* ImageAssets in Resources */,
+				F4D0F9F51BDAF3420039C51D /* etc_woosh_mouth.aif in Resources */,
+				F4CEF4BC1BDAFCF800A1399D /* beep_prompt_2x.aif in Resources */,
+				F4D0F9F41BDAF3420039C51D /* click_pop.aif in Resources */,
+				F4D5FDC41BDB06440048910D /* pop_digi_up.aif in Resources */,
 				F4F5854D1B82A9C80016D180 /* Images.xcassets in Resources */,
 				F4F8245B1BC5AFC000506144 /* rewind.wav in Resources */,
+				F4152EDC1BDAF7F600F83627 /* chime_blip_off.aif in Resources */,
+				F4D0F9F91BDAF3E40039C51D /* chime_blip_on.aif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

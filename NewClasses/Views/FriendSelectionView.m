@@ -154,7 +154,7 @@
   ListName.font                 = parameters.friendsListHeaderTextFont;
   Editor.delegate                 = self;
   Editor.returnKeyType            = UIReturnKeyDone;
-  Editor.keyboardAppearance = UIKeyboardAppearanceDark;
+  //Editor.keyboardAppearance = UIKeyboardAppearanceDark;
   Editor.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
   Editor.font                     = [UIFont fontWithName:@"AvenirNext-Medium" size:parameters.friendsEditorFontSize];
   Editor.autocorrectionType  = UITextAutocorrectionTypeNo;
@@ -169,7 +169,7 @@
   InviteButton.alpha  = 0.0;
   AddButton.alpha     = 0.0;
 
-  UIColor *color = [TypePink colorWithAlphaComponent:0.5];
+  UIColor *color = [TypePink colorWithAlphaComponent:0.40];
   Editor.attributedPlaceholder = [[NSAttributedString alloc] initWithString:parameters.friendsEditorPlaceholderText
                                                                    attributes:@{NSForegroundColorAttributeName: color}];
 
@@ -723,12 +723,7 @@
   NSInteger recentFriendsCount = MIN(self.recentFriends.count, GetGlobalParameters().friendsMaxRecentFriends);
     NSLog(@"%lu",recentFriendsCount);
   if (friendIndex < recentFriendsCount)
-  { NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"rewind"ofType:@"wav"];
-      NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
-      AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
-
-      AudioServicesPlaySystemSound(soundEffect);
-
+  {
 
       NSLog(@"yo");
       FriendRecord *friend =(FriendRecord*)[self.recentFriends objectAtIndex:friendIndex];

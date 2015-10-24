@@ -75,7 +75,7 @@ parameters.blockedUserReasonMessage       = NSLocalizedString(@"You have been bl
     [viewController loginDone:newUser];
   };
 
-    parameters.findUserMessagingSampleText          = NSLocalizedString(@"Don't be misunderstood - add me on typeface. My username is %@. \nitunes.apple.com/app/id1032193825", @"");  // The %@ is a placeholder for the username.
+    parameters.findUserMessagingSampleText          = NSLocalizedString(@"Don't be misunderstood - add me on typeface. My username is %@. \nhttps://appsto.re/us/HCGH9.i", @"");  // The %@ is a placeholder for the username.
   parameters.findUserMessagingNotSupportedAction  = ^
   {
     Alert(NSLocalizedString(@"Failed to send iMessage", @""), NSLocalizedString(@"Messaging is not supported on this device!", @""), NSLocalizedString(@"OK", @""), nil, ^(NSInteger pressedButton)
@@ -213,14 +213,14 @@ parameters.blockedUserReasonMessage       = NSLocalizedString(@"You have been bl
   parameters.friendsProgressStrokeColor             = Transparent;
   parameters.friendsProgressFillColor               = parameters.secondaryButtonColor;
   parameters.friendsSendToLabelTitle              	= NSLocalizedString(@"press & hold to send", @"");
-  parameters.friendsA_ZLabelTitle                 	= NSLocalizedString(@"tap below to find friends", @"");
+  parameters.friendsA_ZLabelTitle                 	= NSLocalizedString(@"tap search to find friends", @"");
   parameters.friendsActivityLabelTitle              = NSLocalizedString(@"press & hold to watch", @"");
   parameters.friendsLabelTitleColor                 = LightGrey;
   parameters.friendsLabelTitleFontSize              = 16;
   parameters.friendsProgressDuration                = 2;
   parameters.friendsMaxRecentFriends                = 5;
 
-  parameters.friendsEditorPlaceholderText           = NSLocalizedString(@"Search for username", @"");
+  parameters.friendsEditorPlaceholderText           = NSLocalizedString(@"Search by username", @"");
   parameters.friendsEditorFontSize                  = 18;
   parameters.friendsEditorHeight                    = 60;
   parameters.friendsEditorLeftMargin                = 18;
@@ -230,7 +230,7 @@ parameters.blockedUserReasonMessage       = NSLocalizedString(@"You have been bl
   parameters.friendsInviteButtonBottomGap           = 43;
   parameters.friendsAddButtonBottomGap              = 5;
   parameters.friendsInviteButtonTitle               = NSLocalizedString(@"MORE FRIENDS", @"");
-  parameters.friendsAddButtonTitle                  = NSLocalizedString(@"ADD", @"");
+  parameters.friendsAddButtonTitle                  = NSLocalizedString(@"ADD FRIEND", @"");
 
   parameters.addFriendAutoSearch                    = NO;
   parameters.addFriendIgnoreBlankSpaces             = YES;
@@ -305,10 +305,10 @@ parameters.blockedUserReasonMessage       = NSLocalizedString(@"You have been bl
   parameters.typingCharacterCountFontSize         = 14;
     parameters.typingCharacterCountColor            = [White colorWithAlphaComponent:0.5];;
   parameters.typingCharacterCountRightMargin      = 24;
-  parameters.typingLeftButtonAlertTitle           = NSLocalizedString(@"Use that selfie?", @"");
+  parameters.typingLeftButtonAlertTitle           = NSLocalizedString(@"Ready for selfie?", @"");
   parameters.typingLeftButtonAlertMessage         = NSLocalizedString(@"Tapping FACE attaches a selfie to your current text blurb", @"");
-  parameters.typingLeftButtonAlertOkString        = NSLocalizedString(@"Use It", @"");
-  parameters.typingLeftButtonAlertCancelString    = NSLocalizedString(@"Re-shoot", @"");
+  parameters.typingLeftButtonAlertOkString        = NSLocalizedString(@"Take Selfie", @"");
+  parameters.typingLeftButtonAlertCancelString    = NSLocalizedString(@"Not Ready", @"");
   parameters.typingRightButtonAlertTitle          = NSLocalizedString(@"You can type more blurbs!", @"");
   parameters.typingRightButtonAlertMessage        = NSLocalizedString(@"Tapping GO means you're ready to pick the recipient of the message", @"");
   parameters.typingRightButtonAlertOkString       = NSLocalizedString(@"Done", @"");

@@ -60,7 +60,7 @@ static UIColor* BaseColor(T_Colors color)
       case E_Color_TypePink:
           return [UIColor colorWithRed:0.98 green:0.32 blue:0.43 alpha:1.0];
       case E_Color_TypeTeal:
-         return [UIColor colorWithRed:0.04 green:0.71 blue:1.0 alpha:1.0];
+         return [UIColor colorWithRed:0.21 green:0.86 blue:0.75 alpha:1.0];
   }
 }
 //__________________________________________________________________________________________________

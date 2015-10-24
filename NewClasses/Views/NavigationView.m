@@ -271,7 +271,9 @@ SystemSoundID           soundEffect;
   };
 
   AzFriendsListView->TouchStarted = ^(CGPoint point, NSInteger tableIndex)
+
   {
+      
   };
 
   AzFriendsListView->TouchEnded = ^(CGPoint point, NSInteger tableIndex)
@@ -328,11 +330,7 @@ SystemSoundID           soundEffect;
   {
     get_myself;
     myself->ScrollView.scrollView.scrollEnabled = NO;
-//    NSLog(@"ActivityListView->TouchStarted disable scroll: %d", myself->ScrollView.scrollView.scrollEnabled);
-//      NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"rewind"ofType:@"wav"];
-//      NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
-//      AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
-//         AudioServicesPlaySystemSound(soundEffect);
+
 
   };
 
@@ -340,7 +338,7 @@ SystemSoundID           soundEffect;
   {
     NSLog(@"1 ActivityListView->TouchEnded");
 
-      NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"rewind"ofType:@"wav"];
+      NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"zap_fall"ofType:@"aif"];
       NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
       AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
 
@@ -458,8 +456,17 @@ SystemSoundID           soundEffect;
     [myself->TypingMessageView clearText];
 
     [myself->Player prepareForFirstChunkWithMessage:myself->MessageToSend];
+      NSLog(@"first chunk");
+
+
     [myself->Player showAnimatedFromPoint:point andInitialRadius:parameters.friendStateViewCircleRadius completion:^
-    {
+     {   NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"pop_digi_up" ofType:@"aif"];
+         NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
+         AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
+
+         AudioServicesPlaySystemSound(soundEffect);
+
+
       NSLog(@"SendToListView->ProgressCompleted showAnimatedFromPoint completed!");
       [Myself->Player displayFirstChunk:myself->PreviewChunkCompletionAction];
       Myself->StartSending = NO;
@@ -487,7 +494,7 @@ SystemSoundID           soundEffect;
     }
     else //a sound each chunk
     {
-        NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"stab" ofType:@"wav"];
+        NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"pop_digi_up" ofType:@"aif"];
         NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
         AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
 
@@ -497,10 +504,14 @@ SystemSoundID           soundEffect;
     }
   };
 
+
+
   PlayerChunkCompletionAction = ^(BOOL done)
   {
     get_myself;
-//    NSLog(@"PlayerChunkCompletionAction");
+
+      
+   NSLog(@"PlayerChunkCompletionAction");
     if (done)
     {
       if (!myself->ScrollView.scrollView.scrollEnabled)
@@ -540,7 +551,7 @@ SystemSoundID           soundEffect;
     }
     else
     {
-        NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"stab" ofType:@"wav"];
+        NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"pop_digi_up" ofType:@"aif"];
         NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
         AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
 

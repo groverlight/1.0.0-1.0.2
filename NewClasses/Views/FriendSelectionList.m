@@ -234,7 +234,7 @@
         {
             Completed = NO;
             if (!TouchActive)
-            {
+            {//NSLog(@"I touched a button, and i liked it3");
                 if (!StateViewHidden)
                 {
                     if (SimulateButton)
@@ -251,7 +251,7 @@
                     }
                     else
                     {
-                        //            NSLog(@"MainContentViewTapped");
+                                   NSLog(@"Tappable Sound");
                         [self updateCellSelection:mycell];
                         [pseudoButton animateToState:E_FriendProgressState_Selected completion:^
                          {
@@ -269,12 +269,14 @@
         {
             Completed = NO;
             TouchActive = YES;
-            //      NSLog(@"MainContentViewPanTouchAction");
+                  //NSLog(@"MainContentViewPanTouchAction");
             [pseudoButton animateToState:E_FriendProgressState_InProgress completion:^
              {
+
              }];
             if (!SimulateButton)
             {
+
                 [self updateCellSelection:mycell];
             }
             NSInteger index = cell.tableSection * [self tableView:self numberOfRowsInSection:0] + cell.tableRow;

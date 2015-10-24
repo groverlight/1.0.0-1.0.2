@@ -13,6 +13,7 @@
 #import "Tools.h"
 #import "TopBarView.h"
 #import "Mixpanel.h"
+#import <AudioToolbox/AudioToolbox.h>
 //__________________________________________________________________________________________________
 
 #define FACE_BUTTON_ALERT_FLAG_DEFAULTS_KEY @"FaceButtonAlertFlag"  //!< The key to retrieve the FACE button alert flag in the user defaults.
@@ -30,6 +31,7 @@
   NSInteger             NumCharactersLeft;          //!< Number of character available to add to the current text.
   NSInteger             FaceCount;
   BOOL                  ChangingReturnButtonType;
+  SystemSoundID           soundEffect;
 }
 @synthesize snapshots;
 //____________________
@@ -101,6 +103,12 @@
         }
         else
         {
+            NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"beep_prompt_2x"ofType:@"aif"];
+            NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
+            AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
+
+            AudioServicesPlaySystemSound(soundEffect);
+
             NSLog(@"Calls the selfie alert!");
             Alert(parameters.typingLeftButtonAlertTitle   , parameters.typingLeftButtonAlertMessage,
                   parameters.typingLeftButtonAlertOkString, parameters.typingLeftButtonAlertCancelString,
@@ -184,6 +192,13 @@
         else
         {
             NSLog(@"Calls send message alert");
+
+            NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"beep_prompt_2x"ofType:@"aif"];
+            NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
+            AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
+
+            AudioServicesPlaySystemSound(soundEffect);
+
             Alert(parameters.typingRightButtonAlertTitle   , parameters.typingRightButtonAlertMessage,
                   parameters.typingRightButtonAlertOkString, parameters.typingRightButtonAlertCancelString,
                   ^(NSInteger pressedButtonIndex)

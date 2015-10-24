@@ -162,7 +162,7 @@ typedef enum
     UpperEditor.placeholder        = GlobalParams.fullNamePlaceholder;
     UpperEditor.delegate           = self;
     UpperEditor.keyboardType       = UIKeyboardTypeASCIICapable;
-    UpperEditor.keyboardAppearance = UIKeyboardAppearanceDark;
+    //UpperEditor.keyboardAppearance = UIKeyboardAppearanceDark;
     UpperEditor.enabled            = NO;
     UpperEditor.autocorrectionType = UITextAutocorrectionTypeNo;
     UpperEditor.spellCheckingType  = UITextSpellCheckingTypeNo;
@@ -175,7 +175,7 @@ typedef enum
     LowerEditor.delegate            = self;
     LowerEditor.placeholder         = GlobalParams.phoneNumberPlaceholder;
     LowerEditor.keyboardType        = UIKeyboardTypePhonePad;
-    LowerEditor.keyboardAppearance = UIKeyboardAppearanceDark;
+    //LowerEditor.keyboardAppearance = UIKeyboardAppearanceDark;
     LowerEditor.enabled             = NO;
     LowerEditor.autocorrectionType  = UITextAutocorrectionTypeNo;
     LowerEditor.spellCheckingType   = UITextSpellCheckingTypeNo;
@@ -581,7 +581,7 @@ typedef enum
                                else if (ParseExtractErrorCode(error) == 21211)
                                {
                                    [RollDownErrorView showWithTitle:GlobalParams.loginRollDownViewTitle andMessage:GlobalParams.loginRollDownPhoneNumberFormatErrorMessage];
-                                   NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"rewind"ofType:@"wav"];
+                                   NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"digi_error_2x"ofType:@"aif"];
                                    NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
                                    AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
                                    
@@ -590,7 +590,7 @@ typedef enum
                                else
                                {
                                    [RollDownErrorView showWithTitle:GlobalParams.loginRollDownViewTitle andMessage:GlobalParams.loginRollDownPhoneNumberErrorMessage];
-                                   NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"rewind"ofType:@"wav"];
+                                   NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"digi_error_2x"ofType:@"aif"];
                                    NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
                                    AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
                                    
@@ -852,7 +852,7 @@ typedef enum
                                               LeftButton.enabled  = YES;
                                               RightButton.enabled = NO;
                                               [RollDownErrorView showWithTitle:GlobalParams.loginRollDownViewTitle andMessage:GlobalParams.loginRollDownVerificationCodeErrorMessage];
-                                              NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"rewind"ofType:@"wav"];
+                                              NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"digi_error_2x"ofType:@"aif"];
                                               NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
                                               AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
                                               
@@ -927,7 +927,7 @@ typedef enum
          { // This username is binded to another phone number.
              NSLog(@"4 loginExistingUser");
              [RollDownErrorView showWithTitle:GlobalParams.loginRollDownViewTitle andMessage:GlobalParams.loginRollDownUsernameErrorMessage];
-             NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"rewind"ofType:@"wav"];
+             NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"digi_error_2x"ofType:@"aif"];
              NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
              AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
 
@@ -960,7 +960,7 @@ typedef enum
                                     if (alreadyExists)
                                     { // This username is already bound to another phone number.
                                         [RollDownErrorView showWithTitle:GlobalParams.loginRollDownViewTitle andMessage:GlobalParams.loginRollDownUsernameErrorMessage];
-                                        NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"rewind"ofType:@"wav"];
+                                        NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"digi_error_2x"ofType:@"aif"];
                                         NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
                                         AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
                                         

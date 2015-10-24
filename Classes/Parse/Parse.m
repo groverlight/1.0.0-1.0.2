@@ -364,12 +364,6 @@ void ParseSendMessage
 
     [mixpanel.people increment:@"messages sent" by:[NSNumber numberWithInt:1]];
 
-    NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"rewind"ofType:@"wav"];
-    NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
-    AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
-
-    AudioServicesPlaySystemSound(soundEffect);
-
 
 
   if (msg == nil)
