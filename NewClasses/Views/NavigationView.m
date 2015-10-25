@@ -378,6 +378,13 @@ SystemSoundID           soundEffect;
       {
 //        NSLog(@"ActivityListView->ProgressCompleted showAnimatedFromPoint completed!");
         [myself->Player displayFirstChunk:myself->PlayerChunkCompletionAction];
+
+          NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"pop_digi_up" ofType:@"aif"];
+          NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
+          AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
+
+          AudioServicesPlaySystemSound(soundEffect);
+
       }];
     }
   };
