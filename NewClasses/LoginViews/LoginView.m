@@ -766,9 +766,16 @@ typedef enum
 // Action when the right button (NEXT) is pressed.
 -(void)rightButtonPressed:(UIButton*)button
 {
-
     
     NSLog(@"rightButtonPressed");
+
+
+    NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"beep_basic_lo_c"ofType:@"aif"];
+    NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
+    AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
+
+    AudioServicesPlaySystemSound(soundEffect);
+
     
     
     Mixpanel *mixpanel = [Mixpanel sharedInstance];

@@ -69,7 +69,6 @@ static StillImageCapture* SharedStillImageCapture = nil;
 
     NSLog(@"selfie");
 
-
     //NSLog(@"takeSnapshot 0");
 
     Mixpanel *mixpanel = [Mixpanel sharedInstance];

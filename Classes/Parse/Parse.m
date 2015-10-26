@@ -485,13 +485,15 @@ void ParseRemoveFriend
   BlockBoolErrorAction  completion              //!< The block to call when the message has been sent.
 )
 {
-    NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"rewind"ofType:@"wav"];
+
+    NSLog(@"ParseRemoveFriend start");
+
+    NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"zap_mini"ofType:@"aif"];
     NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
     AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
 
     AudioServicesPlaySystemSound(soundEffect);
 
-    NSLog(@"ParseRemoveFriend start");
 
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
 
@@ -669,6 +671,13 @@ void ParseLoadMessageArray
         }
         else
         {
+
+            NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"pop_hi"ofType:@"aif"];
+            NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
+            AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
+
+            AudioServicesPlaySystemSound(soundEffect);
+            
           NSMutableArray* objects = [NSMutableArray arrayWithArray:parseMessages];
           // First process action messages.
           NSMutableArray* removedFriendIds = [NSMutableArray arrayWithCapacity:1];

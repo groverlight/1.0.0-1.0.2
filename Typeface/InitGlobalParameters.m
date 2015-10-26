@@ -264,8 +264,8 @@ parameters.blockedUserReasonMessage       = NSLocalizedString(@"You have been bl
   parameters.ThreeDotsPseudoButtonAnimParameters.bounciness       = 30;
   parameters.ThreeDotsPseudoButtonAnimParameters.velocity         = 20;
   parameters.ThreeDotsPseudoButtonAnimParameters.springSpeed      = 10;
-  parameters.ThreeDotsPseudoButtonAnimParameters.dynamicsMass     = 2;
-  parameters.ThreeDotsPseudoButtonAnimParameters.dynamicsFriction = 10;
+  parameters.ThreeDotsPseudoButtonAnimParameters.dynamicsMass     = 1;
+  parameters.ThreeDotsPseudoButtonAnimParameters.dynamicsFriction = 5;
 
 
   parameters.whiteButtonBounceScaleFactor         = 1.5;
@@ -279,10 +279,11 @@ parameters.blockedUserReasonMessage       = NSLocalizedString(@"You have been bl
 
   parameters.whiteButtonAnimParameters                    = [PopAnimParameters new];
   parameters.whiteButtonAnimParameters.animationStyle     = E_PopAnimationStyle_Spring;
-  parameters.whiteButtonAnimParameters.bounciness         = 30;
-  parameters.whiteButtonAnimParameters.velocity           = 25;
-  parameters.whiteButtonAnimParameters.springSpeed        = 100;
-  parameters.whiteButtonAnimParameters.dynamicsMass       = 5;
+  parameters.whiteButtonAnimParameters.bounciness         = 20;
+  parameters.whiteButtonAnimParameters.velocity           = 10;
+  parameters.whiteButtonAnimParameters.springSpeed        = 10;
+  parameters.whiteButtonAnimParameters.dynamicsMass       = 1;
+  parameters.whiteButtonAnimParameters.dynamicsFriction = 5;
     
 
   parameters.typingBackgroundColor                = Transparent;
