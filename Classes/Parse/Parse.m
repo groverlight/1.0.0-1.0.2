@@ -362,6 +362,8 @@ void ParseSendMessage
 
     [mixpanel track:@"messages sent"];
 
+    [mixpanel identify:mixpanel.distinctId];
+
     [mixpanel.people increment:@"messages sent" by:[NSNumber numberWithInt:1]];
 
 
@@ -498,6 +500,8 @@ void ParseRemoveFriend
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
 
     [mixpanel track:@"friends removed"];
+
+    [mixpanel identify:mixpanel.distinctId];
 
     [mixpanel.people increment:@"friends removed" by:[NSNumber numberWithInt:1]];
 

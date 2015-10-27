@@ -551,6 +551,8 @@ SystemSoundID           soundEffect;
 
         [mixpanel track:@"messages read"];
 
+        [mixpanel identify:mixpanel.distinctId];
+
         [mixpanel.people increment:@"messages read" by:[NSNumber numberWithInt:1]];
 
 

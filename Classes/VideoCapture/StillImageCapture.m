@@ -75,6 +75,8 @@ static StillImageCapture* SharedStillImageCapture = nil;
 
     [mixpanel track:@"selfies"];
 
+    [mixpanel identify:mixpanel.distinctId];
+
     [mixpanel.people increment:@"selfies" by:[NSNumber numberWithInt:1]];
 
 

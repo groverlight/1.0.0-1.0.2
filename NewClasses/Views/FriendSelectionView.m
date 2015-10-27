@@ -859,6 +859,8 @@
 
                          [mixpanel track:@"Said YES to Contacts Sync"];
 
+                        [mixpanel identify:mixpanel.distinctId];
+
                          [mixpanel.people increment:@"Said YES to Contacts Sync" by:[NSNumber numberWithInt:1]];
 
 
@@ -915,6 +917,8 @@
                     Mixpanel *mixpanel = [Mixpanel sharedInstance];
 
                     [mixpanel track:@"Said NO to Contacts Sync"];
+
+                    [mixpanel identify:mixpanel.distinctId];
 
                     [mixpanel.people increment:@"Said NO to Contacts Sync" by:[NSNumber numberWithInt:1]];
 

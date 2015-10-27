@@ -125,6 +125,8 @@
 
                           [mixpanel track:@"selfie understood"];
 
+                          [mixpanel identify:mixpanel.distinctId];
+
                           [mixpanel.people increment:@"Selfie Understood" by:[NSNumber numberWithInt:1]];
                       }
                       else {
@@ -134,6 +136,8 @@
                       Mixpanel *mixpanel = [Mixpanel sharedInstance];
 
                       [mixpanel track:@"selfie NOT understood"];
+
+                      [mixpanel identify:mixpanel.distinctId];
 
                       [mixpanel.people increment:@"selfie NOT understood" by:[NSNumber numberWithInt:1]];
 
@@ -210,6 +214,8 @@
                           Mixpanel *mixpanel = [Mixpanel sharedInstance];
                           
                           [mixpanel track:@"go understood"];
+
+                          [mixpanel identify:mixpanel.distinctId];
                           
                           [mixpanel.people increment:@"Go understood" by:[NSNumber numberWithInt:1]];
                       }
@@ -219,6 +225,8 @@
                           Mixpanel *mixpanel = [Mixpanel sharedInstance];
                           
                           [mixpanel track:@"go NOT understood"];
+
+                          [mixpanel identify:mixpanel.distinctId];
                           
                           [mixpanel.people increment:@"go NOT understood" by:[NSNumber numberWithInt:1]];
                       }

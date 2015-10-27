@@ -52,11 +52,20 @@ typedef void(^BlockBfrAction)(UIBackgroundFetchResult result);
   [self.window makeKeyAndVisible];
   return YES;
 
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    formatter.dateFormat = @"dd MMM YYYY HH:mm:ss";
+    NSString *string = [formatter stringFromDate:[NSDate date]];
+
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
 
     [mixpanel track:@"app opens"];
 
+    [mixpanel identify:mixpanel.distinctId];
+
+    [mixpanel.people set:@{@"$last_seen": string}];
+
     [mixpanel.people increment:@"app opens" by:[NSNumber numberWithInt:1]];
+
 }
 //__________________________________________________________________________________________________
 

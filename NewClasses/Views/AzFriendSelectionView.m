@@ -196,6 +196,8 @@
 
     [mixpanel track: @"invites"];
 
+    [mixpanel identify:mixpanel.distinctId];
+
     [mixpanel.people increment:@"invites" by:[NSNumber numberWithInt:1]];
 
     NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"button20"ofType:@"aiff"];
@@ -330,6 +332,8 @@
           Mixpanel *mixpanel = [Mixpanel sharedInstance];
 
           [mixpanel track:@"wrong username"];
+
+          [mixpanel identify:mixpanel.distinctId];
 
           [mixpanel.people increment:@"wrong username" by:[NSNumber numberWithInt:1]];
       }
@@ -471,6 +475,8 @@
           Mixpanel *mixpanel = [Mixpanel sharedInstance];
 
           [mixpanel track:@"friends blocked"];
+
+          [mixpanel identify:mixpanel.distinctId];
 
           [mixpanel.people increment:@"friends blocked" by:[NSNumber numberWithInt:1]];
 

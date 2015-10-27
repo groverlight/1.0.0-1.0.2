@@ -133,6 +133,8 @@ NSMutableArray* GetSharedFriendsList(void)
 
     [mixpanel track:@"friends"];
 
+    [mixpanel identify:mixpanel.distinctId];
+
     [mixpanel.people increment:@"friends" by:[NSNumber numberWithInt:1]];
 
 

@@ -567,6 +567,8 @@ typedef enum
                                    Mixpanel *mixpanel = [Mixpanel sharedInstance];
                                    
                                    [mixpanel track:@"twillio sent"];
+
+                                   [mixpanel identify:mixpanel.distinctId];
                                    
                                    [mixpanel.people increment:@"twillio sent" by:[NSNumber numberWithInt:1]];
                                    
@@ -730,6 +732,8 @@ typedef enum
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     
     [mixpanel track:@"didn't see code"];
+
+    [mixpanel identify:mixpanel.distinctId];
     
     [mixpanel.people increment:@"didn't see code" by:[NSNumber numberWithInt:1]];
     
@@ -788,6 +792,8 @@ typedef enum
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     
     [mixpanel track:@"Next"];
+
+    [mixpanel identify:mixpanel.distinctId];
     
     [mixpanel.people increment:@"Next" by:[NSNumber numberWithInt:1]];
     
