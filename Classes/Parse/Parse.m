@@ -1007,7 +1007,7 @@ void ParseSendPushNotificationToUser(NSString* destUserObjectId, NSString* text)
     NSDictionary* data = [NSDictionary dictionaryWithObjectsAndKeys:
                           text, @"alert",
                           @"Increment", @"badge",
-                          @"default", @"sound",
+                          @"zap_sonar.aif", @"sound",
                           @"1", @"content-available",
                           nil];
 

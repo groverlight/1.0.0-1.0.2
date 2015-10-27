@@ -719,6 +719,12 @@ typedef enum
 
     
     NSLog(@"leftButtonPressed");
+
+    NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"beep_digi_msg_down"ofType:@"aif"];
+    NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
+    AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
+
+    AudioServicesPlaySystemSound(soundEffect);
     
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     
@@ -770,7 +776,7 @@ typedef enum
     NSLog(@"rightButtonPressed");
 
 
-    NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"beep_basic_lo_c"ofType:@"aif"];
+    NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"beep_digi_msg_up"ofType:@"aif"];
     NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
     AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
 

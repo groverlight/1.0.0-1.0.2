@@ -379,7 +379,7 @@ SystemSoundID           soundEffect;
 //        NSLog(@"ActivityListView->ProgressCompleted showAnimatedFromPoint completed!");
         [myself->Player displayFirstChunk:myself->PlayerChunkCompletionAction];
 
-          NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"pop_digi_up" ofType:@"aif"];
+          NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"digi_ping_up" ofType:@"aif"];
           NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
           AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
 
@@ -467,7 +467,7 @@ SystemSoundID           soundEffect;
 
 
     [myself->Player showAnimatedFromPoint:point andInitialRadius:parameters.friendStateViewCircleRadius completion:^
-     {   NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"pop_digi_up" ofType:@"aif"];
+     {   NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"digi_ping_down" ofType:@"aif"];
          NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
          AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
 
@@ -501,7 +501,7 @@ SystemSoundID           soundEffect;
     }
     else //a sound each chunk
     {
-        NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"pop_digi_up" ofType:@"aif"];
+        NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"digi_ping_down" ofType:@"aif"];
         NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
         AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
 
@@ -558,7 +558,7 @@ SystemSoundID           soundEffect;
     }
     else
     {
-        NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"pop_digi_up" ofType:@"aif"];
+        NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"digi_ping_up" ofType:@"aif"];
         NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
         AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
 
