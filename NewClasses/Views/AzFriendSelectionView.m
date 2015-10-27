@@ -198,7 +198,7 @@
 
     [mixpanel.people increment:@"invites" by:[NSNumber numberWithInt:1]];
 
-    NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"click_pop"ofType:@"aif"];
+    NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"button20"ofType:@"aiff"];
     NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
     AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
 
@@ -233,7 +233,7 @@
 // Action when the Add button is pressed.
 -(void)addButtonPressed
 {
-    NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"click_pop" ofType:@"aif"];
+    NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"button20" ofType:@"aiff"];
     NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
     AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
 
@@ -272,7 +272,7 @@
         if ([GetCurrentParseUser() isFriend:user])
         {
           [RollDownErrorView showWithTitle:parameters.addFriendRollDownViewTitle andMessage:parameters.AddFriendRollDownAlreadyFriendErrorMessage];
-            NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"digi_error_2x"ofType:@"aif"];
+            NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"rolldown10"ofType:@"aiff"];
             NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
             AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
             AudioServicesPlaySystemSound(soundEffect);
@@ -281,7 +281,7 @@
         else if (IsUserBlocked(user, BlockedUsers))
         {
           [RollDownErrorView showWithTitle:parameters.addFriendRollDownViewTitle andMessage:parameters.AddFriendRollDownBlockedFriendErrorMessage];
-            NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"digi_error_2x"ofType:@"aif"];
+            NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"rolldown10"ofType:@"aiff"];
             NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
             AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
             AudioServicesPlaySystemSound(soundEffect);
@@ -289,7 +289,7 @@
         else if (IsUserBlocking(user, BlockingUsers))
         {
           [RollDownErrorView showWithTitle:parameters.addFriendRollDownViewTitle andMessage:parameters.AddFriendRollDownBlockingUserErrorMessage];
-            NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"digi_error_2x"ofType:@"aif"];
+            NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"rolldown10"ofType:@"aiff"];
             NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
             AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
             AudioServicesPlaySystemSound(soundEffect);
@@ -301,7 +301,7 @@
                  }] != NSNotFound)
         {
           [RollDownErrorView showWithTitle:parameters.addFriendRollDownViewTitle andMessage:parameters.AddFriendRollDownAlreadyPendingFriendErrorMessage];
-            NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"digi_error_2x"ofType:@"aif"];
+            NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"rolldown10"ofType:@"aiff"];
             NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
             AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
             AudioServicesPlaySystemSound(soundEffect);
@@ -321,7 +321,7 @@
       else
       {
         [RollDownErrorView showWithTitle:parameters.addFriendRollDownViewTitle andMessage:parameters.AddFriendRollDownUnknownUsernameErrorMessage];
-          NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"digi_error_2x"ofType:@"aif"];
+          NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"rolldown10"ofType:@"aiff"];
           NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
           AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
           AudioServicesPlaySystemSound(soundEffect);

@@ -313,7 +313,7 @@
       NSLog(@"1 %p HeaderButton setSelected doNotBounceToSelected: %d", self, doNotBounceToSelected);
       [self animateToState:doNotBounceToSelected? E_PopViewState_Selected: E_PopViewState_BounceToSelected];
 
-        NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"etc_woosh_mouth" ofType:@"aif"];
+        NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"swipe25" ofType:@"aiff"];
         NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
         AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
 

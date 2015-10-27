@@ -488,7 +488,7 @@ void ParseRemoveFriend
 
     NSLog(@"ParseRemoveFriend start");
 
-    NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"zap_mini"ofType:@"aif"];
+    NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"remove15"ofType:@"aiff"];
     NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
     AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
 
@@ -672,7 +672,7 @@ void ParseLoadMessageArray
         else
         {
 
-            NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"pop_hi"ofType:@"aif"];
+            NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"new20"ofType:@"aiff"];
             NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
             AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
 
@@ -1007,7 +1007,7 @@ void ParseSendPushNotificationToUser(NSString* destUserObjectId, NSString* text)
     NSDictionary* data = [NSDictionary dictionaryWithObjectsAndKeys:
                           text, @"alert",
                           @"Increment", @"badge",
-                          @"zap_sonar.aif", @"sound",
+                          @"zap_shake.aif", @"sound",
                           @"1", @"content-available",
                           nil];
 

@@ -440,7 +440,7 @@ typedef enum
             LowerEditor.textAlignment = NSTextAlignmentCenter;
             RightButton.tintColor = TypePink;
             LeftButton.tintColor = TypePink;
-            FirstLabel.text     = @"Welcome to Typeface! 🙆🏼";
+            FirstLabel.text     = @"Welcome to Typeface!";
             SecondLabel.text = @"We'll text you a verification \n code to log you in.";
             SecondLabel.numberOfLines = 2;
             FirstSeparatorView.hidden = YES;
@@ -460,12 +460,13 @@ typedef enum
             pickerAlpha         = 0.0;
             UpperEditor.textAlignment = NSTextAlignmentCenter;
             LowerEditor.textAlignment = NSTextAlignmentCenter;
-            FirstLabel.text = @"Perfect, thanks! 👊🏼";
+            FirstLabel.text = @"Perfect, thanks!";
             SecondLabel.text = @"We sent the verification code. \n";
             SecondLabel.numberOfLines = 2;
             LeftButton.hidden = NO;
             RightButton.tintColor = TypePink;
             LeftButton.tintColor = TypePink;
+            FirstSeparatorView.hidden = YES;
             ThirdSeparatorView.hidden = YES;
             [RightButton setTitle:@"Next" forState:UIControlStateNormal];
             [RightButton setTitleColor:[TypePink colorWithAlphaComponent: 0.25] forState:UIControlStateDisabled];
@@ -484,7 +485,7 @@ typedef enum
             LeftButton.hidden = YES;
             UpperEditor.textAlignment = NSTextAlignmentCenter;
             LowerEditor.textAlignment = NSTextAlignmentCenter;
-            FirstLabel.text = @"Write your Full Name 📇";
+            FirstLabel.text = @"Write your Full Name";
             ThirdSeparatorView.hidden = YES;
             SecondSeparatorView.hidden = YES;
             FirstSeparatorView.hidden = NO;
@@ -581,7 +582,7 @@ typedef enum
                                else if (ParseExtractErrorCode(error) == 21211)
                                {
                                    [RollDownErrorView showWithTitle:GlobalParams.loginRollDownViewTitle andMessage:GlobalParams.loginRollDownPhoneNumberFormatErrorMessage];
-                                   NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"digi_error_2x"ofType:@"aif"];
+                                   NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"rolldown10"ofType:@"aiff"];
                                    NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
                                    AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
                                    
@@ -590,7 +591,7 @@ typedef enum
                                else
                                {
                                    [RollDownErrorView showWithTitle:GlobalParams.loginRollDownViewTitle andMessage:GlobalParams.loginRollDownPhoneNumberErrorMessage];
-                                   NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"digi_error_2x"ofType:@"aif"];
+                                   NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"rolldown10"ofType:@"aiff"];
                                    NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
                                    AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
                                    
@@ -720,7 +721,7 @@ typedef enum
     
     NSLog(@"leftButtonPressed");
 
-    NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"beep_digi_msg_down"ofType:@"aif"];
+    NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"back30"ofType:@"aiff"];
     NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
     AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
 
@@ -776,7 +777,7 @@ typedef enum
     NSLog(@"rightButtonPressed");
 
 
-    NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"beep_digi_msg_up"ofType:@"aif"];
+    NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"next30"ofType:@"aiff"];
     NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
     AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
 
@@ -865,7 +866,7 @@ typedef enum
                                               LeftButton.enabled  = YES;
                                               RightButton.enabled = NO;
                                               [RollDownErrorView showWithTitle:GlobalParams.loginRollDownViewTitle andMessage:GlobalParams.loginRollDownVerificationCodeErrorMessage];
-                                              NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"digi_error_2x"ofType:@"aif"];
+                                              NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"rolldown10"ofType:@"aiff"];
                                               NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
                                               AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
                                               
@@ -940,7 +941,7 @@ typedef enum
          { // This username is binded to another phone number.
              NSLog(@"4 loginExistingUser");
              [RollDownErrorView showWithTitle:GlobalParams.loginRollDownViewTitle andMessage:GlobalParams.loginRollDownUsernameErrorMessage];
-             NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"digi_error_2x"ofType:@"aif"];
+             NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"rolldown10"ofType:@"aiff"];
              NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
              AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
 
@@ -973,7 +974,7 @@ typedef enum
                                     if (alreadyExists)
                                     { // This username is already bound to another phone number.
                                         [RollDownErrorView showWithTitle:GlobalParams.loginRollDownViewTitle andMessage:GlobalParams.loginRollDownUsernameErrorMessage];
-                                        NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"digi_error_2x"ofType:@"aif"];
+                                        NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"rolldown10"ofType:@"aiff"];
                                         NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
                                         AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
                                         
