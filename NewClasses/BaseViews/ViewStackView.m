@@ -297,7 +297,7 @@
 //! Display a white screen with max luminosity for the specified duration in seconds.
 - (void)flashForDuration:(CGFloat)duration completion:(BlockAction)completion
 {
-  FlashView.alpha                   = 1.0;
+  FlashView.alpha                   = 0.7;
   CGFloat savedBrightness           = [UIScreen mainScreen].brightness;
   [UIScreen mainScreen].brightness  = 1.0;
   dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(duration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^
