@@ -7,13 +7,21 @@
 #import "FriendRecord.h"
 #import "GlobalParameters.h"
 #import "ParseUser.h"
+#import "FriendSelectionView.h"
+#import "VideoViewController.h"
 //__________________________________________________________________________________________________
 
 //! UIView based class that show a list of friends and some other objects.
 @implementation SendToFriendSelectionView
+
 {
   NSInteger SelectedFriend;
+  UITableView *tableView;
+    NSMutableArray *sectionTitles;
+    NSMutableArray *sectionPeople;
+    NSMutableArray *person;
 }
+
 //____________________
 
 //! Initialize the object however it has been created.
@@ -25,9 +33,8 @@
   self.showSectionHeaders       = YES;
   self.useBlankState            = NO;
   self.ignoreUnreadMessages     = YES;
-  
   self.maxNumRecentFriends      = GetGlobalParameters().friendsMaxRecentFriends;
-  
+
 }
 //__________________________________________________________________________________________________
 
@@ -35,6 +42,8 @@
 {
   [self cleanup];
 }
+
+
 //__________________________________________________________________________________________________
 
 - (void)cleanup
@@ -45,10 +54,13 @@
 - (void)updateFriendsLists
 {
   self.recentFriends  = GetTimeSortedFriendRecords();
-  self.allFriends     = GetNameSortedFriendRecords();
-  
-  FriendsList.contentOffset = CGPointMake(0, 0- FriendsList.contentInset.top);
-  [FriendsList ReloadTableData];
+    self.allFriends     = contactsNotUsers;
+  self->FriendsList.contentOffset = CGPointMake(0, 0- FriendsList.contentInset.top);
+    
+  [self->FriendsList ReloadTableData];
+
+
+
 }
 //__________________________________________________________________________________________________
 

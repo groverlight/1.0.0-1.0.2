@@ -25,7 +25,7 @@
   BOOL                UseDotsVsState;
   BOOL                SimulateButton;
   BOOL                IgnoreUnreadMessages;
-    
+  NSArray* indexTitles;
 }
 //____________________
 

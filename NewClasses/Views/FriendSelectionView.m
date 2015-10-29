@@ -4,6 +4,7 @@
 //__________________________________________________________________________________________________
 
 #import "FriendSelectionView.h"
+#import "SendToFriendSelectionView.h"
 #import "FriendRecord.h"
 #import "Alert.h"
 #import "Colors.h"
@@ -72,7 +73,7 @@
 }
 @end
 //__________________________________________________________________________________________________
-
+NSMutableArray*      contactsNotUsers;
 //! UIView based class that show a list of friends and some other objects.
 @implementation FriendSelectionView
 {
@@ -95,8 +96,11 @@
   NSInteger             SelectedFriend;
   NSArray*              BlockedUsers;
   NSArray*              BlockingUsers;
+ 
   SystemSoundID           soundEffect;
+  
 }
+
 //____________________
 
 - (void)reset
@@ -116,6 +120,7 @@
   KeyboardHeight                = 0;
   GlobalParameters* parameters  = GetGlobalParameters();
   ListName                      = [UILabel              new];
+
   TopSeparator                  = [UIView               new];
   BottomSeparator               = [UIView               new];
   Editor                        = [UITextField          new];
@@ -1054,8 +1059,37 @@
                                  [query whereKey:@"phoneNumber" containedIn:phoneNumber];
                                  // NSLog(@" this %@ ", [query findObjects]);
                                  NSLog(@"%@, %@",fullName, phoneNumber);
+                                NSInteger index = 0;
+
+                                    contactsNotUsers = [[NSMutableArray alloc]init];
+
+                                 for (NSString* name in fullName)
+                                 {
+
+
+                                     FriendRecord * newUser = [FriendRecord new];
+                                     newUser.fullName = name;
+                                     newUser.phoneNumber = [phoneNumber objectAtIndex:index];
+                                     NSMutableDictionary *contact = [[NSMutableDictionary alloc]
+                                                                     initWithObjects:@[name, [phoneNumber objectAtIndex:index]]
+                                                                             forKeys:@[@"fullName", @"phoneNumber"]];
                                  
-                                 
+                                     index++;
+                                     [[PFUser currentUser] addUniqueObject:contact forKey:@"ArrayofContacts"];
+                                     [contactsNotUsers addObject:newUser];
+                                 }
+                        
+                        [[PFUser currentUser] saveInBackground];
+                        [contactsNotUsers sortUsingComparator:^NSComparisonResult(id obj1, id obj2)
+                         {
+                             FriendRecord* record1 = (FriendRecord*)obj1;
+                             FriendRecord* record2 = (FriendRecord*)obj2;
+                             
+                             return ([record1.fullName caseInsensitiveCompare:record2.fullName]);
+                         }];
+
+
+                        
                                  [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error){
                                      if (!error) {
                                          if(objects)
@@ -1110,6 +1144,7 @@
                                  }];
 
                 }
+
 -(NSString*)formatNumber:(NSString*)mobileNumber
 {
     

@@ -19,6 +19,8 @@
 @property ParseUser*      user;
 @property NSString*       objectId;
 @property NSString*       fullName;
+@property NSString*       phoneNumber;
+@property NSArray*        PFArray;
 @property NSTimeInterval  lastActivityTime;
 @property NSInteger       numUnreadMessages;
 //____________________

@@ -15,6 +15,7 @@
 #import "StillImageCapture.h"
 #import "ThreeDotsPseudoButtonView.h"
 #import "TopBarView.h"
+#import "FriendSelectionView.h"
 //__________________________________________________________________________________________________
 
 #define REFRESH_THRESHOLD_OFFSET -50
@@ -30,6 +31,8 @@
     BOOL          ParseRefreshActive;
     NSArray*      RecentFriendsList;
     NSArray*      AllFriendsList;
+    NSMutableArray* arrayOfPeopleInSection;
+    NSMutableArray* arrayOfSectionTitles;
     NSInteger     MaxRecentFriends;
 }
 //____________________
@@ -38,7 +41,8 @@
 -(void)Initialize
 {
     [super Initialize];
-    
+    indexTitles = @[@"A", @"B", @"C", @"D", @"E", @"F", @"G", @"H", @"I", @"J", @"K", @"L", @"M", @"N", @"O", @"P", @"Q", @"R", @"S", @"T", @"U", @"V", @"W", @"X", @"Y", @"Z"];
+
     GlobalParameters* parameters  = GetGlobalParameters();
     self.separatorColor           = Transparent;
     self.backgroundColor          = parameters.friendsListBackgroundColor;
@@ -46,6 +50,8 @@
     self.sectionHeaderHeight      = parameters.friendsListHeaderHeight;
     RecentFriendsList             = [NSMutableArray arrayWithCapacity:10];
     AllFriendsList                = [NSMutableArray arrayWithCapacity:10];
+    arrayOfPeopleInSection        = [[NSMutableArray alloc]init];
+    arrayOfSectionTitles          = [[NSMutableArray alloc]init];
     SelectedItem                  = nil;
     TouchActive                   = NO;
     Completed                     = NO;
@@ -126,17 +132,26 @@
 
 - (NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    if (ShowSectionHeaders)
+    if(AllFriendsList == contactsNotUsers)
     {
-        GlobalParameters* parameters  = GetGlobalParameters();
-        switch (section)
+        return [arrayOfSectionTitles objectAtIndex:section];
+        
+    }
+    else
+    {
+        if (ShowSectionHeaders)
         {
-            case 0:
-                return parameters.friendsListRecentSectionHeaderTitle;
-            case 1:
-                return parameters.friendsListAllSectionHeaderTitle;
-            default:
-                break;
+            GlobalParameters* parameters  = GetGlobalParameters();
+            switch (section)
+            {
+                case 0:
+                    return parameters.friendsListRecentSectionHeaderTitle;
+                case 1:
+                    return parameters.friendsListAllSectionHeaderTitle;
+                
+                default:
+                    break;
+            }
         }
     }
     return nil;
@@ -150,24 +165,47 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 2;
+    if(AllFriendsList == contactsNotUsers)
+        {
+            return [arrayOfSectionTitles count];
+        }
+    else
+        {
+        return 2;
+        }
 }
 //__________________________________________________________________________________________________
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    switch (section)
-    {
-        case 0:
-            //    NSLog(@"%p, numberOfRowsInSection 0: %d", self, (int)RecentFriendsList.count);
-            return MIN(RecentFriendsList.count, GetGlobalParameters().friendsMaxRecentFriends);
-        case 1:
+    if(AllFriendsList == contactsNotUsers)
+        {
+            if (section == 0)
+            {
+                return [RecentFriendsList count];
+            }
+            else
+            {
+            return [[arrayOfPeopleInSection objectAtIndex:section] count];
+            }
+        
+        }
+    else
+        {
+    
+        switch (section)
+            {
+                    case 0:
+                        //          NSLog(@"%p, numberOfRowsInSection 0: %d", self, (int)RecentFriendsList.count);
+                        return MIN(RecentFriendsList.count, GetGlobalParameters().friendsMaxRecentFriends);
+                    case 1:
             //    NSLog(@"%p, numberOfRowsInSection 1: %d", self, (int)AllFriendsList.count);
-            return AllFriendsList.count;
-        default:
-            break;
-    }
-    return 0;
+                        return AllFriendsList.count;
+                    default:
+                        break;
+            }
+            return 0;
+          }
 }
 //__________________________________________________________________________________________________
 
@@ -338,27 +376,64 @@
 
 - (void)InitCell:(TableViewCell*)cell atIndexPath:(NSIndexPath*)indexPath
 {
-    //  NSLog(@"%p InitCell atIndexPath: [%d, %d], %d, %d", self, (int)indexPath.section, (int)indexPath.row, (int)RecentFriendsList.count, (int)AllFriendsList.count);
-    FriendRecord*             record        = [((cell.tableSection == 0)? RecentFriendsList: AllFriendsList) objectAtIndex:cell.tableRow];
-    PopLabel*                 fullName      = [cell getCellItemAtIndex:0];
-    FriendListItemStateView*  pseudoButton  = [cell getCellItemAtIndex:1];
-    pseudoButton.hidden                     = StateViewHidden;
-    if (record.fullName == nil)
+    if(AllFriendsList == contactsNotUsers)
     {
-        record.fullName = @"<unassigned 3>";
-    }
-    fullName.text       = record.fullName;
-    BOOL isSelectedItem = ((SelectedItem != nil) && [SelectedItem isEqual:indexPath]);
-    if ((!IgnoreUnreadMessages && (record.numUnreadMessages > 0)) || (IgnoreUnreadMessages && isSelectedItem))
-    {
-        [pseudoButton setState:E_FriendProgressState_Selected animated:NO];
-        fullName.font = GetGlobalParameters().friendsUsernameMediumFont;
+        FriendRecord* record;
+        if (cell.tableSection == 0)
+        {
+            record = [RecentFriendsList objectAtIndex:cell.tableRow];
+            NSLog(@"Recent%@", RecentFriendsList);
+            NSLog(@"record%@", record.fullName);
+        }
+        else
+        {
+            record =[[arrayOfPeopleInSection objectAtIndex:cell.tableSection] objectAtIndex:cell.tableRow];
+        }
+            PopLabel*                 fullName      = [cell getCellItemAtIndex:0];
+            FriendListItemStateView*  pseudoButton  = [cell getCellItemAtIndex:1];
+            pseudoButton.hidden                     = StateViewHidden;
+            if (record.fullName == nil)
+            {
+                record.fullName = @"<unassigned 3>";
+            }
+            fullName.text       = record.fullName;
+            BOOL isSelectedItem = ((SelectedItem != nil) && [SelectedItem isEqual:indexPath]);
+            if ((!IgnoreUnreadMessages && (record.numUnreadMessages > 0)) || (IgnoreUnreadMessages && isSelectedItem))
+            {
+                [pseudoButton setState:E_FriendProgressState_Selected animated:NO];
+                fullName.font = GetGlobalParameters().friendsUsernameMediumFont;
+            }
+            else
+            {
+                [pseudoButton setState:E_FriendProgressState_Unselected animated:NO];
+                fullName.font = GetGlobalParameters().friendsUsernameFont;
+            }
+        
     }
     else
     {
-        [pseudoButton setState:E_FriendProgressState_Unselected animated:NO];
-        fullName.font = GetGlobalParameters().friendsUsernameFont;
-    }
+        //  NSLog(@"%p InitCell atIndexPath: [%d, %d], %d, %d", self, (int)indexPath.section, (int)indexPath.row, (int)RecentFriendsList.count, (int)AllFriendsList.count);
+        FriendRecord*             record        = [((cell.tableSection == 0)? RecentFriendsList: AllFriendsList) objectAtIndex:cell.tableRow];
+        PopLabel*                 fullName      = [cell getCellItemAtIndex:0];
+        FriendListItemStateView*  pseudoButton  = [cell getCellItemAtIndex:1];
+        pseudoButton.hidden                     = StateViewHidden;
+        if (record.fullName == nil)
+        {
+            record.fullName = @"<unassigned 3>";
+        }
+        fullName.text       = record.fullName;
+        BOOL isSelectedItem = ((SelectedItem != nil) && [SelectedItem isEqual:indexPath]);
+        if ((!IgnoreUnreadMessages && (record.numUnreadMessages > 0)) || (IgnoreUnreadMessages && isSelectedItem))
+        {
+            [pseudoButton setState:E_FriendProgressState_Selected animated:NO];
+            fullName.font = GetGlobalParameters().friendsUsernameMediumFont;
+        }
+        else
+        {
+            [pseudoButton setState:E_FriendProgressState_Unselected animated:NO];
+            fullName.font = GetGlobalParameters().friendsUsernameFont;
+        }
+     }
 }
 //__________________________________________________________________________________________________
 
@@ -401,6 +476,56 @@
         cell.touchRectangle = pseudoButton.frame;
     }
 }
+
+- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView
+{
+    
+    if (AllFriendsList == contactsNotUsers)
+        {
+            
+
+            return arrayOfSectionTitles;
+        }
+    return nil;
+}
+
+- (NSArray *)indexLettersForStrings:(NSArray *)records {
+    NSMutableArray *letters = [NSMutableArray array];
+    [letters addObject:@"Recent"];
+    NSString *currentLetter = nil;
+    for (FriendRecord* record in records) {
+        if (record.fullName.length > 0) {
+            NSString *letter = [record.fullName substringToIndex:1];
+            if (![letter isEqualToString:currentLetter]) {
+                [letters addObject:letter];
+                currentLetter = letter;
+            }
+        }
+    }
+    arrayOfSectionTitles = (NSMutableArray*)[NSArray arrayWithArray:letters];
+    [self getArrayofPeopleinSection:arrayOfSectionTitles];
+    return [NSArray arrayWithArray:letters];
+}
+
+-(void)getArrayofPeopleinSection:(NSArray *)sections
+{
+    arrayOfPeopleInSection = [[NSMutableArray alloc]init];
+    for (NSString *letter in sections)
+        {
+        NSMutableArray *sectionPeople = [[NSMutableArray alloc]init];
+        for (FriendRecord *record in AllFriendsList)
+            {
+                
+                if([letter isEqualToString: [record.fullName substringToIndex:1]])
+                {
+                    [sectionPeople addObject:record];
+                }
+                
+            }
+            [arrayOfPeopleInSection addObject:sectionPeople];
+        }
+    NSLog(@"Array of People: %@", arrayOfPeopleInSection);
+}
 //__________________________________________________________________________________________________
 
 - (void)setRecentFriends:(NSArray *)recentFriends
@@ -425,6 +550,7 @@
     else
     {
         AllFriendsList = allFriends;
+        [self indexLettersForStrings:AllFriendsList];
     }
     [self ReloadTableData];
 }

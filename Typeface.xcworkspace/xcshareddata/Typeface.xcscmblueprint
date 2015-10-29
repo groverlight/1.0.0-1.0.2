@@ -5,11 +5,13 @@
   },
   "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
     "5B06EB564F9C1D68C3A03113D1570E775E24593F" : 0,
+    "BD15A179E46F89FD21041E6658AE15C6D059DECE" : 0,
     "D495C968313CFA5D716041F944D2883B0BFE5426" : 0
   },
   "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "B5A4FED5-087B-4EE0-B058-35445AC6DDEB",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
     "5B06EB564F9C1D68C3A03113D1570E775E24593F" : "typefaceAppStore%60\/",
+    "BD15A179E46F89FD21041E6658AE15C6D059DECE" : "typefaceAppStore\/testing\/",
     "D495C968313CFA5D716041F944D2883B0BFE5426" : "typefaceAppStore"
   },
   "DVTSourceControlWorkspaceBlueprintNameKey" : "Typeface",
@@ -20,6 +22,11 @@
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/groverlight\/typefaceAppStore.git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "5B06EB564F9C1D68C3A03113D1570E775E24593F"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/groverlight\/testing.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "BD15A179E46F89FD21041E6658AE15C6D059DECE"
     },
     {
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/groverlight\/typefaceAppStore.git",

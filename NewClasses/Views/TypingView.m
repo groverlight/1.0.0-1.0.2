@@ -105,9 +105,9 @@
         {
             NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"beep_prompt_2x"ofType:@"aif"];
             NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
-            AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
+            AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &(myself->soundEffect));
 
-            AudioServicesPlaySystemSound(soundEffect);
+            AudioServicesPlaySystemSound(myself->soundEffect);
 
             NSLog(@"Calls the selfie alert!");
             Alert(parameters.typingLeftButtonAlertTitle   , parameters.typingLeftButtonAlertMessage,
@@ -199,9 +199,9 @@
 
             NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"beep_prompt_2x"ofType:@"aif"];
             NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
-            AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
+            AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &(myself->soundEffect));
 
-            AudioServicesPlaySystemSound(soundEffect);
+            AudioServicesPlaySystemSound(myself->soundEffect);
 
             Alert(parameters.typingRightButtonAlertTitle   , parameters.typingRightButtonAlertMessage,
                   parameters.typingRightButtonAlertOkString, parameters.typingRightButtonAlertCancelString,

@@ -108,8 +108,9 @@ typedef enum
     UIColor*                TextColor;              //!< Color of the user's full name texts.
     BOOL                    Animated;               //!< Temporary value for the animated flag for some methods when performed on main thread.
     SystemSoundID           soundEffect;
-
-
+   
+    NSString *soundPath;
+    NSURL *soundURL;
 
 }
 //____________________
@@ -584,8 +585,8 @@ typedef enum
                                else if (ParseExtractErrorCode(error) == 21211)
                                {
                                    [RollDownErrorView showWithTitle:GlobalParams.loginRollDownViewTitle andMessage:GlobalParams.loginRollDownPhoneNumberFormatErrorMessage];
-                                   NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"rolldown10"ofType:@"aiff"];
-                                   NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
+                                   soundPath = [[NSBundle mainBundle] pathForResource:@"rolldown10"ofType:@"aiff"];
+                                   soundURL = [NSURL fileURLWithPath:soundPath];
                                    AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
                                    
                                    AudioServicesPlaySystemSound(soundEffect);
@@ -593,8 +594,8 @@ typedef enum
                                else
                                {
                                    [RollDownErrorView showWithTitle:GlobalParams.loginRollDownViewTitle andMessage:GlobalParams.loginRollDownPhoneNumberErrorMessage];
-                                   NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"rolldown10"ofType:@"aiff"];
-                                   NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
+                                   soundPath = [[NSBundle mainBundle] pathForResource:@"rolldown10"ofType:@"aiff"];
+                                   soundURL = [NSURL fileURLWithPath:soundPath];
                                    AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
                                    
                                    AudioServicesPlaySystemSound(soundEffect);
@@ -723,8 +724,8 @@ typedef enum
     
     NSLog(@"leftButtonPressed");
 
-    NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"back30"ofType:@"aiff"];
-    NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
+    soundPath = [[NSBundle mainBundle] pathForResource:@"back30"ofType:@"aiff"];
+    soundURL = [NSURL fileURLWithPath:soundPath];
     AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
 
     AudioServicesPlaySystemSound(soundEffect);
@@ -781,8 +782,8 @@ typedef enum
     NSLog(@"rightButtonPressed");
 
 
-    NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"next30"ofType:@"aiff"];
-    NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
+    soundPath = [[NSBundle mainBundle] pathForResource:@"next30"ofType:@"aiff"];
+    soundURL = [NSURL fileURLWithPath:soundPath];
     AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
 
     AudioServicesPlaySystemSound(soundEffect);
@@ -872,9 +873,9 @@ typedef enum
                                               LeftButton.enabled  = YES;
                                               RightButton.enabled = NO;
                                               [RollDownErrorView showWithTitle:GlobalParams.loginRollDownViewTitle andMessage:GlobalParams.loginRollDownVerificationCodeErrorMessage];
-                                              NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"rolldown10"ofType:@"aiff"];
-                                              NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
-                                              AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
+                                           NSString* soundPath2 = [[NSBundle mainBundle] pathForResource:@"rolldown10"ofType:@"aiff"];
+                                        NSURL* soundURL2 = [NSURL fileURLWithPath:soundPath2];
+                                              AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL2), &soundEffect);
                                               
                                               AudioServicesPlaySystemSound(soundEffect);
                                               
@@ -947,8 +948,8 @@ typedef enum
          { // This username is binded to another phone number.
              NSLog(@"4 loginExistingUser");
              [RollDownErrorView showWithTitle:GlobalParams.loginRollDownViewTitle andMessage:GlobalParams.loginRollDownUsernameErrorMessage];
-             NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"rolldown10"ofType:@"aiff"];
-             NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
+             soundPath = [[NSBundle mainBundle] pathForResource:@"rolldown10"ofType:@"aiff"];
+             soundURL = [NSURL fileURLWithPath:soundPath];
              AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
 
              AudioServicesPlaySystemSound(soundEffect);
@@ -980,8 +981,8 @@ typedef enum
                                     if (alreadyExists)
                                     { // This username is already bound to another phone number.
                                         [RollDownErrorView showWithTitle:GlobalParams.loginRollDownViewTitle andMessage:GlobalParams.loginRollDownUsernameErrorMessage];
-                                        NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"rolldown10"ofType:@"aiff"];
-                                        NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
+                                            soundPath = [[NSBundle mainBundle] pathForResource:@"rolldown10"ofType:@"aiff"];
+                                            soundURL = [NSURL fileURLWithPath:soundPath];
                                         AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
                                         
                                         AudioServicesPlaySystemSound(soundEffect);

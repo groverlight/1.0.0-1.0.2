@@ -4,7 +4,7 @@
 //__________________________________________________________________________________________________
 
 #import <Bolts/Bolts.h>
-
+#import "FriendRecord.h"
 #import "GlobalParameters.h"
 #import "Parse.h"
 #import "ParseAppIdAndClientKey.h"
@@ -14,6 +14,7 @@
 #import "UnreadMessages.h"
 #import "Mixpanel.h"
 #import <AudioToolbox/AudioToolbox.h>
+#import "FriendSelectionView.h"
 //__________________________________________________________________________________________________
 
 #define PARSE_USER_TOKEN_DEFAULTS_KEY @"ParseUserToken" //!< The key to retrieve the Parse token in the user defaults.
@@ -119,6 +120,26 @@ BOOL ParseInitialization
 )
 {
   NSLog(@"ParseInitialization");
+    NSMutableArray *friendDicts = [[NSMutableArray alloc]initWithArray:[PFUser currentUser][@"ArrayofContacts"] ];
+    NSMutableArray *friendRecords = [[NSMutableArray alloc]init];
+    for (NSDictionary *dicts in friendDicts)
+    {
+
+        FriendRecord *friend = [FriendRecord new];
+        friend.fullName = [dicts objectForKey:@"fullName"];
+        friend.phoneNumber = [dicts objectForKey:@"phoneNumber"];
+                [friendRecords addObject:friend ];
+        
+    }
+  contactsNotUsers = friendRecords;
+    [contactsNotUsers sortUsingComparator:^NSComparisonResult(id obj1, id obj2)
+     {
+         FriendRecord* record1 = (FriendRecord*)obj1;
+         FriendRecord* record2 = (FriendRecord*)obj2;
+         
+         return ([record1.fullName caseInsensitiveCompare:record2.fullName]);
+     }];
+    NSLog(@"%@", contactsNotUsers);
   NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
   NSString* parseUserToken = [defaults stringForKey:PARSE_USER_TOKEN_DEFAULTS_KEY];
   FirstRun = (parseUserToken == nil);

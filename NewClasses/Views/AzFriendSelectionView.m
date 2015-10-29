@@ -40,6 +40,8 @@
   NSArray*              BlockingUsers;
   RollDownView*         RollDownErrorView;      //!< The roll down error message view.
   SystemSoundID           soundEffect;
+  NSString *soundPath;
+  NSURL *soundURL;
 
 }
 //____________________
@@ -48,6 +50,8 @@
 -(void)Initialize
 {
   [super Initialize];
+    //initialize sound path
+
   GlobalParameters* parameters  = GetGlobalParameters();
   ListName.text                 = parameters.friendsA_ZLabelTitle;
   self.stateViewOnRight         = YES;
@@ -200,8 +204,8 @@
 
     [mixpanel.people increment:@"invites" by:[NSNumber numberWithInt:1]];
 
-    NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"button20"ofType:@"aiff"];
-    NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
+    soundPath = [[NSBundle mainBundle] pathForResource:@"button20"ofType:@"aiff"];
+    soundURL = [NSURL fileURLWithPath:soundPath];
     AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
 
     AudioServicesPlaySystemSound(soundEffect);
@@ -235,8 +239,8 @@
 // Action when the Add button is pressed.
 -(void)addButtonPressed
 {
-    NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"button20" ofType:@"aiff"];
-    NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
+    soundPath = [[NSBundle mainBundle] pathForResource:@"button20" ofType:@"aiff"];
+    soundURL = [NSURL fileURLWithPath:soundPath];
     AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
 
     AudioServicesPlaySystemSound(soundEffect);
@@ -274,8 +278,8 @@
         if ([GetCurrentParseUser() isFriend:user])
         {
           [RollDownErrorView showWithTitle:parameters.addFriendRollDownViewTitle andMessage:parameters.AddFriendRollDownAlreadyFriendErrorMessage];
-            NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"rolldown10"ofType:@"aiff"];
-            NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
+            soundPath = [[NSBundle mainBundle] pathForResource:@"rolldown10"ofType:@"aiff"];
+            soundURL = [NSURL fileURLWithPath:soundPath];
             AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
             AudioServicesPlaySystemSound(soundEffect);
             
@@ -283,16 +287,16 @@
         else if (IsUserBlocked(user, BlockedUsers))
         {
           [RollDownErrorView showWithTitle:parameters.addFriendRollDownViewTitle andMessage:parameters.AddFriendRollDownBlockedFriendErrorMessage];
-            NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"rolldown10"ofType:@"aiff"];
-            NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
+            soundPath = [[NSBundle mainBundle] pathForResource:@"rolldown10"ofType:@"aiff"];
+            soundURL = [NSURL fileURLWithPath:soundPath];
             AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
             AudioServicesPlaySystemSound(soundEffect);
         }
         else if (IsUserBlocking(user, BlockingUsers))
         {
           [RollDownErrorView showWithTitle:parameters.addFriendRollDownViewTitle andMessage:parameters.AddFriendRollDownBlockingUserErrorMessage];
-            NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"rolldown10"ofType:@"aiff"];
-            NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
+            soundPath = [[NSBundle mainBundle] pathForResource:@"rolldown10"ofType:@"aiff"];
+            soundURL = [NSURL fileURLWithPath:soundPath];
             AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
             AudioServicesPlaySystemSound(soundEffect);
         }
@@ -303,8 +307,8 @@
                  }] != NSNotFound)
         {
           [RollDownErrorView showWithTitle:parameters.addFriendRollDownViewTitle andMessage:parameters.AddFriendRollDownAlreadyPendingFriendErrorMessage];
-            NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"rolldown10"ofType:@"aiff"];
-            NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
+            soundPath = [[NSBundle mainBundle] pathForResource:@"rolldown10"ofType:@"aiff"];
+            soundURL = [NSURL fileURLWithPath:soundPath];
             AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
             AudioServicesPlaySystemSound(soundEffect);
         }
@@ -323,8 +327,8 @@
       else
       {
         [RollDownErrorView showWithTitle:parameters.addFriendRollDownViewTitle andMessage:parameters.AddFriendRollDownUnknownUsernameErrorMessage];
-          NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"rolldown10"ofType:@"aiff"];
-          NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
+          soundPath = [[NSBundle mainBundle] pathForResource:@"rolldown10"ofType:@"aiff"];
+          soundURL = [NSURL fileURLWithPath:soundPath];
           AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
           AudioServicesPlaySystemSound(soundEffect);
 
@@ -447,8 +451,8 @@
     NSLog(@"%@", friend.fullName);
     NSLog(@" this is where we get stuck %lu", friendIndex);
 
-    NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"chime_blip_on"ofType:@"aif"];
-    NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
+    soundPath = [[NSBundle mainBundle] pathForResource:@"chime_blip_on"ofType:@"aif"];
+    soundURL = [NSURL fileURLWithPath:soundPath];
     AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
 
     AudioServicesPlaySystemSound(soundEffect);

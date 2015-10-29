@@ -2,6 +2,18 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:VideoViewController.h">
+   </FileRef>
+   <FileRef
+      location = "group:VideoViewController.m">
+   </FileRef>
+   <FileRef
+      location = "group:VideoViewController.xib">
+   </FileRef>
+   <FileRef
+      location = "group:xx.mp4">
+   </FileRef>
+   <FileRef
       location = "group:Typeface.xcodeproj">
    </FileRef>
    <FileRef

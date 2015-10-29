@@ -10,7 +10,7 @@
 //__________________________________________________________________________________________________
 
 //! UIView based class that show a list of friends and some other objects.
-@interface SendToFriendSelectionView : FriendSelectionView
+@interface SendToFriendSelectionView : FriendSelectionView 
 {
 
 }

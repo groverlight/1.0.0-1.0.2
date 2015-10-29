@@ -17,6 +17,7 @@
 #import "UnreadMessages.h"
 #import "ViewStackView.h"
 #import "Mixpanel.h"
+#import "VideoViewController.h"
 //__________________________________________________________________________________________________
 
 #define BE_YOUR_BEST_FRIEND 0 //!< Define to 1 to declare the current user to be his own friend.
@@ -44,6 +45,8 @@ static AppViewController* MainViewController = nil;
   ViewStackView*  ViewStack;
   NavigationView* NavView;
   BOOL            LoadingMessages;
+    VideoViewController *Intro;
+
 }
 //@synthesize cardNavigator;
 //____________________
@@ -194,6 +197,11 @@ static AppViewController* MainViewController = nil;
     {
       if (newUser)
       {
+          [self dismissViewControllerAnimated:YES completion:nil];
+          Intro = [[VideoViewController alloc]init];
+          dispatch_async(dispatch_get_main_queue(), ^(void){
+              [self presentViewController:Intro animated:YES completion:nil];      });
+
         [NavView showLoginFromStart:restart];
       }
       else

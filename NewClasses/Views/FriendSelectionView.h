@@ -10,13 +10,15 @@
 //__________________________________________________________________________________________________
 
 @class ParseUser;
+extern NSMutableArray* contactsNotUsers;
+
 //__________________________________________________________________________________________________
 
 //! UIView based class that show a list of friends and some other objects.
 @interface FriendSelectionView : BaseView
 {
 @public
-  UILabel*              ListName;
+   UILabel*              ListName;
   BlockAction           RefreshRequest;
  // BlockAction          AddFriendStarted;
   BlockIntAction        TouchTapped;
@@ -31,6 +33,7 @@
   BlockAction           EditionEnded;
   BlockStringAction     EditedStringChanged;
   FriendSelectionList*  FriendsList;
+
 }
 //____________________
 
@@ -48,6 +51,7 @@
 @property CGFloat   topOffset;
 @property BOOL      ignoreUnreadMessages;
 @property NSInteger maxNumRecentFriends;
+
 //____________________
 
 - (void)updateFriendsLists;
@@ -64,3 +68,6 @@
 
 @end
 //__________________________________________________________________________________________________
+
+
+

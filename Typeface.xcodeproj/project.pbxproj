@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		27AA8F351BE1811B009B363A /* testing in Resources */ = {isa = PBXBuildFile; fileRef = 27AA8F341BE1811B009B363A /* testing */; };
+		27AA8F3A1BE18147009B363A /* VideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 27AA8F371BE18147009B363A /* VideoViewController.m */; };
+		27AA8F3B1BE18147009B363A /* VideoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 27AA8F381BE18147009B363A /* VideoViewController.xib */; };
+		27AA8F3C1BE18147009B363A /* xx.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 27AA8F391BE18147009B363A /* xx.mp4 */; };
 		4B54798E0871C1CD30766BD2 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADC11EAC3B02F3A8EFCAC90A /* libPods.a */; };
 		B617F3271AFFB28F0092EF3C /* Menu.m in Sources */ = {isa = PBXBuildFile; fileRef = B617F3261AFFB28F0092EF3C /* Menu.m */; };
 		B61B60491AF60A6A00EE2060 /* NetworkActivityView.m in Sources */ = {isa = PBXBuildFile; fileRef = B61B60481AF60A6A00EE2060 /* NetworkActivityView.m */; };
@@ -119,6 +123,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		27AA8F341BE1811B009B363A /* testing */ = {isa = PBXFileReference; lastKnownFileType = folder; path = testing; sourceTree = "<group>"; };
+		27AA8F361BE18147009B363A /* VideoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoViewController.h; sourceTree = SOURCE_ROOT; };
+		27AA8F371BE18147009B363A /* VideoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoViewController.m; sourceTree = SOURCE_ROOT; };
+		27AA8F381BE18147009B363A /* VideoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VideoViewController.xib; sourceTree = SOURCE_ROOT; };
+		27AA8F391BE18147009B363A /* xx.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = xx.mp4; sourceTree = SOURCE_ROOT; };
 		ADC11EAC3B02F3A8EFCAC90A /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		B617F3251AFFB28F0092EF3C /* Menu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Menu.h; path = NewClasses/Various/Menu.h; sourceTree = "<group>"; };
 		B617F3261AFFB28F0092EF3C /* Menu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Menu.m; path = NewClasses/Various/Menu.m; sourceTree = "<group>"; };
@@ -440,6 +449,7 @@
 				B67130951AFF25AC00859780 /* PseudoButtonView.m */,
 				B6B982D21AED4C8C009A8423 /* SendToFriendSelectionView.h */,
 				B6B982D31AED4C8C009A8423 /* SendToFriendSelectionView.m */,
+				27AA8F341BE1811B009B363A /* testing */,
 				B67130911AFE7B3E00859780 /* ThreeDotsPseudoButtonView.h */,
 				B67130921AFE7B3E00859780 /* ThreeDotsPseudoButtonView.m */,
 				B6FB0D7D1A9736AE002125AF /* TypingView.h */,
@@ -708,6 +718,10 @@
 		B6E7AAC71868512800DBB0EB /* Typeface */ = {
 			isa = PBXGroup;
 			children = (
+				27AA8F361BE18147009B363A /* VideoViewController.h */,
+				27AA8F371BE18147009B363A /* VideoViewController.m */,
+				27AA8F381BE18147009B363A /* VideoViewController.xib */,
+				27AA8F391BE18147009B363A /* xx.mp4 */,
 				F4F585441B82A9C80016D180 /* AppDelegate.h */,
 				F4F585451B82A9C80016D180 /* AppDelegate.m */,
 				F4F585461B82A9C80016D180 /* AppViewController.h */,
@@ -850,6 +864,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				27AA8F3C1BE18147009B363A /* xx.mp4 in Resources */,
 				F466BDFB1BDF42F600683986 /* zap_shake.aif in Resources */,
 				F466BDE51BDF343500683986 /* next30.aiff in Resources */,
 				F466BDEA1BDF37D200683986 /* blurbin15.aiff in Resources */,
@@ -859,6 +874,7 @@
 				B652A13E1A9E7D1F006222EE /* ImageAssets in Resources */,
 				F4CEF4BC1BDAFCF800A1399D /* beep_prompt_2x.aif in Resources */,
 				F4D5FDC41BDB06440048910D /* pop_digi_up.aif in Resources */,
+				27AA8F351BE1811B009B363A /* testing in Resources */,
 				F4F5854D1B82A9C80016D180 /* Images.xcassets in Resources */,
 				F466BDEF1BDF39A500683986 /* rolldown10.aiff in Resources */,
 				F466BDEB1BDF37D200683986 /* blurbout15.aiff in Resources */,
@@ -867,6 +883,7 @@
 				F4D0F9F91BDAF3E40039C51D /* chime_blip_on.aif in Resources */,
 				F480C2B01BDFEF3F009EF518 /* zap_future.aif in Resources */,
 				F466BDD31BDF302100683986 /* remove15.aiff in Resources */,
+				27AA8F3B1BE18147009B363A /* VideoViewController.xib in Resources */,
 				F466BDDB1BDF319000683986 /* button20.aiff in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -929,6 +946,7 @@
 				B65810231AA4A1DC0086820C /* TableView.m in Sources */,
 				B65810241AA4A1DC0086820C /* TableViewCell.m in Sources */,
 				B6B982C71AECDC93009A8423 /* RollDownView.m in Sources */,
+				27AA8F3A1BE18147009B363A /* VideoViewController.m in Sources */,
 				B6D54A0F1ADC277E00C77CEA /* Message.m in Sources */,
 				B6CEE37019F96E7C005AC1A0 /* POPAnimationTracer.mm in Sources */,
 				B6CEE36C19F96E7C005AC1A0 /* POPAnimationExtras.mm in Sources */,
