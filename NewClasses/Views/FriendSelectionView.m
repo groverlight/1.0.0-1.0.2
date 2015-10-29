@@ -846,78 +846,75 @@ NSMutableArray*      contactsNotUsers;
             
             // NSMutableArray *contacts = [[NSMutableArray alloc]init];
             
-            if([CNContactStore class]) // this is where you say yes or noiOS 9 or later
-            {
-                
-               
-                CNContactStore* addressBook = [[CNContactStore alloc]init];
-                CNAuthorizationStatus permissions = [CNContactStore authorizationStatusForEntityType:CNEntityTypeContacts];
-                if(permissions == CNAuthorizationStatusNotDetermined) {
-        
-                [addressBook requestAccessForEntityType:CNEntityTypeContacts completionHandler:^(BOOL granted, NSError * _Nullable contactError) {
+                     if([CNContactStore class]) // this is where you say yes or noiOS 9 or later
+                     {
+                         
+                         NSError *contactError;
+                         CNContactStore* addressBook = [[CNContactStore alloc]init];
+                         CNAuthorizationStatus permissions = [CNContactStore authorizationStatusForEntityType:CNEntityTypeContacts];
+                         if(permissions == CNAuthorizationStatusAuthorized) {
+                             
+ 
+                                     NSLog(@"Said YES to Contacts Sync");
+                                     
+                                     Mixpanel *mixpanel = [Mixpanel sharedInstance];
+                                     
+                                     [mixpanel track:@"Said YES to Contacts Sync"];
+                                     
+                                     [mixpanel identify:mixpanel.distinctId];
+                                     
+                                     [mixpanel.people increment:@"Said YES to Contacts Sync" by:[NSNumber numberWithInt:1]];
+                                     
+                                     
+                                     [addressBook containersMatchingPredicate:[CNContainer predicateForContainersWithIdentifiers: @[addressBook.defaultContainerIdentifier]] error:&contactError];
+                                     
+                                     
+                                     NSArray * keysToFetch =@[CNContactEmailAddressesKey, CNContactPhoneNumbersKey, CNContactFamilyNameKey, CNContactGivenNameKey, CNContactPostalAddressesKey];
+                                     CNContactFetchRequest * request = [[CNContactFetchRequest alloc]initWithKeysToFetch:keysToFetch];
+                                     
+                                     
+                                     [addressBook enumerateContactsWithFetchRequest:request error:&contactError usingBlock:^(CNContact * __nonnull contact, BOOL * __nonnull stop){
+                                         
+                                         NSString *name = [NSString stringWithFormat:@"%@ %@",contact.givenName,contact.familyName];
+                                         NSString *phone = [NSString string];
+                                         
+                                         for (CNLabeledValue *value in contact.phoneNumbers) {
+                                             
+                                             if ([value.label isEqualToString:@"_$!<Mobile>!$_"])
+                                             {
+                                                 CNPhoneNumber *phoneNum = value.value;
+                                                 phone = phoneNum.stringValue;
+                                             }
+                                             
+                                             if ([phone isEqualToString:@""])
+                                             {
+                                                 if ([value.label isEqualToString:@"_$!<Home>!$_"])
+                                                 {
+                                                     CNPhoneNumber *phoneNum = value.value;
+                                                     phone = phoneNum.stringValue;
+                                                 }
+                                             }
+                                             if ([phone isEqualToString:@""])
+                                             {
+                                                 if ([value.label isEqualToString:@"_$!<Work>!$_"])
+                                                 {
+                                                     CNPhoneNumber *phoneNum = value.value;
+                                                     phone = phoneNum.stringValue;
+                                                 }
+                                             }
+                                             
+                                         }
+                                         
+                                         [fullName addObject:name];
+                                         [phoneNumber addObject:[self formatNumber:phone]];
+                                         
+                                         
+                                         
+                                     }];
+                                     [self updateTable:fullName phone:phoneNumber];
+                                 }
                     
-                    if (granted)
-                    {
-                        NSLog(@"Said YES to Contacts Sync");
-
-                        Mixpanel *mixpanel = [Mixpanel sharedInstance];
-
-                         [mixpanel track:@"Said YES to Contacts Sync"];
-
-                        [mixpanel identify:mixpanel.distinctId];
-
-                         [mixpanel.people increment:@"Said YES to Contacts Sync" by:[NSNumber numberWithInt:1]];
-
-
-                        [addressBook containersMatchingPredicate:[CNContainer predicateForContainersWithIdentifiers: @[addressBook.defaultContainerIdentifier]] error:&contactError];
-                            
-                            
-                            NSArray * keysToFetch =@[CNContactEmailAddressesKey, CNContactPhoneNumbersKey, CNContactFamilyNameKey, CNContactGivenNameKey, CNContactPostalAddressesKey];
-                            CNContactFetchRequest * request = [[CNContactFetchRequest alloc]initWithKeysToFetch:keysToFetch];
-                            
-                            
-                            [addressBook enumerateContactsWithFetchRequest:request error:&contactError usingBlock:^(CNContact * __nonnull contact, BOOL * __nonnull stop){
-                                
-                                NSString *name = [NSString stringWithFormat:@"%@ %@",contact.givenName,contact.familyName];
-                                NSString *phone = [NSString string];
-                                
-                                for (CNLabeledValue *value in contact.phoneNumbers) {
-                                    
-                                    if ([value.label isEqualToString:@"_$!<Mobile>!$_"])
-                                    {
-                                        CNPhoneNumber *phoneNum = value.value;
-                                        phone = phoneNum.stringValue;
-                                    }
-                                    
-                                    if ([phone isEqualToString:@""])
-                                    {
-                                        if ([value.label isEqualToString:@"_$!<Home>!$_"])
-                                        {
-                                            CNPhoneNumber *phoneNum = value.value;
-                                            phone = phoneNum.stringValue;
-                                        }
-                                    }
-                                    if ([phone isEqualToString:@""])
-                                    {
-                                        if ([value.label isEqualToString:@"_$!<Work>!$_"])
-                                        {
-                                            CNPhoneNumber *phoneNum = value.value;
-                                            phone = phoneNum.stringValue;
-                                        }
-                                    }
-                                    
-                                }
-                              
-                                [fullName addObject:name];
-                                [phoneNumber addObject:[self formatNumber:phone]];
-                                
-                                
-                        
-                            }];
-                        [self updateTable:fullName phone:phoneNumber];
-                    }
-                    
-                    else{NSLog(@"You said NO to Contacts");}
+                    else{NSLog(@"You said NO to Contacts");
 
                     Mixpanel *mixpanel = [Mixpanel sharedInstance];
 
@@ -928,9 +925,9 @@ NSMutableArray*      contactsNotUsers;
                     [mixpanel.people increment:@"Said NO to Contacts Sync" by:[NSNumber numberWithInt:1]];
 
 
-                    }];
+                    }
                     
-            }
+            
         }
                 
             
@@ -940,58 +937,7 @@ NSMutableArray*      contactsNotUsers;
                 __block NSString *firstName;
                 __block NSString *lastName;
                 ABAddressBookRef addressBookRef = ABAddressBookCreateWithOptions(NULL, NULL);
-                if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
-                    ABAddressBookRequestAccessWithCompletion(addressBookRef, ^(bool granted, CFErrorRef error) { // granted = yes
-                        
-                        CFArrayRef allPeople = ABAddressBookCopyArrayOfAllPeople(addressBookRef);
-                        CFIndex numberOfPeople = CFArrayGetCount(allPeople);
-                        NSLog(@"%lu", numberOfPeople);
-                        for(int  i = 0; i < numberOfPeople; i++) {
-                        
-                            ABRecordRef person = CFArrayGetValueAtIndex( allPeople, i );
-                            // Use a general Core Foundation object.
-                            CFTypeRef generalCFObject = ABRecordCopyValue(person, kABPersonFirstNameProperty);
-                            
-                            // Get the first name.
-                            if (generalCFObject) {
-                                firstName =(__bridge NSString *)generalCFObject;
-                                CFRelease(generalCFObject);
-                            }
-                            
-                            // Get the last name.
-                            generalCFObject = ABRecordCopyValue(person, kABPersonLastNameProperty);
-                            if (generalCFObject) {
-                                lastName =(__bridge NSString *)generalCFObject;
-                                CFRelease(generalCFObject);
-                            }
-                            [fullName addObject: [NSString stringWithFormat:@"%@ %@", firstName, lastName]];
-                            NSLog(@"%@", [fullName objectAtIndex:i]);
-                            ABMultiValueRef phoneNumbers = ABRecordCopyValue(person, kABPersonPhoneProperty);
-                            
-                            for (CFIndex j = 0; j < ABMultiValueGetCount(phoneNumbers); j++) {
-                                CFStringRef currentPhoneLabel = ABMultiValueCopyLabelAtIndex(phoneNumbers, j);
-                                CFStringRef currentPhoneValue = ABMultiValueCopyValueAtIndex(phoneNumbers, j);
-                                
-                                if (CFStringCompare(currentPhoneLabel, kABPersonPhoneMobileLabel, 0) == kCFCompareEqualTo) {
-                                    [phoneNumber addObject:[self formatNumber:(__bridge NSString *)currentPhoneValue]];
-                                }
-                                
-                                else if (CFStringCompare(currentPhoneLabel, kABHomeLabel, 0) == kCFCompareEqualTo) {
-                                    [phoneNumber addObject:[self formatNumber:(__bridge NSString *)currentPhoneValue]];                 }
-                                else if (CFStringCompare(currentPhoneLabel, kABWorkLabel, 0) == kCFCompareEqualTo) {
-                                    [phoneNumber addObject:[self formatNumber:(__bridge NSString *)currentPhoneValue]];
-                                }
-                                
-                                CFRelease(currentPhoneLabel);
-                                CFRelease(currentPhoneValue);
-                            }
-                            CFRelease(phoneNumbers);
-                            
-                        }
-                    
-                    });
-                }
-                else if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusAuthorized)
+                 if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusAuthorized)
                 {
                     
                     CFArrayRef allPeople = ABAddressBookCopyArrayOfAllPeople(addressBookRef);

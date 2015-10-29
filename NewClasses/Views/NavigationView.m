@@ -150,6 +150,7 @@ SystemSoundID           soundEffect;
     switch (page)
     {
     case 0:
+      myself->ActivityListView.hidden = NO;
       [[UIResponder currentFirstResponder] resignFirstResponder];
       {
         [UIView animateWithDuration:0.2 animations:^
@@ -695,6 +696,8 @@ SystemSoundID           soundEffect;
 - (void)showLoginFromStart:(BOOL)fromStart
 {
   [HeaderBar  hideAnimated:YES];
+  ActivityListView.hidden = YES;
+
   [Login      showAnimated:YES fromStart:fromStart];
 }
 //__________________________________________________________________________________________________
@@ -703,6 +706,7 @@ SystemSoundID           soundEffect;
 {
   [HeaderBar showAnimated:YES];
   [Login hideAnimated:YES];
+
 }
 //__________________________________________________________________________________________________
 
