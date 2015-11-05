@@ -33,6 +33,7 @@
 
 //! Add a friendRecord in the Activity and SendTo lists if not currently present. Update the list otherwise.
 void UpdateFriendRecordListForUser(ParseUser* user, NSTimeInterval time);
+void UpdateFriendRecordListForRecord(FriendRecord* user, NSTimeInterval time);
 //__________________________________________________________________________________________________
 
 //! Add friendRecord entries in the Activity and SendTo lists for the specified messages.

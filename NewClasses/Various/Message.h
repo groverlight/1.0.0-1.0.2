@@ -20,6 +20,7 @@
   NSString*       ParseObjectId;    //!< The object ID of this message. It is nil when sending message.
   NSString*       FromObjectId;     //!> The objectId of the sender user;
   NSString*       ToObjectId;       //!> The objectId of the receiver user;
+  NSString*       placeHolder;
   ParseUser*      FromUser;         //!< The sender user.
   ParseUser*      ToUser;           //!< The receiver user.
 }

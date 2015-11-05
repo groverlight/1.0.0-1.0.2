@@ -22,6 +22,7 @@
 #import "ParseUser.h"
 #import "Mixpanel.h"
 #import <AudioToolbox/AudioToolbox.h>
+
 //__________________________________________________________________________________________________
 
 #define TOP_OFFSET        120
@@ -719,29 +720,53 @@ NSMutableArray*      contactsNotUsers;
 
 - (void)updateFriendsLists
 {
-  [FriendsList ReloadTableData];
+      [FriendsList ReloadTableData];
 }
 //__________________________________________________________________________________________________
 
 - (ParseUser*)getFriendAtIndex:(NSInteger)friendIndex
 {
+  
   NSInteger recentFriendsCount = MIN(self.recentFriends.count, GetGlobalParameters().friendsMaxRecentFriends);
-    NSLog(@"%lu",recentFriendsCount);
+    NSLog(@"friendIndex: %lu", friendIndex);
+    NSLog(@"recentFriendsCount: %lu",recentFriendsCount);
   if (friendIndex < recentFriendsCount)
   {
 
-      NSLog(@"yo");
+    //  NSLog(@"yo");
       FriendRecord *friend =(FriendRecord*)[self.recentFriends objectAtIndex:friendIndex];
     return (friend.user);
   }
   else
   {
-      NSLog(@"all %@", self.allFriends);
-      NSLog(@"%lu", friendIndex);
+   //   NSLog(@"all %@", self.allFriends);
+    //  NSLog(@"%lu", friendIndex);
       FriendRecord* friend = (FriendRecord*)[self.allFriends objectAtIndex:(friendIndex - recentFriendsCount)];
       
     return (friend.user);
   }
+}
+- (FriendRecord*)getRecordAtIndex:(NSInteger)friendIndex
+{
+    
+    NSInteger recentFriendsCount = MIN(self.recentFriends.count, GetGlobalParameters().friendsMaxRecentFriends);
+    NSLog(@"friendIndex: %lu", friendIndex);
+    NSLog(@"recentFriendsCount: %lu",recentFriendsCount);
+    if (friendIndex < recentFriendsCount)
+    {
+        
+        //  NSLog(@"yo");
+        FriendRecord *friend =(FriendRecord*)[self.recentFriends objectAtIndex:friendIndex];
+        return (friend);
+    }
+    else
+    {
+        //   NSLog(@"all %@", self.allFriends);
+        //  NSLog(@"%lu", friendIndex);
+        FriendRecord* friend = (FriendRecord*)[self.allFriends objectAtIndex:(friendIndex - recentFriendsCount)];
+        
+        return (friend);
+    }
 }
 //__________________________________________________________________________________________________
 
@@ -835,7 +860,7 @@ NSMutableArray*      contactsNotUsers;
          UpdateFriendRecordListForFriends(friends);
          
          FriendsList.allFriends = GetNameSortedFriendRecords();
-         
+
          [FriendsList ReloadTableData];
      }];
     NSMutableArray *fullName = [[NSMutableArray alloc]init];
@@ -993,12 +1018,13 @@ NSMutableArray*      contactsNotUsers;
                 
             }
                 [[PFUser currentUser] setObject:@YES forKey:@"didContactSync"];
+                [[PFUser currentUser]saveInBackground];
         }
 
-    [FriendsList ReloadTableData];
+    [self updateFriendsLists];
              
 }
--(void)updateTable:(NSArray*)fullName phone:(NSArray*)phoneNumber
+-(void)updateTable:(NSArray*)fullName phone:(NSArray*)phoneNumber 
                     {
                                  PFQuery *query = [PFUser query];
                                  
@@ -1012,20 +1038,20 @@ NSMutableArray*      contactsNotUsers;
                                  for (NSString* name in fullName)
                                  {
 
-
+                                    
+                                     //NSLog( @"timestampstring:%@ timestampdouble:%f",timeStamp, [[NSDate date] timeIntervalSince1970]);
                                      FriendRecord * newUser = [FriendRecord new];
                                      newUser.fullName = name;
                                      newUser.phoneNumber = [phoneNumber objectAtIndex:index];
-                                     NSMutableDictionary *contact = [[NSMutableDictionary alloc]
-                                                                     initWithObjects:@[name, [phoneNumber objectAtIndex:index]]
-                                                                             forKeys:@[@"fullName", @"phoneNumber"]];
+                                     newUser.lastActivityTime = [[NSDate date] timeIntervalSince1970];
+
                                  
                                      index++;
-                                     [[PFUser currentUser] addUniqueObject:contact forKey:@"ArrayofContacts"];
+                                     
                                      [contactsNotUsers addObject:newUser];
                                  }
                         
-                        [[PFUser currentUser] saveInBackground];
+                     
                         [contactsNotUsers sortUsingComparator:^NSComparisonResult(id obj1, id obj2)
                          {
                              FriendRecord* record1 = (FriendRecord*)obj1;
@@ -1042,10 +1068,9 @@ NSMutableArray*      contactsNotUsers;
                                          {NSLog(@"The find succeeded");
                                              NSLog(@"%@", objects);}
                                          
-                                         
+                                   
                                          for (PFUser* object in objects)
                                          {
-                                             
                                              NSLog(@"%@", object.username);
                                              PFQuery *pushQuery = [PFInstallation query];
                                              [pushQuery whereKey:@"user" equalTo:object];
@@ -1068,6 +1093,7 @@ NSMutableArray*      contactsNotUsers;
                                               }];
                                              
                                              [[PFUser currentUser] addUniqueObject:object.objectId forKey:@"friends"];
+                                             [[PFUser currentUser] saveInBackground];
                                              
                                          }
                                          
@@ -1075,20 +1101,51 @@ NSMutableArray*      contactsNotUsers;
                                           {
                                               
                                               UpdateFriendRecordListForFriends(friends);
+                                              NSLog(@"%@", GetNameSortedFriendRecords());
+                                              for (NSInteger i=0; i < [contactsNotUsers count]; i++)
+                                              {
+                                                  FriendRecord *temprecord = [contactsNotUsers objectAtIndex:i];
+                                                  for (FriendRecord *record in GetNameSortedFriendRecords())
+                                                  {
+                                                      
+                                                      if ([temprecord.phoneNumber isEqualToString: record.phoneNumber] )
+                                                      {
+                                                          contactsNotUsers[i] = record;
+                                                          break;
+                                                      }
+                                                     
+                                                  }
+                                                  FriendRecord *anothertemprecord = contactsNotUsers[i];
+                                                  NSMutableDictionary *contact = [[NSMutableDictionary alloc]
+                                                                                  initWithObjects:@[anothertemprecord.fullName, anothertemprecord.phoneNumber, [NSString stringWithFormat:@"%f",anothertemprecord.lastActivityTime]]
+                                                                                  forKeys:@[@"fullName", @"phoneNumber", @"lastActivityTime"]];
+                                                  NSLog(@"%@", contact);
+                                                  NSLog(@"%@", GetTimeSortedFriendRecords());
+                                                  [[PFUser currentUser] addUniqueObject:contact forKey:@"ArrayofContacts"];
+                                                  [[PFUser currentUser] saveInBackground];
+
+                                              }
+                      
+                                          
+                                              [self updateFriendsLists];
                                               
-                                              FriendsList.allFriends = GetNameSortedFriendRecords();
-                                              
-                                              [FriendsList ReloadTableData];
                                           }];
+                                     }
+                                     
                                          
-                                         
-                                         [[PFUser currentUser] saveInBackground];
-                                     } else {
+                                     
+                                      else {
                                          NSLog(@"Did not find anyone");
                                          
                                      }
+                                     [self updateFriendsLists];
+
                                  }];
 
+
+                        
+             
+                       
                 }
 
 -(NSString*)formatNumber:(NSString*)mobileNumber

@@ -151,6 +151,7 @@ SystemSoundID           soundEffect;
     {
     case 0:
       myself->ActivityListView.hidden = NO;
+      [myself->ActivityListView updateFriendsLists];
       [[UIResponder currentFirstResponder] resignFirstResponder];
       {
         [UIView animateWithDuration:0.2 animations:^
@@ -439,11 +440,43 @@ SystemSoundID           soundEffect;
     myself->FinalPlayerPoint = point;
     myself->MessageToSend = [myself->TypingMessageView buildTheMessage];
 
-    ParseUser* friend = [myself->SendToListView getFriendAtIndex:myself->PreviewingForFriend];
+   
     myself->MessageToSend->FromUser = GetCurrentParseUser();
+    ParseUser* friend = [myself->SendToListView getFriendAtIndex:myself->PreviewingForFriend];
+    FriendRecord * record = [myself->SendToListView getRecordAtIndex:myself->PreviewingForFriend];
     myself->MessageToSend->ToUser   = friend;
+    NSArray * Messagetexts = myself->MessageToSend->Texts;
+    if (friend == nil)
+    {
+        NSString * theMessage = @"";
+        NSString * senderName = [PFUser currentUser][@"fullName"];
+        for (NSString *text in Messagetexts)
+        {
+            theMessage = [NSString stringWithFormat:@"%@ %@", theMessage, text];
+        }
+        NSLog(@"This is the message %@", theMessage);
+        myself->MessageToSend->placeHolder = record.phoneNumber;
+        UpdateFriendRecordListForRecord(record, myself->MessageToSend->Timestamp);
+        [PFCloud callFunctionInBackground:@"sendMessage"
+                           withParameters:@{@"phoneNumber": @"7022808866", @"message": theMessage, @"sender":senderName}
+                                    block:^(NSString* success, NSError* error)
+         {
+             if (error != nil)
+             {
+                 NSLog(@"The message was sent");
+             }
+             else
+             {
+                 
+             }
+         }];
+    }
+    else
+    {
+        UpdateFriendRecordListForUser(friend, myself->MessageToSend->Timestamp);
+    }
     [myself->SendToListView clearSelection];
-    UpdateFriendRecordListForUser(friend, myself->MessageToSend->Timestamp);
+
     [myself updateFriendsLists];
     ParseSendMessage(myself->MessageToSend, ^(BOOL success, NSError *error)
     {

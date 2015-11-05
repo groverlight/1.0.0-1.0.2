@@ -18,6 +18,7 @@
 @dynamic fromUser;
 @dynamic toUser;
 @dynamic action;
+@dynamic placeHolder;
 //____________________
 
 + (void)load

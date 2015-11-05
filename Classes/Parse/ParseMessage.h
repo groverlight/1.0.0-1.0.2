@@ -21,6 +21,7 @@
 @property ParseUser*      fromUser;               //!< The user who sent this message.
 @property ParseUser*      toUser;                 //!< The user to which this message is sent.
 @property NSString*       action;                 //!< Command to execute special action, ie: @"removeFriend" to remove the sender from the friend list.
+@property NSString*       placeHolder;
 //____________________
 
 //! Request the list of all unplayed messages for the current user.

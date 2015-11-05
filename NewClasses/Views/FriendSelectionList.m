@@ -221,6 +221,7 @@
 - (void)updateCellSelection:(TableViewCell*)cell
 {
     NSIndexPath* indexPath = [self indexPathForCell:cell];
+   
     GlobalParameters* parameters = GetGlobalParameters();
     if ((SelectedItem != nil) && (![SelectedItem isEqual:indexPath]))
     {
@@ -259,10 +260,11 @@
     
     PseudoButtonView* myPseudoButton  = pseudoButton;
     TableViewCell*    mycell          = cell;
+    
     pseudoButton->AnimationDone = ^
     {
         Completed = YES;
-        NSInteger index = cell.tableSection * [self tableView:self numberOfRowsInSection:0] + cell.tableRow;
+        NSInteger index = [self getIndex:cell.tableSection and:cell.tableRow];
         //    NSLog(@"stateView->ProgressDone: %d, %d, %d", (int)mycell.tableSection, (int)mycell.tableRow, (int)index);
         ProgressCompleted([self calculatePoint:myPseudoButton.center fromIndexPath:indexPath], index);
     };
@@ -295,7 +297,8 @@
                          {
                          }];
                     }
-                    NSInteger index = cell.tableSection * [self tableView:self numberOfRowsInSection:0] + cell.tableRow;
+                   
+                     NSInteger index = [self getIndex:mycell.tableSection and:mycell.tableRow];
                     TouchTapped(index);
                 }
             }
@@ -317,7 +320,7 @@
 
                 [self updateCellSelection:mycell];
             }
-            NSInteger index = cell.tableSection * [self tableView:self numberOfRowsInSection:0] + cell.tableRow;
+                       NSInteger index = [self getIndex:mycell.tableSection and:mycell.tableRow];
             TouchStarted([self calculatePoint:pseudoButton.center fromIndexPath:indexPath], index);
         }
     };
@@ -345,7 +348,7 @@
                     [pseudoButton animateToState:E_FriendProgressState_Unselected completion:^
                      {
                      }];
-                    NSInteger index = cell.tableSection * [self tableView:self numberOfRowsInSection:0] + cell.tableRow;
+                    NSInteger index = [self getIndex:mycell.tableSection and:mycell.tableRow];
                     TouchEnded([self calculatePoint:pseudoButton.center fromIndexPath:indexPath], index);
                 }
             }
@@ -355,14 +358,14 @@
                 if (Completed)
                 {
                     NSLog(@"MainContentViewPanEndAction after progress completion");
-                    NSInteger index = cell.tableSection * [self tableView:self numberOfRowsInSection:0] + cell.tableRow;
+                    NSInteger index = [self getIndex:mycell.tableSection and:mycell.tableRow];
                     TouchEnded([self calculatePoint:pseudoButton.center fromIndexPath:indexPath], index);
                 }
                 else
                 {
                     NSLog(@"MainContentViewPanEndAction before progress completion");
                     [pseudoButton cancelAnimation];
-                    NSInteger index = cell.tableSection * [self tableView:self numberOfRowsInSection:0] + cell.tableRow;
+                    NSInteger index = [self getIndex:mycell.tableSection and:mycell.tableRow];
                     ProgressCancelled([self calculatePoint:pseudoButton.center fromIndexPath:indexPath], index);
                 }
                 [pseudoButton animateToState:E_FriendProgressState_Selected completion:^
@@ -382,8 +385,8 @@
         if (cell.tableSection == 0)
         {
             record = [RecentFriendsList objectAtIndex:cell.tableRow];
-            NSLog(@"Recent%@", RecentFriendsList);
-            NSLog(@"record%@", record.fullName);
+            //NSLog(@"Recent%@", RecentFriendsList);
+            //NSLog(@"record%@", record.fullName);
         }
         else
         {
@@ -479,14 +482,20 @@
 
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView
 {
-    
+    NSArray* IndexTitles = @[@"Recent",@"A", @"B", @"C", @"D", @"E", @"F", @"G", @"H", @"I", @"J", @"K", @"L", @"M", @"N", @"O", @"P", @"Q", @"R", @"S", @"T", @"U", @"V", @"W", @"X", @"Y", @"Z"];
     if (AllFriendsList == contactsNotUsers)
         {
             
 
-            return arrayOfSectionTitles;
+            return IndexTitles;
         }
     return nil;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index
+{
+    NSLog(@"index, %lu", index);
+    return [arrayOfSectionTitles indexOfObject:title];
 }
 
 - (NSArray *)indexLettersForStrings:(NSArray *)records {
@@ -524,7 +533,7 @@
             }
             [arrayOfPeopleInSection addObject:sectionPeople];
         }
-    NSLog(@"Array of People: %@", arrayOfPeopleInSection);
+   // NSLog(@"Array of People: %@", arrayOfPeopleInSection);
 }
 //__________________________________________________________________________________________________
 
@@ -598,5 +607,30 @@
     ParseRefreshActive = NO;
 }
 //__________________________________________________________________________________________________
+-(NSInteger) getIndex:(NSInteger)tableSection and:(NSInteger)tableRow
+{
+    
+    NSInteger indexCounter = 0;
+    for ( int i = 0; i < tableSection; i++)
+    {
+        
+        
+        indexCounter = indexCounter + [[arrayOfPeopleInSection objectAtIndex:i] count];
+        NSLog(@"people count %lu", indexCounter);
+        
+    }
+    NSLog(@"%lu", indexCounter);
+    NSInteger index = 0;
+    if (tableSection == 0 )
+    {
+        index = tableRow;
+    }
+    else
+    {
+        index = indexCounter + tableRow + [RecentFriendsList count];
+    }
+    
+    return index;
+}
 
 @end
