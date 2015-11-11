@@ -153,7 +153,7 @@ NSMutableArray*      contactsNotUsers;
 
 
 
-  FriendsList.maxNumRecentFriends = parameters.friendsMaxRecentFriends;
+  FriendsList.maxNumRecentFriends = parameters.friendsMaxRecentFriends; // this is where we need to look at
   TopSeparator.backgroundColor    = parameters.separatorLineColor;
   BottomSeparator.backgroundColor = parameters.separatorLineColor;
   ListName.textColor              = parameters.friendsLabelTitleColor;

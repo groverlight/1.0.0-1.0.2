@@ -151,6 +151,9 @@ SystemSoundID           soundEffect;
     {
     case 0:
       myself->ActivityListView.hidden = NO;
+      [myself loadReceivedMessages:^(BOOL hasNewData)
+      { // Do nothing!
+      }];
       [myself->ActivityListView updateFriendsLists];
       [[UIResponder currentFirstResponder] resignFirstResponder];
       {

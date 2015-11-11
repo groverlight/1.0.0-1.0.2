@@ -182,7 +182,7 @@
         {
             if (section == 0)
             {
-                return [RecentFriendsList count];
+                return 5;//[RecentFriendsList count];
             }
             else
             {
@@ -197,7 +197,7 @@
             {
                     case 0:
                         //          NSLog(@"%p, numberOfRowsInSection 0: %d", self, (int)RecentFriendsList.count);
-                        return MIN(RecentFriendsList.count, GetGlobalParameters().friendsMaxRecentFriends);
+                    return RecentFriendsList.count;
                     case 1:
             //    NSLog(@"%p, numberOfRowsInSection 1: %d", self, (int)AllFriendsList.count);
                         return AllFriendsList.count;
@@ -479,7 +479,7 @@
         cell.touchRectangle = pseudoButton.frame;
     }
 }
-
+//__________________________________________________________________________________________________
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView
 {
     NSArray* IndexTitles = @[@"Recent",@"A", @"B", @"C", @"D", @"E", @"F", @"G", @"H", @"I", @"J", @"K", @"L", @"M", @"N", @"O", @"P", @"Q", @"R", @"S", @"T", @"U", @"V", @"W", @"X", @"Y", @"Z"];
@@ -491,13 +491,13 @@
         }
     return nil;
 }
-
+//__________________________________________________________________________________________________
 - (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index
 {
     NSLog(@"index, %lu", index);
     return [arrayOfSectionTitles indexOfObject:title];
 }
-
+//__________________________________________________________________________________________________
 - (NSArray *)indexLettersForStrings:(NSArray *)records {
     NSMutableArray *letters = [NSMutableArray array];
     [letters addObject:@"Recent"];
@@ -515,7 +515,7 @@
     [self getArrayofPeopleinSection:arrayOfSectionTitles];
     return [NSArray arrayWithArray:letters];
 }
-
+//__________________________________________________________________________________________________
 -(void)getArrayofPeopleinSection:(NSArray *)sections
 {
     arrayOfPeopleInSection = [[NSMutableArray alloc]init];
@@ -574,7 +574,7 @@
 - (void)setMaxNumRecentFriends:(NSInteger)maxNumRecentFriends
 {
     MaxRecentFriends = maxNumRecentFriends;
-    [self ReloadTableData];
+       [self ReloadTableData];
 }
 //__________________________________________________________________________________________________
 

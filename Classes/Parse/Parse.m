@@ -15,6 +15,7 @@
 #import "Mixpanel.h"
 #import <AudioToolbox/AudioToolbox.h>
 #import "FriendSelectionView.h"
+#import "NavigationView.h"
 //__________________________________________________________________________________________________
 
 #define PARSE_USER_TOKEN_DEFAULTS_KEY @"ParseUserToken" //!< The key to retrieve the Parse token in the user defaults.
@@ -997,7 +998,12 @@ void ParseDidFailToRegisterForRemoteNotificationsWithError(NSError* error)
 //! Callback when receiving a remote notification.
 void ParseDidReceiveRemoteNotification(NSDictionary* userInfo)
 {
-  NSLog(@"ParseDidReceiveRemoteNotification");
+  ParseLoadMessageArray(^{
+     
+ }, ^(BOOL value, NSError *error) {
+     
+ });
+    
     NSLog(@"%@",userInfo);
    
   [PFPush handlePush:userInfo];
