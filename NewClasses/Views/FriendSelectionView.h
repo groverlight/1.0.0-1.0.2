@@ -8,6 +8,7 @@
 #import "Blocks.h"
 #import "FriendSelectionList.h"
 #import "FriendRecord.h"
+#import "Parse.h"
 //__________________________________________________________________________________________________
 
 @class ParseUser;

@@ -15,7 +15,7 @@
 #import "Mixpanel.h"
 #import <AudioToolbox/AudioToolbox.h>
 #import "FriendSelectionView.h"
-#import "NavigationView.h"
+
 //__________________________________________________________________________________________________
 
 #define PARSE_USER_TOKEN_DEFAULTS_KEY @"ParseUserToken" //!< The key to retrieve the Parse token in the user defaults.
@@ -121,20 +121,27 @@ BOOL ParseInitialization
 )
 {
   NSLog(@"ParseInitialization");
-    NSMutableArray *friendDicts = [[NSMutableArray alloc]initWithArray:[PFUser currentUser][@"ArrayofContacts"] ];
-    NSMutableArray *friendRecords = [[NSMutableArray alloc]init];
-    for (NSDictionary *dicts in friendDicts)
-    {
-        double time = [[dicts objectForKey:@"lastActivityTime"] doubleValue];
-        FriendRecord *friend = [FriendRecord new];
-        friend.fullName = [dicts objectForKey:@"fullName"];
-        friend.phoneNumber = [dicts objectForKey:@"phoneNumber"];
-        friend.lastActivityTime = time;
-        NSLog(@"Time:%f", time);
-        [friendRecords addObject:friend ];
+    PFQuery *query = [PFQuery queryWithClassName:@"localDatastore"];
+    [query fromLocalDatastore];
+    [[query findObjectsInBackground] continueWithBlock:^id(BFTask *task) {
+        if (task.error) {
+            NSLog(@"Error: %@", task.error);
+            return task;
+        }
         
-    }
-  contactsNotUsers = friendRecords;
+        NSLog(@"Retrieved %@", task.result);
+        for (NSDictionary *person in task.result)
+        {
+            FriendRecord *tempRecord;
+            tempRecord.phoneNumber = [person objectForKey:@"phoneNumber"];
+            tempRecord.fullName =[person objectForKey:@"fullName"];
+            tempRecord.lastActivityTime = [[person objectForKey:@"lastActivityTime"] doubleValue];
+            [contactsNotUsers addObject:tempRecord];
+        }
+       
+        return task;
+    }];
+
     [contactsNotUsers sortUsingComparator:^NSComparisonResult(id obj1, id obj2)
      {
          FriendRecord* record1 = (FriendRecord*)obj1;
@@ -998,11 +1005,7 @@ void ParseDidFailToRegisterForRemoteNotificationsWithError(NSError* error)
 //! Callback when receiving a remote notification.
 void ParseDidReceiveRemoteNotification(NSDictionary* userInfo)
 {
-  ParseLoadMessageArray(^{
-     
- }, ^(BOOL value, NSError *error) {
-     
- });
+
     
     NSLog(@"%@",userInfo);
    

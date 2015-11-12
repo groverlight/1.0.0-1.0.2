@@ -182,7 +182,14 @@
         {
             if (section == 0)
             {
-                return 5;//[RecentFriendsList count];
+                if(RecentFriendsList.count < 6)
+                {
+                    return [RecentFriendsList count];
+                }
+                else
+                {
+                    return 5;
+                }
             }
             else
             {
@@ -379,19 +386,48 @@
 
 - (void)InitCell:(TableViewCell*)cell atIndexPath:(NSIndexPath*)indexPath
 {
-    if(AllFriendsList == contactsNotUsers)
-    {
-        FriendRecord* record;
-        if (cell.tableSection == 0)
+
+        if(AllFriendsList == contactsNotUsers)
         {
-            record = [RecentFriendsList objectAtIndex:cell.tableRow];
-            //NSLog(@"Recent%@", RecentFriendsList);
-            //NSLog(@"record%@", record.fullName);
+            FriendRecord* record;
+            if (cell.tableSection == 0)
+            {
+                if(RecentFriendsList.count > 0)
+                {
+                record = [RecentFriendsList objectAtIndex:cell.tableRow];
+                }
+                //NSLog(@"Recent%@", RecentFriendsList);
+                //NSLog(@"record%@", record.fullName);
+            }
+            else
+            {
+                record =[[arrayOfPeopleInSection objectAtIndex:cell.tableSection] objectAtIndex:cell.tableRow];
+            }
+                PopLabel*                 fullName      = [cell getCellItemAtIndex:0];
+                FriendListItemStateView*  pseudoButton  = [cell getCellItemAtIndex:1];
+                pseudoButton.hidden                     = StateViewHidden;
+                if (record.fullName == nil)
+                {
+                    record.fullName = @"<unassigned 3>";
+                }
+                fullName.text       = record.fullName;
+                BOOL isSelectedItem = ((SelectedItem != nil) && [SelectedItem isEqual:indexPath]);
+                if ((!IgnoreUnreadMessages && (record.numUnreadMessages > 0)) || (IgnoreUnreadMessages && isSelectedItem))
+                {
+                    [pseudoButton setState:E_FriendProgressState_Selected animated:NO];
+                    fullName.font = GetGlobalParameters().friendsUsernameMediumFont;
+                }
+                else
+                {
+                    [pseudoButton setState:E_FriendProgressState_Unselected animated:NO];
+                    fullName.font = GetGlobalParameters().friendsUsernameFont;
+                }
+            
         }
         else
         {
-            record =[[arrayOfPeopleInSection objectAtIndex:cell.tableSection] objectAtIndex:cell.tableRow];
-        }
+            //  NSLog(@"%p InitCell atIndexPath: [%d, %d], %d, %d", self, (int)indexPath.section, (int)indexPath.row, (int)RecentFriendsList.count, (int)AllFriendsList.count);
+            FriendRecord*             record        = [((cell.tableSection == 0)? RecentFriendsList: AllFriendsList) objectAtIndex:cell.tableRow];
             PopLabel*                 fullName      = [cell getCellItemAtIndex:0];
             FriendListItemStateView*  pseudoButton  = [cell getCellItemAtIndex:1];
             pseudoButton.hidden                     = StateViewHidden;
@@ -411,32 +447,8 @@
                 [pseudoButton setState:E_FriendProgressState_Unselected animated:NO];
                 fullName.font = GetGlobalParameters().friendsUsernameFont;
             }
-        
-    }
-    else
-    {
-        //  NSLog(@"%p InitCell atIndexPath: [%d, %d], %d, %d", self, (int)indexPath.section, (int)indexPath.row, (int)RecentFriendsList.count, (int)AllFriendsList.count);
-        FriendRecord*             record        = [((cell.tableSection == 0)? RecentFriendsList: AllFriendsList) objectAtIndex:cell.tableRow];
-        PopLabel*                 fullName      = [cell getCellItemAtIndex:0];
-        FriendListItemStateView*  pseudoButton  = [cell getCellItemAtIndex:1];
-        pseudoButton.hidden                     = StateViewHidden;
-        if (record.fullName == nil)
-        {
-            record.fullName = @"<unassigned 3>";
-        }
-        fullName.text       = record.fullName;
-        BOOL isSelectedItem = ((SelectedItem != nil) && [SelectedItem isEqual:indexPath]);
-        if ((!IgnoreUnreadMessages && (record.numUnreadMessages > 0)) || (IgnoreUnreadMessages && isSelectedItem))
-        {
-            [pseudoButton setState:E_FriendProgressState_Selected animated:NO];
-            fullName.font = GetGlobalParameters().friendsUsernameMediumFont;
-        }
-        else
-        {
-            [pseudoButton setState:E_FriendProgressState_Unselected animated:NO];
-            fullName.font = GetGlobalParameters().friendsUsernameFont;
-        }
-     }
+         }
+    
 }
 //__________________________________________________________________________________________________
 

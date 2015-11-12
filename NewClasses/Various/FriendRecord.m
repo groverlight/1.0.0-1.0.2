@@ -222,17 +222,18 @@
 - (void)sortNameList
 {
 
- /*[NameSortedList sortUsingComparator:^NSComparisonResult(id obj1, id obj2)
+ [NameSortedList sortUsingComparator:^NSComparisonResult(id obj1, id obj2)
      {
          FriendRecord* record1 = (FriendRecord*)obj1;
          FriendRecord* record2 = (FriendRecord*)obj2;
    
          return ([record1.fullName caseInsensitiveCompare:record2.fullName]);
-     }];*/
+     }];
     
     NSOrderedSet *orderedSet = [NSOrderedSet orderedSetWithArray:NameSortedList];
     
     NameSortedList = [[NSMutableArray alloc]initWithArray:[orderedSet array]];
+    NSLog(@"NameSortedList%@", NameSortedList);
    
 
 #if 0
@@ -305,6 +306,8 @@
 {
     BOOL changed = NO;
     FriendRecord* friendRecord = parseRecord;
+
+
     friendRecord.lastActivityTime = time;
     NSInteger index = [TimeSortedList indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop)
                        {
@@ -317,8 +320,10 @@
                        }];
     if (index == NSNotFound)
     {
+        NSLog(@"index == nsnotfound");
         [NameSortedList addObject:friendRecord];
         [TimeSortedList addObject:friendRecord];
+
         [self sortNameList];
         changed = YES;
     }
@@ -385,13 +390,7 @@
                 break;
             }
         }
-        BOOL networkfound = [self checkNetwork];
-        if (!found && networkfound)
-        {
-            NSLog(@"5 updateActivityForFriends: %@", timeRecord.fullName);
-            [TimeSortedList removeObject:timeRecord];
-            changed = YES;
-        }
+
     }
     
     for (ParseUser* friend in friends)
@@ -479,7 +478,7 @@ switch (myStatus) {
                 NSLog(@"FriendRecord load: exception in [NSKeyedUnarchiver unarchiveObjectWithData:] %@", exception);
                 friendRecord = nil;
             }
-            if ((friendRecord != nil) && ((friendRecord.user != nil) || (friendRecord.fullName != nil)))
+            if ((friendRecord != nil)  || (friendRecord.fullName != nil))
             {
                 // Check for duplicates. Should never happen, but reality doesn't always follow programmer's intents.
                 BOOL found = NO;
@@ -513,7 +512,8 @@ switch (myStatus) {
     {
         if ((friendRecord.user == nil) && (friendRecord.fullName == nil))
         { // Do not save if any pair of user and fullName is null!
-            return;
+            NSLog(@"we got some nils");
+            //return;
         }
     }
     NSUserDefaults* defaults  = [NSUserDefaults standardUserDefaults];
@@ -522,11 +522,10 @@ switch (myStatus) {
     for (FriendRecord* friendRecord in TimeSortedList)
     {
         //      NSLog(@"3 (%@) User: %p -> fullName: '%@'", Name, friendRecord.user, friendRecord.fullName);
-        if (friendRecord.user != nil)
-        {
+
             NSData* data = [NSKeyedArchiver archivedDataWithRootObject:friendRecord];
             [saveArray addObject:data];
-        }
+        
     }
     [defaults setObject:saveArray forKey:FRIEND_RECORD_LIST_NAME];
 }

@@ -75,6 +75,7 @@
 @end
 //__________________________________________________________________________________________________
 NSMutableArray*      contactsNotUsers;
+
 //! UIView based class that show a list of friends and some other objects.
 @implementation FriendSelectionView
 {
@@ -727,7 +728,7 @@ NSMutableArray*      contactsNotUsers;
 - (ParseUser*)getFriendAtIndex:(NSInteger)friendIndex
 {
   
-  NSInteger recentFriendsCount = MIN(self.recentFriends.count, GetGlobalParameters().friendsMaxRecentFriends);
+  NSInteger recentFriendsCount = self.recentFriends.count;
     NSLog(@"friendIndex: %lu", friendIndex);
     NSLog(@"recentFriendsCount: %lu",recentFriendsCount);
   if (friendIndex < recentFriendsCount)
@@ -749,7 +750,7 @@ NSMutableArray*      contactsNotUsers;
 - (FriendRecord*)getRecordAtIndex:(NSInteger)friendIndex
 {
     
-    NSInteger recentFriendsCount = MIN(self.recentFriends.count, GetGlobalParameters().friendsMaxRecentFriends);
+    NSInteger recentFriendsCount = self.recentFriends.count;
     NSLog(@"friendIndex: %lu", friendIndex);
     NSLog(@"recentFriendsCount: %lu",recentFriendsCount);
     if (friendIndex < recentFriendsCount)
@@ -1050,8 +1051,7 @@ NSMutableArray*      contactsNotUsers;
                                      
                                      [contactsNotUsers addObject:newUser];
                                  }
-                        
-                     
+
                         [contactsNotUsers sortUsingComparator:^NSComparisonResult(id obj1, id obj2)
                          {
                              FriendRecord* record1 = (FriendRecord*)obj1;
@@ -1081,6 +1081,7 @@ NSMutableArray*      contactsNotUsers;
                                              NSDictionary *data = @{
                                                                     @"alert" : [NSString stringWithFormat:@"%@ is now on Typeface! Add %@ in Friends" ,Name, Username],
                                                                     @"p" :[PFUser currentUser].objectId,
+                                                                    @"t" :[PFUser currentUser][@"phoneNumber"]
                                                                     };
                                              
                                              PFPush *push = [[PFPush alloc] init];
@@ -1099,7 +1100,8 @@ NSMutableArray*      contactsNotUsers;
                                          
                                          [GetCurrentParseUser() loadFriendsListWithCompletion:^(NSArray* friends, NSError* loadError)
                                           {
-                                              
+                                              PFObject* localDatastore = [PFObject objectWithClassName:@"localDatastore"];
+
                                               UpdateFriendRecordListForFriends(friends);
                                               NSLog(@"%@", GetNameSortedFriendRecords());
                                               for (NSInteger i=0; i < [contactsNotUsers count]; i++)
@@ -1119,9 +1121,12 @@ NSMutableArray*      contactsNotUsers;
                                                   NSMutableDictionary *contact = [[NSMutableDictionary alloc]
                                                                                   initWithObjects:@[anothertemprecord.fullName, anothertemprecord.phoneNumber, [NSString stringWithFormat:@"%f",anothertemprecord.lastActivityTime]]
                                                                                   forKeys:@[@"fullName", @"phoneNumber", @"lastActivityTime"]];
-                                                  NSLog(@"%@", contact);
-                                                  NSLog(@"%@", GetTimeSortedFriendRecords());
-                                                  [[PFUser currentUser] addUniqueObject:contact forKey:@"ArrayofContacts"];
+                                                  
+                                                  
+                                                 
+                                                  
+                                                  [localDatastore addUniqueObject:contact forKey:@"FriendsList"];
+                                                  [localDatastore pinInBackground];
                                                   [[PFUser currentUser] saveInBackground];
 
                                               }

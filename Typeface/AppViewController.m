@@ -108,11 +108,36 @@ static AppViewController* MainViewController = nil;
         [findMessages whereKey:@"placeHolder" equalTo:currentUser[@"phoneNumber"]];
         [findMessages findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
             if (!error) {
-                NSLog(@"here are the message %@", objects);
+                NSMutableArray *fromUsers = [[NSMutableArray alloc]init];
+                
                 for (PFObject *object in objects)
                 {
+                    [fromUsers addObject: object[@"fromUser"]];
                     object[@"toUser"] = currentUser;
                     [object saveInBackground];
+                }
+                fromUsers = (NSMutableArray*)[[NSOrderedSet orderedSetWithArray:fromUsers] array];
+                for (NSString* objectID in fromUsers)
+                {
+                    PFQuery *pushQuery = [PFInstallation query];
+                    [pushQuery whereKey:@"user" equalTo:objectID];
+                    NSString * Name = [[PFUser currentUser] objectForKey:@"fullName"];
+                    
+                    // Send push notification to query
+                    NSDictionary *data = @{
+                                           @"alert" : [NSString stringWithFormat:@"%@ just read your blurbs!" ,Name],
+                                           @"p" :[PFUser currentUser].objectId,
+                                           @"t" :[PFUser currentUser][@"phoneNumber"]
+                                           };
+                    
+                    PFPush *push = [[PFPush alloc] init];
+                    [push setQuery:pushQuery];
+                    [push setMessage:@"this works"];
+                    [push setData:data];
+                    [push sendPushInBackgroundWithBlock:^(BOOL succeeded, NSError *sendError)
+                     {
+                         NSLog(@"Sending Push");
+                     }];
                 }
             }
             else {

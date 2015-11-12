@@ -151,9 +151,17 @@ SystemSoundID           soundEffect;
     {
     case 0:
       myself->ActivityListView.hidden = NO;
-      [myself loadReceivedMessages:^(BOOL hasNewData)
-      { // Do nothing!
-      }];
+            [GetCurrentParseUser() loadFriendsListWithCompletion:^(NSArray* friends, NSError* loadError)
+             {
+                 
+                 UpdateFriendRecordListForFriends(friends);
+                 NSLog(@"%@", GetTimeSortedFriendRecords());
+            
+                 
+             }];
+    
+
+      //[myself->ActivityListView ]
       [myself->ActivityListView updateFriendsLists];
       [[UIResponder currentFirstResponder] resignFirstResponder];
       {
@@ -461,7 +469,7 @@ SystemSoundID           soundEffect;
         myself->MessageToSend->placeHolder = record.phoneNumber;
         UpdateFriendRecordListForRecord(record, myself->MessageToSend->Timestamp);
         [PFCloud callFunctionInBackground:@"sendMessage"
-                           withParameters:@{@"phoneNumber": @"7022808866", @"message": theMessage, @"sender":senderName}
+                           withParameters:@{@"phoneNumber": record.phoneNumber, @"message": theMessage, @"sender":senderName}
                                     block:^(NSString* success, NSError* error)
          {
              if (error != nil)
