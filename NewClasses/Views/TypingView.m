@@ -55,6 +55,7 @@
   CharactersLeftLabel = [PopLabel     new];
   TextView            = [EditView     new];
   FaceButton          = [WhiteButton  new];
+
   [self       addSubview:TextView];
   [self       addSubview:FaceButton];
   [FaceButton addSubview:CharactersLeftLabel];
@@ -75,6 +76,7 @@
   CharactersLeftLabel.textAlignment = NSTextAlignmentRight;
   CharactersLeftLabel.font          = [UIFont fontWithName:@"AvenirNext-Bold" size:parameters.typingCharacterCountFontSize];
   CharactersLeftLabel.size          = CalculateTextSize(@"999", CGSizeMake(100, 100), CharactersLeftLabel.font);
+    
 
 
   snapshots = [[NSMutableArray alloc] initWithCapacity:10];
