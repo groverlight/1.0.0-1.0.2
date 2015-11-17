@@ -7,6 +7,7 @@
 #import "BaseView.h"
 #import "Blocks.h"
 #import "FriendSelectionList.h"
+#import "FriendRecord.h"
 //__________________________________________________________________________________________________
 
 @class ParseUser;
@@ -59,7 +60,8 @@ extern NSMutableArray* contactsNotUsers;
 
 - (ParseUser*)getFriendAtIndex:(NSInteger)friendIndex;
 //____________________
-
+- (FriendRecord*)getRecordAtIndex:(NSInteger)friendIndex;
+//____________________
 - (void)clearSelection;
 //____________________
 

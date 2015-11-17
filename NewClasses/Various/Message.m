@@ -33,6 +33,8 @@
   [coder encodeObject:ParseObjectId forKey:@"parseObjectId" ];
   [coder encodeObject:FromObjectId  forKey:@"fromUser"      ];
   [coder encodeObject:ToObjectId    forKey:@"toUser"        ];
+  [coder encodeObject:placeHolder   forKey:@"placeholder"   ];
+  
 }
 //__________________________________________________________________________________________________
 
@@ -47,6 +49,8 @@
     ParseObjectId = [coder decodeObjectForKey:@"parseObjectId"];
     FromObjectId  = [coder decodeObjectForKey:@"fromUser"     ];
     ToObjectId    = [coder decodeObjectForKey:@"toUser"       ];
+    placeHolder   = [coder decodeObjectForKey:@"placeholder"  ];
+    
   }
   return self;
 }

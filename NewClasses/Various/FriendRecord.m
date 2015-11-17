@@ -9,6 +9,7 @@
 #import "ParseUser.h"
 #import "UnreadMessages.h"
 #import "Reachability.h"
+#import "FriendSelectionView.h"
 //__________________________________________________________________________________________________
 
 #define FRIEND_RECORD_LIST_NAME @"FriendRecordList"
@@ -32,9 +33,11 @@
         self.user             = user;
         self.lastActivityTime = time;
         self.fullName         = (user.fullName == nil)? @"<Unassigned>": user.fullName;
-        
+        self.phoneNumber      = user[@"phoneNumber"];
         NSLog(@"FriendRecord initWithUser: %f, %@", self.lastActivityTime, self.fullName);
-    }
+        }
+    NSLog(@"%@", self.phoneNumber);
+
     return self;
 }
 //__________________________________________________________________________________________________
@@ -159,6 +162,7 @@
         [self sortTimeList];
         [self sortNameList];
     }
+    
     return self;
 }
 //__________________________________________________________________________________________________
@@ -217,17 +221,20 @@
 
 - (void)sortNameList
 {
- [NameSortedList sortUsingComparator:^NSComparisonResult(id obj1, id obj2)
+
+ /*[NameSortedList sortUsingComparator:^NSComparisonResult(id obj1, id obj2)
      {
          FriendRecord* record1 = (FriendRecord*)obj1;
          FriendRecord* record2 = (FriendRecord*)obj2;
    
          return ([record1.fullName caseInsensitiveCompare:record2.fullName]);
-     }];
+     }];*/
+    
     NSOrderedSet *orderedSet = [NSOrderedSet orderedSetWithArray:NameSortedList];
     
     NameSortedList = [[NSMutableArray alloc]initWithArray:[orderedSet array]];
-    
+   
+
 #if 0
     NSLog(@"sortNameList:");
     for (FriendRecord* record in NameSortedList)
@@ -259,6 +266,7 @@
 - (BOOL)updateForUser:(ParseUser*)parseUser atTime:(NSTimeInterval)time updateOnly:(BOOL)updateOnly
 {
     BOOL changed = NO;
+   // NSlog(@"%@", parseUser)
     FriendRecord* friendRecord = [[FriendRecord alloc] initWithUser:parseUser andTime:time];
     NSInteger index = [TimeSortedList indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop)
                        {
@@ -292,6 +300,45 @@
     }
     return changed;
 }
+
+- (BOOL)updateForRecord:(FriendRecord*)parseRecord atTime:(NSTimeInterval)time updateOnly:(BOOL)updateOnly
+{
+    BOOL changed = NO;
+    FriendRecord* friendRecord = parseRecord;
+    friendRecord.lastActivityTime = time;
+    NSInteger index = [TimeSortedList indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop)
+                       {
+                           FriendRecord* testActivity = (FriendRecord*)obj;
+                           if ([friendRecord.user.objectId isEqualToString:testActivity.user.objectId])
+                           {
+                               return YES;
+                           }
+                           return NO;
+                       }];
+    if (index == NSNotFound)
+    {
+        [NameSortedList addObject:friendRecord];
+        [TimeSortedList addObject:friendRecord];
+        [self sortNameList];
+        changed = YES;
+    }
+    else
+    {
+        FriendRecord* foundActivity = [TimeSortedList objectAtIndex:index];
+        changed = foundActivity.lastActivityTime < time;
+        if (changed)
+        {
+            [TimeSortedList replaceObjectAtIndex:index withObject:friendRecord];
+        }
+    }
+    if (changed)
+    {
+        [self sortTimeList];
+        [self refreshUnreadMessageCount];
+    }
+    return changed;
+}
+
 //__________________________________________________________________________________________________
 
 - (void)updateForFriends:(NSArray*)friends
@@ -372,6 +419,8 @@
             [TimeSortedList addObject:friendRecord];
             changed = YES;
         }
+
+
     }
     
     if (changed)
@@ -504,6 +553,13 @@ void UpdateFriendRecordListForUser(ParseUser* user, NSTimeInterval time)
 {
     FriendRecordsList* records = GetSharedActivityList();
     [records updateForUser:user atTime:time updateOnly:NO];
+    [records save];
+}
+
+void UpdateFriendRecordListForRecord(FriendRecord* user, NSTimeInterval time)
+{
+    FriendRecordsList* records = GetSharedActivityList();
+    [records updateForRecord:user atTime:time updateOnly:NO];
     [records save];
 }
 //__________________________________________________________________________________________________

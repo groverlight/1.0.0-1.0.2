@@ -90,16 +90,36 @@ static AppViewController* MainViewController = nil;
 
 - (void)loginDone:(BOOL)newUser
 {
-  LoggedIn = YES;
+    ParseUser* currentUser = GetCurrentParseUser();
+    LoggedIn = YES;
+    NSLog(@"LOGIN DONE %@",currentUser[@"phoneNumber"]);
+
   set_myself;
 #if BE_YOUR_BEST_FRIEND
-  ParseUser* currentUser = GetCurrentParseUser();
+  
+ 
   // Add ourself as friend to be able to test push notifications with a single user. Do nothing if we are already in the friends list.
   [currentUser addFriend:currentUser completion:^(BOOL success, NSError *error)
   {
 #endif
     [GetCurrentParseUser() loadFriendsListWithCompletion:^(NSArray* friends, NSError* loadError)
     {
+        PFQuery *findMessages = [PFQuery queryWithClassName:@"ParseMessage"];
+        [findMessages whereKey:@"placeHolder" equalTo:currentUser[@"phoneNumber"]];
+        [findMessages findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+            if (!error) {
+                NSLog(@"here are the message %@", objects);
+                for (PFObject *object in objects)
+                {
+                    object[@"toUser"] = currentUser;
+                    [object saveInBackground];
+                }
+            }
+            else {
+                // Log details of the failure
+                NSLog(@"Error: %@ %@", error, [error userInfo]);
+            }
+        }];
       get_myself;
       if (loadError == nil)
       {

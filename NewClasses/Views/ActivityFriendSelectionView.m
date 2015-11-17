@@ -25,7 +25,7 @@
   self.stateViewOnRight         = NO;
   self.useBlankState            = YES;
   NetworkActivityIndicator      = [NetworkActivityView new];
-  [self addSubview:NetworkActivityIndicator];
+    [self addSubview:NetworkActivityIndicator];
 }
 //__________________________________________________________________________________________________
 
@@ -44,7 +44,8 @@
 {
 
     self.recentFriends  = GetTimeSortedFriendRecords();
-    
+    [FriendsList setMaxNumRecentFriends:20];
+    NSLog(@"%lu", [FriendsList maxNumRecentFriends]);
  //NSLog(@"INITIATING OTHER SORT");
     //self.allFriends     = GetNameSortedFriendRecords(); // this makes all of the friends in the alphabetized
   

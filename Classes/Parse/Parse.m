@@ -15,6 +15,7 @@
 #import "Mixpanel.h"
 #import <AudioToolbox/AudioToolbox.h>
 #import "FriendSelectionView.h"
+#import "NavigationView.h"
 //__________________________________________________________________________________________________
 
 #define PARSE_USER_TOKEN_DEFAULTS_KEY @"ParseUserToken" //!< The key to retrieve the Parse token in the user defaults.
@@ -124,11 +125,13 @@ BOOL ParseInitialization
     NSMutableArray *friendRecords = [[NSMutableArray alloc]init];
     for (NSDictionary *dicts in friendDicts)
     {
-
+        double time = [[dicts objectForKey:@"lastActivityTime"] doubleValue];
         FriendRecord *friend = [FriendRecord new];
         friend.fullName = [dicts objectForKey:@"fullName"];
         friend.phoneNumber = [dicts objectForKey:@"phoneNumber"];
-                [friendRecords addObject:friend ];
+        friend.lastActivityTime = time;
+        NSLog(@"Time:%f", time);
+        [friendRecords addObject:friend ];
         
     }
   contactsNotUsers = friendRecords;
@@ -306,7 +309,9 @@ static void ParseSendMessageBody
   parse_message.fromUser                = msg->FromUser;
   parse_message.toUser                  = msg->ToUser;
   parse_message.action                  = @"";
+  parse_message.placeHolder             = msg->placeHolder;
   //    [parse_message pinInBackground];
+    NSLog(@"%@", parse_message.placeHolder);
   NSLog(@"2 ParseSendMessageBody");
   [parse_message saveInBackgroundWithBlock:^(BOOL success, NSError* error)
    {
@@ -993,7 +998,12 @@ void ParseDidFailToRegisterForRemoteNotificationsWithError(NSError* error)
 //! Callback when receiving a remote notification.
 void ParseDidReceiveRemoteNotification(NSDictionary* userInfo)
 {
-  NSLog(@"ParseDidReceiveRemoteNotification");
+  ParseLoadMessageArray(^{
+     
+ }, ^(BOOL value, NSError *error) {
+     
+ });
+    
     NSLog(@"%@",userInfo);
    
   [PFPush handlePush:userInfo];

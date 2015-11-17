@@ -218,7 +218,7 @@ parameters.blockedUserReasonMessage       = NSLocalizedString(@"You have been bl
   parameters.friendsLabelTitleColor                 = LightGrey;
   parameters.friendsLabelTitleFontSize              = 16;
   parameters.friendsProgressDuration                = 2;
-  parameters.friendsMaxRecentFriends                = 5;
+  parameters.friendsMaxRecentFriends                = 5; //  this is where we need to look at
 
   parameters.friendsEditorPlaceholderText           = NSLocalizedString(@"Search by username", @"");
   parameters.friendsEditorFontSize                  = 18;
