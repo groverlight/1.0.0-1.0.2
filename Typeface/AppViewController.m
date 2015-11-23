@@ -4,7 +4,6 @@
 //__________________________________________________________________________________________________
 
 #import "AppViewController.h"
-
 #import "FriendRecord.h"
 #import "Alert.h"
 #import "BaseView.h"
@@ -18,6 +17,7 @@
 #import "ViewStackView.h"
 #import "Mixpanel.h"
 #import "VideoViewController.h"
+#import "Reachability.h"
 //__________________________________________________________________________________________________
 
 #define BE_YOUR_BEST_FRIEND 0 //!< Define to 1 to declare the current user to be his own friend.
@@ -45,8 +45,8 @@ static AppViewController* MainViewController = nil;
   ViewStackView*  ViewStack;
   NavigationView* NavView;
   BOOL            LoadingMessages;
-    VideoViewController *Intro;
-
+  VideoViewController *Intro;
+    UILabel *noInternet;
 }
 //@synthesize cardNavigator;
 //____________________
@@ -58,6 +58,8 @@ static AppViewController* MainViewController = nil;
   {
     LoadingMessages = NO;
   }
+
+
   return self;
 }
 //__________________________________________________________________________________________________
@@ -192,6 +194,8 @@ static AppViewController* MainViewController = nil;
 
 - (void)loadView
 {
+
+    
 //  NSLog(@"1 loadView");
   MainViewController = self;
   // The global parameters should be set as soon as possible, at last before loading the user interface.
@@ -230,10 +234,13 @@ static AppViewController* MainViewController = nil;
 //! The UI has been loaded, do whatever else is required.
 - (void)viewDidLoad
 {
+    
 //  NSLog(@"1 viewDidLoad");
   [super viewDidLoad];
 //  NSLog(@"2 viewDidLoad");
-
+    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [self checkNetwork];
+    });
   // Parse stuff.
   ParseInitialization(^(PFUser* user, BOOL newUser, BOOL restart, NSError *error)
   {
@@ -242,10 +249,10 @@ static AppViewController* MainViewController = nil;
     {
       if (newUser)
       {
-          [self dismissViewControllerAnimated:YES completion:nil];
+          /*[self dismissViewControllerAnimated:YES completion:nil];
           Intro = [[VideoViewController alloc]init];
           dispatch_async(dispatch_get_main_queue(), ^(void){
-              [self presentViewController:Intro animated:YES completion:nil];      });
+              [self presentViewController:Intro animated:YES completion:nil];      });*/
 
         [NavView showLoginFromStart:restart];
       }
@@ -339,7 +346,42 @@ static AppViewController* MainViewController = nil;
   }];
 }
 //__________________________________________________________________________________________________
+-(void) checkNetwork
+{
+    
+    UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc]
+                                             initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    
+    activityView.center=self.view.center;
+    activityView.backgroundColor = [UIColor whiteColor];
+    [activityView startAnimating];
+    while(1){
+        Reachability *myNetwork = [Reachability reachabilityWithHostname:@"www.google.com"];
+        NetworkStatus myStatus = [myNetwork currentReachabilityStatus];
+        if (myStatus == NotReachable)
+        {
+           
+                dispatch_async(dispatch_get_main_queue(), ^{
+               // NavView.hidden = YES;
 
+                self.view = activityView;
+               // [self.view addSubview:activityView];
+                    });
+            
+        }
+        else
+        {
+            if(self.view !=ViewStack)
+            {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                ViewStack = [ViewStackView sharedInstance];
+                self.view = ViewStack;
+                    });
+            }
+        }
+
+    }
+}
 @end
 
 //! Present in a custom view the data contained in the remote notification userInfo dictionary.
@@ -407,4 +449,7 @@ void PerformBackgroundFetch(BlockBoolAction completion)
     completion(NO);
   }
 }
+
+
 //__________________________________________________________________________________________________
+

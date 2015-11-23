@@ -163,6 +163,7 @@ typedef enum
     UpperEditor.placeholder        = GlobalParams.fullNamePlaceholder;
     UpperEditor.delegate           = self;
     UpperEditor.keyboardType       = UIKeyboardTypeASCIICapable;
+    UpperEditor.tag                = 1;
     //UpperEditor.keyboardAppearance = UIKeyboardAppearanceDark;
     UpperEditor.enabled            = NO;
     UpperEditor.autocorrectionType = UITextAutocorrectionTypeNo;
@@ -176,6 +177,7 @@ typedef enum
     LowerEditor.delegate            = self;
     LowerEditor.placeholder         = GlobalParams.phoneNumberPlaceholder;
     LowerEditor.keyboardType        = UIKeyboardTypePhonePad;
+    LowerEditor.tag                 = 2;
     //LowerEditor.keyboardAppearance = UIKeyboardAppearanceDark;
     LowerEditor.enabled             = NO;
     LowerEditor.autocorrectionType  = UITextAutocorrectionTypeNo;
@@ -398,7 +400,7 @@ typedef enum
             LowerEditor.keyboardType  = UIKeyboardTypeASCIICapable;
             LowerEditor.placeholder   = GlobalParams.usernamePlaceholder;
             UpperEditor.placeholder   = GlobalParams.fullNamePlaceholder;
-            RightButton.enabled = NO;
+            RightButton.enabled = YES;
             break;
         case E_LoginState_LoggedIn:
             break;
@@ -473,6 +475,7 @@ typedef enum
             [RightButton setTitleColor:[TypePink colorWithAlphaComponent: 0.25] forState:UIControlStateDisabled];
             break;
         case E_LoginState_Username:
+            //[UpperEditor becomeFirstResponder];
             UpperEditor.hidden  = NO;
             SecondLabel.hidden  = YES;
             editorWidth       	= width - PREFIX_LEFT_MARGIN - EDITOR_RIGHT_MARGIN;
@@ -483,7 +486,7 @@ typedef enum
             policyAlpha       	= 0.0;
             pickerAlpha         = 0.0;
             ThirdSeparatorView.hidden = NO;
-            LeftButton.hidden = YES;
+            LeftButton.hidden = NO;
             UpperEditor.textAlignment = NSTextAlignmentCenter;
             LowerEditor.textAlignment = NSTextAlignmentCenter;
             FirstLabel.text = @"Write your Full Name";
@@ -647,10 +650,10 @@ typedef enum
             break;
         case E_LoginState_Username:
             
-            if (textField == UpperEditor)
+            if (textField.tag == 1)
             {
-                [UpperEditor becomeFirstResponder];
-                [LowerEditor resignFirstResponder];
+                NSLog(@"upper");
+
                 [UpperEditor setAutocapitalizationType:UITextAutocapitalizationTypeWords];
                 NSCharacterSet *invalidCharSet = [[NSCharacterSet characterSetWithCharactersInString:@"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ "] invertedSet];
                 NSString *text = [[UpperEditor.text componentsSeparatedByCharactersInSet:invalidCharSet] componentsJoinedByString:@""];
@@ -661,10 +664,10 @@ typedef enum
                 
                 [defaults setObject:FullName forKey:LOGIN_FULL_NAME_DEFAULTS_KEY];
             }
-            else if (textField == LowerEditor)
+            else if (textField.tag == 2)
             {
-                [UpperEditor resignFirstResponder];
-                [LowerEditor becomeFirstResponder];
+
+                
                 // take away upppercase and spaces
                 
                 NSCharacterSet *invalidCharSet2 = [[NSCharacterSet characterSetWithCharactersInString:@"abcdefghijklmnopqrstuvwxyz1234567890"] invertedSet];
@@ -675,23 +678,10 @@ typedef enum
                 [defaults setObject:Username forKey:LOGIN_USER_NAME_DEFAULTS_KEY];
             }
             
-            if ([FullName containsString:@" "])
-            {
-                NSLog(@"FirstName: %@ and LastName: %@",[FullName componentsSeparatedByString:@" "][0],[FullName componentsSeparatedByString:@" "][1]);
-                if (![Username isEqualToString:@""] && ([FullName componentsSeparatedByString:@" "][0].length > 1) && ([FullName componentsSeparatedByString:@" "][1].length > 1))
-                {
-                    RightButton.enabled = YES;//
-                }
-                else
-                {
-                    RightButton.enabled = NO;
-                }
-                
-            }
-            else
-            {
-                RightButton.enabled = NO;
-            }
+   
+            
+
+    
             break;
         case E_LoginState_LoggedIn:
             break;
@@ -831,7 +821,7 @@ typedef enum
                                                                                      LeftButton.enabled  = YES;
                                                                                      RightButton.enabled = NO;
                                                                                  }
-                                                                                 [LowerEditor resignFirstResponder];
+                                                                                 //[LowerEditor resignFirstResponder];
                                                                                  LowerEditor.keyboardType  = UIKeyboardTypeASCIICapable;
                                                                                  LowerEditor.placeholder   = GlobalParams.usernamePlaceholder;
                                                                                  LowerEditor.text          = Username;
@@ -841,25 +831,25 @@ typedef enum
                                                                                  if ([Username isEqualToString:@""])
                                                                                  {
                                                                                      LowerEditor.enabled = YES;
-                                                                                     [LowerEditor becomeFirstResponder];
+                                                                                    // [UpperEditor becomeFirstResponder]; // changed this
                                                                                  }
                                                                                  else
                                                                                  {
                                                                                      LowerEditor.enabled = NO;
-                                                                                     [UpperEditor becomeFirstResponder];
+                                                                                     //[UpperEditor becomeFirstResponder];
                                                                                  }
                                                                              }
                                                                              else
                                                                              {
                                                                                  [LowerEditor resignFirstResponder];  // Resign first responder to let change keyboard type.
                                                                                  LeftButton.enabled        = YES;
-                                                                                 RightButton.enabled       = NO;
+                                                                                 RightButton.enabled       = YES;
                                                                                  UpperEditor.placeholder   = GlobalParams.fullNamePlaceholder;
                                                                                  UpperEditor.text          = @"";
                                                                                  LowerEditor.placeholder   = GlobalParams.usernamePlaceholder;
                                                                                  LowerEditor.text          = @"";
                                                                                  LowerEditor.keyboardType  = UIKeyboardTypeASCIICapable;
-                                                                                 [LowerEditor becomeFirstResponder];  // Becomes first responder with the new keyboard type.
+                                                                                 [UpperEditor becomeFirstResponder];  // Becomes first responder with the new keyboard type.
                                                                              }
                                                                              State = E_LoginState_Username;
                                                                              [[NSUserDefaults standardUserDefaults] setInteger:State forKey:LOGIN_STATE_DEFAULTS_KEY];
@@ -890,17 +880,32 @@ typedef enum
                                       });
         }
             break;
-        case E_LoginState_Username:
+        case E_LoginState_Username: // HEREEREER
             
             // Transition from username to LoggedIn.
-            if ((RecoveredUser != nil))
+            if (![Username isEqualToString:@""] && ([FullName componentsSeparatedByString:@" "][0].length > 1) && ([FullName componentsSeparatedByString:@" "][1].length > 1) && [FullName containsString:@" "])
+            
             {
-                [self loginExistingUser];
+                if ((RecoveredUser != nil))
+                {
+                    [self loginExistingUser];
+                }
+                else
+                {
+                    [self loginNewUser];
+                }
+
             }
             else
             {
-                [self loginNewUser];
+                [RollDownErrorView showWithTitle:@"Oops, there seems to be an error" andMessage:@"Make sure your full name is in the correct format!"];
+                soundPath = [[NSBundle mainBundle] pathForResource:@"rolldown10"ofType:@"aiff"];
+                soundURL = [NSURL fileURLWithPath:soundPath];
+                AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &soundEffect);
+                
+                AudioServicesPlaySystemSound(soundEffect);
             }
+
             break;
         case E_LoginState_LoggedIn:
             // Transition from logged in to ...?

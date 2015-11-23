@@ -120,28 +120,29 @@ BOOL ParseInitialization
   InitializationBlockAction completion //!< The block to call when initialization has completed.
 )
 {
-  NSLog(@"ParseInitialization");
+    NSLog(@"ParseInitialization");
     PFQuery *query = [PFQuery queryWithClassName:@"localDatastore"];
-    [query fromLocalDatastore];
-    [[query findObjectsInBackground] continueWithBlock:^id(BFTask *task) {
-        if (task.error) {
-            NSLog(@"Error: %@", task.error);
-            return task;
-        }
-        
-        NSLog(@"Retrieved %@", task.result);
-        for (NSDictionary *person in task.result)
-        {
-            FriendRecord *tempRecord;
-            tempRecord.phoneNumber = [person objectForKey:@"phoneNumber"];
-            tempRecord.fullName =[person objectForKey:@"fullName"];
-            tempRecord.lastActivityTime = [[person objectForKey:@"lastActivityTime"] doubleValue];
-            [contactsNotUsers addObject:tempRecord];
-        }
-       
-        return task;
-    }];
 
+    [query fromLocalDatastore];
+    PFObject *temp = [query getFirstObject];
+   // NSLog(@"temp %@", temp);
+
+    if( contactsNotUsers == nil)
+    {
+        contactsNotUsers = [[NSMutableArray alloc]init];
+    }
+    for (NSDictionary *person in temp[@"FriendsList"])
+    {
+        
+      //  NSLog(@"%@", person);
+        FriendRecord* tempRecord    = [FriendRecord new];
+        tempRecord.phoneNumber = [person objectForKey:@"phoneNumber"];
+        tempRecord.fullName = [person objectForKey:@"fullName"];
+        tempRecord.lastActivityTime = [[person objectForKey:@"lastActivityTime"] doubleValue];
+       // NSLog(@"tempRecord: %@", tempRecord);
+        [contactsNotUsers addObject:tempRecord];
+    }
+    
     [contactsNotUsers sortUsingComparator:^NSComparisonResult(id obj1, id obj2)
      {
          FriendRecord* record1 = (FriendRecord*)obj1;
@@ -149,7 +150,8 @@ BOOL ParseInitialization
          
          return ([record1.fullName caseInsensitiveCompare:record2.fullName]);
      }];
-    NSLog(@"%@", contactsNotUsers);
+    
+  NSLog(@"contactsNotUsers udpated: %@", contactsNotUsers);
   NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
   NSString* parseUserToken = [defaults stringForKey:PARSE_USER_TOKEN_DEFAULTS_KEY];
   FirstRun = (parseUserToken == nil);

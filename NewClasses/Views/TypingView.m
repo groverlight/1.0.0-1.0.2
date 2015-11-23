@@ -32,6 +32,7 @@
   NSInteger             FaceCount;
   BOOL                  ChangingReturnButtonType;
   SystemSoundID           soundEffect;
+  BOOL permission;
 }
 @synthesize snapshots;
 //____________________
@@ -52,6 +53,7 @@
 -(void)Initialize
 {
   [super Initialize];
+  permission = NO;
   CharactersLeftLabel = [PopLabel     new];
   TextView            = [EditView     new];
   FaceButton          = [WhiteButton  new];
@@ -97,6 +99,7 @@
 
         if (faceAlertAlreadyDone)
         {
+            if (permission == YES)
             [myself faceButtonPressed];
 
 
@@ -128,6 +131,7 @@
                           [mixpanel identify:mixpanel.distinctId];
 
                           [mixpanel.people increment:@"Selfie Understood" by:[NSNumber numberWithInt:1]];
+                          
                       }
                       else {
 
@@ -187,51 +191,8 @@
     {
         get_myself;
         [myself->TextView resignFirstResponder];
-        NSUserDefaults* defaults  = [NSUserDefaults standardUserDefaults];
-        BOOL goAlertAlreadyDone   = [defaults boolForKey:GO_BUTTON_ALERT_FLAG_DEFAULTS_KEY];
-        if (goAlertAlreadyDone)
-        {
-            [myself goButtonPressed];
-        }
-        else
-        {
-            NSLog(@"Calls send message alert");
-
-            NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"beep_prompt_2x"ofType:@"aif"];
-            NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
-            AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &(myself->soundEffect));
-
-            AudioServicesPlaySystemSound(myself->soundEffect);
-
-            Alert(parameters.typingRightButtonAlertTitle   , parameters.typingRightButtonAlertMessage,
-                  parameters.typingRightButtonAlertOkString, parameters.typingRightButtonAlertCancelString,
-                  ^(NSInteger pressedButtonIndex)
-                  {
-                      [defaults setBool:YES forKey:GO_BUTTON_ALERT_FLAG_DEFAULTS_KEY];
-                      if (pressedButtonIndex == 1)
-                      {
-                          [myself goButtonPressed];
-                          Mixpanel *mixpanel = [Mixpanel sharedInstance];
-                          
-                          [mixpanel track:@"go understood"];
-
-                          [mixpanel identify:mixpanel.distinctId];
-                          
-                          [mixpanel.people increment:@"Go understood" by:[NSNumber numberWithInt:1]];
-                      }
-                      else
-                      {
-                          [myself->TextView becomeFirstResponder];
-                          Mixpanel *mixpanel = [Mixpanel sharedInstance];
-                          
-                          [mixpanel track:@"go NOT understood"];
-
-                          [mixpanel identify:mixpanel.distinctId];
-                          
-                          [mixpanel.people increment:@"go NOT understood" by:[NSNumber numberWithInt:1]];
-                      }
-                  });
-        }
+        [myself goButtonPressed];
+        
     };
 }
 //__________________________________________________________________________________________________

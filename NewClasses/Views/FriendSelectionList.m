@@ -42,7 +42,11 @@
 {
     [super Initialize];
     indexTitles = @[@"A", @"B", @"C", @"D", @"E", @"F", @"G", @"H", @"I", @"J", @"K", @"L", @"M", @"N", @"O", @"P", @"Q", @"R", @"S", @"T", @"U", @"V", @"W", @"X", @"Y", @"Z"];
-
+    // this stuff
+    self.sectionIndexColor = [UIColor blueColor];
+    self.sectionIndexBackgroundColor = [UIColor clearColor];
+    self.sectionIndexTrackingBackgroundColor = [UIColor blueColor];
+    
     GlobalParameters* parameters  = GetGlobalParameters();
     self.separatorColor           = Transparent;
     self.backgroundColor          = parameters.friendsListBackgroundColor;
@@ -165,6 +169,8 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
+    //NSLog(@"SECTIONS CALLFRIENDSLIST %lu",[AllFriendsList count]);
+    //NSLog(@"SECTIONS contacts %lu",[contactsNotUsers count]);
     if(AllFriendsList == contactsNotUsers)
         {
             return [arrayOfSectionTitles count];
@@ -176,7 +182,7 @@
 }
 //__________________________________________________________________________________________________
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section   //HERE
 {
     if(AllFriendsList == contactsNotUsers)
         {
@@ -494,14 +500,19 @@
 //__________________________________________________________________________________________________
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView
 {
-    NSArray* IndexTitles = @[@"Recent",@"A", @"B", @"C", @"D", @"E", @"F", @"G", @"H", @"I", @"J", @"K", @"L", @"M", @"N", @"O", @"P", @"Q", @"R", @"S", @"T", @"U", @"V", @"W", @"X", @"Y", @"Z"];
+    NSArray* IndexTitles = @[@"Recent",@"",@"A",@"", @"B",@"", @"C",@"", @"D",@"", @"E",@"", @"F", @"G", @"H", @"I", @"J", @"K", @"L", @"M", @"N", @"O", @"P", @"Q", @"R", @"S", @"T", @"U", @"V", @"W", @"X", @"Y", @"Z"];
     if (AllFriendsList == contactsNotUsers)
         {
             
 
             return IndexTitles;
         }
+    else
+    {
+        
+    
     return nil;
+    }
 }
 //__________________________________________________________________________________________________
 - (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index
@@ -547,6 +558,9 @@
         }
    // NSLog(@"Array of People: %@", arrayOfPeopleInSection);
 }
+
+
+
 //__________________________________________________________________________________________________
 
 - (void)setRecentFriends:(NSArray *)recentFriends

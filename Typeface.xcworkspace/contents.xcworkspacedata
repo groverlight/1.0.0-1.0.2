@@ -2,16 +2,10 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:VideoViewController.h">
+      location = "group:Typeface/NoConnectAlert.h">
    </FileRef>
    <FileRef
-      location = "group:VideoViewController.m">
-   </FileRef>
-   <FileRef
-      location = "group:VideoViewController.xib">
-   </FileRef>
-   <FileRef
-      location = "group:xx.mp4">
+      location = "group:Typeface/NoConnectAlert.m">
    </FileRef>
    <FileRef
       location = "group:Typeface.xcodeproj">

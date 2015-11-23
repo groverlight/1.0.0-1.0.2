@@ -71,7 +71,7 @@ typedef void(^BlockBfrAction)(UIBackgroundFetchResult result);
 
 - (void)application:(UIApplication*)application performFetchWithCompletionHandler:(void(^)(UIBackgroundFetchResult))completionHandler
 {
-//  NSLog(@"\n\nperformFetchWithCompletionHandler Start");
+//ac  NSLog(@"\n\nperformFetchWithCompletionHandler Start");
   PerformBackgroundFetch(^(BOOL hasNewData)
   {
 //    NSLog(@"performFetchWithCompletionHandler End");
@@ -131,33 +131,38 @@ typedef void(^BlockBfrAction)(UIBackgroundFetchResult result);
 
 - (void)application:(UIApplication*)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))handler
 {
-    ParseLoadMessageArray(^{
-        
-    }, ^(BOOL value, NSError *error) {
-        
-    });
-    NSLog(@"userInfo: %@", userInfo);
-    NSString *objectid = [userInfo objectForKey:@"p"];
-    //NSString *phoneNumber = [userInfo objectForKey:@"t"];
-    NSLog(@"%@", objectid);
-    if (objectid)
+    if ([userInfo objectForKey:@"p"] != nil)
+        {
+            ParseLoadMessageArray(^{
+                
+            }, ^(BOOL value, NSError *error) {
+                
+            });
+            NSLog(@"userInfo: %@", userInfo);
+            NSString *objectid = [userInfo objectForKey:@"p"];
+            //NSString *phoneNumber = [userInfo objectForKey:@"t"];
+            NSLog(@"%@", objectid);
+            if (objectid)
+            {
+            [[PFUser currentUser] addUniqueObject:objectid forKey:@"friends"];
+            [[PFUser currentUser] saveInBackground];
+            }
+        }
+    else
     {
-    [[PFUser currentUser] addUniqueObject:objectid forKey:@"friends"];
-    [[PFUser currentUser] saveInBackground];
+          NotificationCompletionHandler = handler;
+          NSLog(@"\n\n");
+          NSLog(@"didReceiveRemoteNotification Start: %p", NotificationCompletionHandler);
+          DidReceiveRemoteNotification(userInfo, ^(BOOL hasNewData)
+          {
+            NSLog(@"didReceiveRemoteNotification End: %p", NotificationCompletionHandler);
+            if (NotificationCompletionHandler != nil)
+            {
+              NotificationCompletionHandler(hasNewData? UIBackgroundFetchResultNewData: UIBackgroundFetchResultNoData);
+              NotificationCompletionHandler = NULL;
+            }
+          });
     }
-
-  NotificationCompletionHandler = handler;
-  NSLog(@"\n\n");
-  NSLog(@"didReceiveRemoteNotification Start: %p", NotificationCompletionHandler);
-  DidReceiveRemoteNotification(userInfo, ^(BOOL hasNewData)
-  {
-    NSLog(@"didReceiveRemoteNotification End: %p", NotificationCompletionHandler);
-    if (NotificationCompletionHandler != nil)
-    {
-      NotificationCompletionHandler(hasNewData? UIBackgroundFetchResultNewData: UIBackgroundFetchResultNoData);
-      NotificationCompletionHandler = NULL;
-    }
-  });
 }
 //__________________________________________________________________________________________________
 

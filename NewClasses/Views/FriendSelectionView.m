@@ -877,19 +877,9 @@ NSMutableArray*      contactsNotUsers;
                          
                          NSError *contactError;
                          CNContactStore* addressBook = [[CNContactStore alloc]init];
-                         CNAuthorizationStatus permissions = [CNContactStore authorizationStatusForEntityType:CNEntityTypeContacts];
-                         if(permissions == CNAuthorizationStatusAuthorized) {
-                             
  
-                                     NSLog(@"Said YES to Contacts Sync");
-                                     
-                                     Mixpanel *mixpanel = [Mixpanel sharedInstance];
-                                     
-                                     [mixpanel track:@"Said YES to Contacts Sync"];
-                                     
-                                     [mixpanel identify:mixpanel.distinctId];
-                                     
-                                     [mixpanel.people increment:@"Said YES to Contacts Sync" by:[NSNumber numberWithInt:1]];
+ 
+
                                      
                                      
                                      [addressBook containersMatchingPredicate:[CNContainer predicateForContainersWithIdentifiers: @[addressBook.defaultContainerIdentifier]] error:&contactError];
@@ -938,20 +928,7 @@ NSMutableArray*      contactsNotUsers;
                                          
                                      }];
                                      [self updateTable:fullName phone:phoneNumber];
-                                 }
-                    
-                    else{NSLog(@"You said NO to Contacts");
-
-                    Mixpanel *mixpanel = [Mixpanel sharedInstance];
-
-                    [mixpanel track:@"Said NO to Contacts Sync"];
-
-                    [mixpanel identify:mixpanel.distinctId];
-
-                    [mixpanel.people increment:@"Said NO to Contacts Sync" by:[NSNumber numberWithInt:1]];
-
-
-                    }
+                        
                     
             
         }
@@ -1033,9 +1010,10 @@ NSMutableArray*      contactsNotUsers;
                                  // NSLog(@" this %@ ", [query findObjects]);
                                  NSLog(@"%@, %@",fullName, phoneNumber);
                                 NSInteger index = 0;
-
+                                if(contactsNotUsers == nil)
+                                {
                                     contactsNotUsers = [[NSMutableArray alloc]init];
-
+                                }
                                  for (NSString* name in fullName)
                                  {
 
@@ -1103,6 +1081,7 @@ NSMutableArray*      contactsNotUsers;
                                               PFObject* localDatastore = [PFObject objectWithClassName:@"localDatastore"];
 
                                               UpdateFriendRecordListForFriends(friends);
+
                                               NSLog(@"%@", GetNameSortedFriendRecords());
                                               for (NSInteger i=0; i < [contactsNotUsers count]; i++)
                                               {
@@ -1117,7 +1096,7 @@ NSMutableArray*      contactsNotUsers;
                                                       }
                                                      
                                                   }
-                                                  FriendRecord *anothertemprecord = contactsNotUsers[i];
+                                                 FriendRecord *anothertemprecord = contactsNotUsers[i];
                                                   NSMutableDictionary *contact = [[NSMutableDictionary alloc]
                                                                                   initWithObjects:@[anothertemprecord.fullName, anothertemprecord.phoneNumber, [NSString stringWithFormat:@"%f",anothertemprecord.lastActivityTime]]
                                                                                   forKeys:@[@"fullName", @"phoneNumber", @"lastActivityTime"]];
