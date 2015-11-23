@@ -29,19 +29,19 @@ typedef void(^BlockBfrAction)(UIBackgroundFetchResult result);
 
 - (BOOL)application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions
 {
-
+    [Parse enableLocalDatastore];
     #define MIXPANEL_TOKEN @"b3152c0c9f9d07b8b65bfcfe849194c0"
 
     // Initialize the library with your
     // Mixpanel project token, MIXPANEL_TOKEN
-[Mixpanel sharedInstanceWithToken:MIXPANEL_TOKEN];
- /*NSDictionary *notificationPayload = launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey];
+    [Mixpanel sharedInstanceWithToken:MIXPANEL_TOKEN];
+    /*NSDictionary *notificationPayload = launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey];
      NSLog(@"notificationpayload: %@", notificationPayload);
     NSString *objectid = [notificationPayload objectForKey:@"p"];
     [[PFUser currentUser] addUniqueObject:objectid forKey:@"friends"];
     [[PFUser currentUser] saveInBackground];*/
-  // Override point for customization after application launch.
-  [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
+    // Override point for customization after application launch.
+    [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
 
   // Parse initialization.
   ParseAppDelegateInitialization(launchOptions);
@@ -71,7 +71,7 @@ typedef void(^BlockBfrAction)(UIBackgroundFetchResult result);
 
 - (void)application:(UIApplication*)application performFetchWithCompletionHandler:(void(^)(UIBackgroundFetchResult))completionHandler
 {
-//  NSLog(@"\n\nperformFetchWithCompletionHandler Start");
+//ac  NSLog(@"\n\nperformFetchWithCompletionHandler Start");
   PerformBackgroundFetch(^(BOOL hasNewData)
   {
 //    NSLog(@"performFetchWithCompletionHandler End");
@@ -131,27 +131,38 @@ typedef void(^BlockBfrAction)(UIBackgroundFetchResult result);
 
 - (void)application:(UIApplication*)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))handler
 {
-    NSLog(@"userInfo: %@", userInfo);
-    NSString *objectid = [userInfo objectForKey:@"p"];
-    NSLog(@"%@", objectid);
-    if (objectid)
+    if ([userInfo objectForKey:@"p"] != nil)
+        {
+            ParseLoadMessageArray(^{
+                
+            }, ^(BOOL value, NSError *error) {
+                
+            });
+            NSLog(@"userInfo: %@", userInfo);
+            NSString *objectid = [userInfo objectForKey:@"p"];
+            //NSString *phoneNumber = [userInfo objectForKey:@"t"];
+            NSLog(@"%@", objectid);
+            if (objectid)
+            {
+            [[PFUser currentUser] addUniqueObject:objectid forKey:@"friends"];
+            [[PFUser currentUser] saveInBackground];
+            }
+        }
+    else
     {
-    [[PFUser currentUser] addUniqueObject:objectid forKey:@"friends"];
-    [[PFUser currentUser] saveInBackground];
+          NotificationCompletionHandler = handler;
+          NSLog(@"\n\n");
+          NSLog(@"didReceiveRemoteNotification Start: %p", NotificationCompletionHandler);
+          DidReceiveRemoteNotification(userInfo, ^(BOOL hasNewData)
+          {
+            NSLog(@"didReceiveRemoteNotification End: %p", NotificationCompletionHandler);
+            if (NotificationCompletionHandler != nil)
+            {
+              NotificationCompletionHandler(hasNewData? UIBackgroundFetchResultNewData: UIBackgroundFetchResultNoData);
+              NotificationCompletionHandler = NULL;
+            }
+          });
     }
-
-  NotificationCompletionHandler = handler;
-  NSLog(@"\n\n");
-  NSLog(@"didReceiveRemoteNotification Start: %p", NotificationCompletionHandler);
-  DidReceiveRemoteNotification(userInfo, ^(BOOL hasNewData)
-  {
-    NSLog(@"didReceiveRemoteNotification End: %p", NotificationCompletionHandler);
-    if (NotificationCompletionHandler != nil)
-    {
-      NotificationCompletionHandler(hasNewData? UIBackgroundFetchResultNewData: UIBackgroundFetchResultNoData);
-      NotificationCompletionHandler = NULL;
-    }
-  });
 }
 //__________________________________________________________________________________________________
 

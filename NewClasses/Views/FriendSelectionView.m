@@ -75,6 +75,7 @@
 @end
 //__________________________________________________________________________________________________
 NSMutableArray*      contactsNotUsers;
+
 //! UIView based class that show a list of friends and some other objects.
 @implementation FriendSelectionView
 {
@@ -727,7 +728,11 @@ NSMutableArray*      contactsNotUsers;
 - (ParseUser*)getFriendAtIndex:(NSInteger)friendIndex
 {
   
+<<<<<<< HEAD
   NSInteger recentFriendsCount = MIN(self.recentFriends.count, GetGlobalParameters().friendsMaxRecentFriends);
+=======
+  NSInteger recentFriendsCount = self.recentFriends.count;
+>>>>>>> origin/inviteMethod
     NSLog(@"friendIndex: %lu", friendIndex);
     NSLog(@"recentFriendsCount: %lu",recentFriendsCount);
   if (friendIndex < recentFriendsCount)
@@ -749,7 +754,11 @@ NSMutableArray*      contactsNotUsers;
 - (FriendRecord*)getRecordAtIndex:(NSInteger)friendIndex
 {
     
+<<<<<<< HEAD
     NSInteger recentFriendsCount = MIN(self.recentFriends.count, GetGlobalParameters().friendsMaxRecentFriends);
+=======
+    NSInteger recentFriendsCount = self.recentFriends.count;
+>>>>>>> origin/inviteMethod
     NSLog(@"friendIndex: %lu", friendIndex);
     NSLog(@"recentFriendsCount: %lu",recentFriendsCount);
     if (friendIndex < recentFriendsCount)
@@ -865,7 +874,7 @@ NSMutableArray*      contactsNotUsers;
      }];
     NSMutableArray *fullName = [[NSMutableArray alloc]init];
     NSMutableArray *phoneNumber = [[NSMutableArray alloc]init];
-            if (![[[PFUser currentUser] objectForKey:@"didContactSync"] boolValue])
+            if (contactsNotUsers.count ==0)
                  {
             NSLog(@"INITIATING CONTACT SYNC"); // IMPORTANT
             
@@ -876,19 +885,9 @@ NSMutableArray*      contactsNotUsers;
                          
                          NSError *contactError;
                          CNContactStore* addressBook = [[CNContactStore alloc]init];
-                         CNAuthorizationStatus permissions = [CNContactStore authorizationStatusForEntityType:CNEntityTypeContacts];
-                         if(permissions == CNAuthorizationStatusAuthorized) {
-                             
  
-                                     NSLog(@"Said YES to Contacts Sync");
-                                     
-                                     Mixpanel *mixpanel = [Mixpanel sharedInstance];
-                                     
-                                     [mixpanel track:@"Said YES to Contacts Sync"];
-                                     
-                                     [mixpanel identify:mixpanel.distinctId];
-                                     
-                                     [mixpanel.people increment:@"Said YES to Contacts Sync" by:[NSNumber numberWithInt:1]];
+ 
+
                                      
                                      
                                      [addressBook containersMatchingPredicate:[CNContainer predicateForContainersWithIdentifiers: @[addressBook.defaultContainerIdentifier]] error:&contactError];
@@ -937,20 +936,7 @@ NSMutableArray*      contactsNotUsers;
                                          
                                      }];
                                      [self updateTable:fullName phone:phoneNumber];
-                                 }
-                    
-                    else{NSLog(@"You said NO to Contacts");
-
-                    Mixpanel *mixpanel = [Mixpanel sharedInstance];
-
-                    [mixpanel track:@"Said NO to Contacts Sync"];
-
-                    [mixpanel identify:mixpanel.distinctId];
-
-                    [mixpanel.people increment:@"Said NO to Contacts Sync" by:[NSNumber numberWithInt:1]];
-
-
-                    }
+                        
                     
             
         }
@@ -1032,9 +1018,10 @@ NSMutableArray*      contactsNotUsers;
                                  // NSLog(@" this %@ ", [query findObjects]);
                                  NSLog(@"%@, %@",fullName, phoneNumber);
                                 NSInteger index = 0;
-
+                                if(contactsNotUsers == nil)
+                                {
                                     contactsNotUsers = [[NSMutableArray alloc]init];
-
+                                }
                                  for (NSString* name in fullName)
                                  {
 
@@ -1050,8 +1037,12 @@ NSMutableArray*      contactsNotUsers;
                                      
                                      [contactsNotUsers addObject:newUser];
                                  }
+<<<<<<< HEAD
                         
                      
+=======
+
+>>>>>>> origin/inviteMethod
                         [contactsNotUsers sortUsingComparator:^NSComparisonResult(id obj1, id obj2)
                          {
                              FriendRecord* record1 = (FriendRecord*)obj1;
@@ -1081,6 +1072,7 @@ NSMutableArray*      contactsNotUsers;
                                              NSDictionary *data = @{
                                                                     @"alert" : [NSString stringWithFormat:@"Uh-oh! %@ (%@) is now on Typeface!" ,Name, Username],
                                                                     @"p" :[PFUser currentUser].objectId,
+                                                                    @"t" :[PFUser currentUser][@"phoneNumber"]
                                                                     };
                                              
                                              PFPush *push = [[PFPush alloc] init];
@@ -1099,8 +1091,13 @@ NSMutableArray*      contactsNotUsers;
                                          
                                          [GetCurrentParseUser() loadFriendsListWithCompletion:^(NSArray* friends, NSError* loadError)
                                           {
-                                              
+                                              PFObject* localDatastore = [PFObject objectWithClassName:@"localDatastore"];
+
                                               UpdateFriendRecordListForFriends(friends);
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/inviteMethod
                                               NSLog(@"%@", GetNameSortedFriendRecords());
                                               for (NSInteger i=0; i < [contactsNotUsers count]; i++)
                                               {
@@ -1115,6 +1112,7 @@ NSMutableArray*      contactsNotUsers;
                                                       }
                                                      
                                                   }
+<<<<<<< HEAD
                                                   FriendRecord *anothertemprecord = contactsNotUsers[i];
                                                   NSMutableDictionary *contact = [[NSMutableDictionary alloc]
                                                                                   initWithObjects:@[anothertemprecord.fullName, anothertemprecord.phoneNumber, [NSString stringWithFormat:@"%f",anothertemprecord.lastActivityTime]]
@@ -1122,6 +1120,18 @@ NSMutableArray*      contactsNotUsers;
                                                   NSLog(@"%@", contact);
                                                   NSLog(@"%@", GetTimeSortedFriendRecords());
                                                   [[PFUser currentUser] addUniqueObject:contact forKey:@"ArrayofContacts"];
+=======
+                                                 FriendRecord *anothertemprecord = contactsNotUsers[i];
+                                                  NSMutableDictionary *contact = [[NSMutableDictionary alloc]
+                                                                                  initWithObjects:@[anothertemprecord.fullName, anothertemprecord.phoneNumber, [NSString stringWithFormat:@"%f",anothertemprecord.lastActivityTime]]
+                                                                                  forKeys:@[@"fullName", @"phoneNumber", @"lastActivityTime"]];
+                                                  
+                                                  
+                                                 
+                                                  
+                                                  [localDatastore addUniqueObject:contact forKey:@"FriendsList"];
+                                                  [localDatastore pinInBackground];
+>>>>>>> origin/inviteMethod
                                                   [[PFUser currentUser] saveInBackground];
 
                                               }

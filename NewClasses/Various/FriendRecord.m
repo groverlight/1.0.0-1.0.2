@@ -176,6 +176,7 @@
 
 - (void)sortTimeList
 {
+    NSLog(@"TIME SORT");
     if (TimeSortedList.count == 0)
     {
         [TimeSortedList removeAllObjects];
@@ -183,32 +184,39 @@
 
     else
     {
-    
-        [TimeSortedList sortUsingComparator:^NSComparisonResult(id obj1, id obj2)
-         {
-             FriendRecord* record1 = (FriendRecord*)obj1;
-             FriendRecord* record2 = (FriendRecord*)obj2;
-
-             if (record1.lastActivityTime > record2.lastActivityTime)
-             {
-                 return NSOrderedAscending;
-             }
-             else if (record1.lastActivityTime < record2.lastActivityTime)
-             {
-                 return NSOrderedDescending;
-             }
-             else
-             {
-                 return NSOrderedSame;
-             }
-         }];
-        NSOrderedSet *orderedSet = [NSOrderedSet orderedSetWithArray:TimeSortedList];
+        NSMutableArray *uniqueArray = [NSMutableArray array];
+        NSMutableSet *names = [NSMutableSet set];
+        for (FriendRecord* record in TimeSortedList) {
+            NSString *destinationName = record.fullName;
+            if (![names containsObject:destinationName]) {
+                [uniqueArray addObject:record];
+                [names addObject:destinationName];
+            }
+        }
+        TimeSortedList = uniqueArray;
         
-        TimeSortedList = [[NSMutableArray alloc]initWithArray:[orderedSet array]];
-
+    [TimeSortedList sortUsingComparator:^NSComparisonResult(id obj1, id obj2)
+     {
+         FriendRecord* record1 = (FriendRecord*)obj1;
+         FriendRecord* record2 = (FriendRecord*)obj2;
+         
+         if (record1.lastActivityTime > record2.lastActivityTime)
+         {
+             return NSOrderedAscending;
+         }
+         else if (record1.lastActivityTime < record2.lastActivityTime)
+         {
+             return NSOrderedDescending;
+         }
+         else
+         {
+             return NSOrderedSame;
+         }
+     }];
+        // First sort array by descending so I could capture the max id
+        //NSArray *originalArray = ... // original array of objects with duplicates
 
     }
-
 #if 0
     NSLog(@"sortTimeList:");
     for (FriendRecord* record in TimeSortedList)
@@ -222,17 +230,30 @@
 - (void)sortNameList
 {
 
+<<<<<<< HEAD
  /*[NameSortedList sortUsingComparator:^NSComparisonResult(id obj1, id obj2)
+=======
+    [NameSortedList sortUsingComparator:^NSComparisonResult(id obj1, id obj2)
+>>>>>>> origin/inviteMethod
      {
          FriendRecord* record1 = (FriendRecord*)obj1;
          FriendRecord* record2 = (FriendRecord*)obj2;
    
          return ([record1.fullName caseInsensitiveCompare:record2.fullName]);
+<<<<<<< HEAD
      }];*/
     
     NSOrderedSet *orderedSet = [NSOrderedSet orderedSetWithArray:NameSortedList];
     
     NameSortedList = [[NSMutableArray alloc]initWithArray:[orderedSet array]];
+=======
+     }];
+    
+   // NSOrderedSet *orderedSet = [NSOrderedSet orderedSetWithArray:NameSortedList];
+    
+   // NameSortedList = [[NSMutableArray alloc]initWithArray:[orderedSet array]];
+    NSLog(@"NameSortedList%@", NameSortedList);
+>>>>>>> origin/inviteMethod
    
 
 #if 0
@@ -305,6 +326,11 @@
 {
     BOOL changed = NO;
     FriendRecord* friendRecord = parseRecord;
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> origin/inviteMethod
     friendRecord.lastActivityTime = time;
     NSInteger index = [TimeSortedList indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop)
                        {
@@ -317,8 +343,15 @@
                        }];
     if (index == NSNotFound)
     {
+<<<<<<< HEAD
         [NameSortedList addObject:friendRecord];
         [TimeSortedList addObject:friendRecord];
+=======
+        NSLog(@"index == nsnotfound");
+        [NameSortedList addObject:friendRecord];
+        [TimeSortedList addObject:friendRecord];
+
+>>>>>>> origin/inviteMethod
         [self sortNameList];
         changed = YES;
     }
@@ -385,13 +418,7 @@
                 break;
             }
         }
-        BOOL networkfound = [self checkNetwork];
-        if (!found && networkfound)
-        {
-            NSLog(@"5 updateActivityForFriends: %@", timeRecord.fullName);
-            [TimeSortedList removeObject:timeRecord];
-            changed = YES;
-        }
+
     }
     
     for (ParseUser* friend in friends)
@@ -479,7 +506,7 @@ switch (myStatus) {
                 NSLog(@"FriendRecord load: exception in [NSKeyedUnarchiver unarchiveObjectWithData:] %@", exception);
                 friendRecord = nil;
             }
-            if ((friendRecord != nil) && ((friendRecord.user != nil) || (friendRecord.fullName != nil)))
+            if ((friendRecord != nil)  || (friendRecord.fullName != nil))
             {
                 // Check for duplicates. Should never happen, but reality doesn't always follow programmer's intents.
                 BOOL found = NO;
@@ -508,12 +535,15 @@ switch (myStatus) {
 
 - (void)save
 {
+
+    
     // First check that all users are not null.
     for (FriendRecord* friendRecord in TimeSortedList)
     {
         if ((friendRecord.user == nil) && (friendRecord.fullName == nil))
         { // Do not save if any pair of user and fullName is null!
-            return;
+            NSLog(@"we got some nils");
+            //return;
         }
     }
     NSUserDefaults* defaults  = [NSUserDefaults standardUserDefaults];
@@ -522,13 +552,15 @@ switch (myStatus) {
     for (FriendRecord* friendRecord in TimeSortedList)
     {
         //      NSLog(@"3 (%@) User: %p -> fullName: '%@'", Name, friendRecord.user, friendRecord.fullName);
-        if (friendRecord.user != nil)
-        {
+
             NSData* data = [NSKeyedArchiver archivedDataWithRootObject:friendRecord];
             [saveArray addObject:data];
-        }
+        //[localDatastore addUniqueObject:data forKey:@"TimeSortedList"];
+        
     }
+    
     [defaults setObject:saveArray forKey:FRIEND_RECORD_LIST_NAME];
+    
 }
 //__________________________________________________________________________________________________
 

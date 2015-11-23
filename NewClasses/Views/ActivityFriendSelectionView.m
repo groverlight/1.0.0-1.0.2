@@ -44,7 +44,11 @@
 {
 
     self.recentFriends  = GetTimeSortedFriendRecords();
+<<<<<<< HEAD
     [FriendsList setMaxNumRecentFriends:20];
+=======
+    [FriendsList setRecentFriends:self.recentFriends];
+>>>>>>> origin/inviteMethod
     NSLog(@"%lu", [FriendsList maxNumRecentFriends]);
  //NSLog(@"INITIATING OTHER SORT");
     //self.allFriends     = GetNameSortedFriendRecords(); // this makes all of the friends in the alphabetized

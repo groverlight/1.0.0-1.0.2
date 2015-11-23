@@ -178,8 +178,15 @@
   {
     //  NSLog(@"INITIATING SORT");
     //self.recentFriends  = GetTimeSortedFriendRecords();
-    self.allFriends     = GetNameSortedFriendRecords(); // CHANGED THIS
-#if 0
+      
+      NSLog(@"friends: %@", [[PFUser currentUser] objectForKey:@"friends"]);
+      
+            self.allFriends     =  GetNameSortedFriendRecords();
+            NSLog(@"current User:%@", [PFUser currentUser]);
+            NSLog(@"this is all friends: %@",self.allFriends);
+      
+     
+   #if 0
     for (FriendRecord* record in self.allFriends)
     {
       NSLog(@"AzFriendSelectionView updateFriendsLists: username: %@, fullName: '%@', (%@)", record.user.username, record.fullName, record.user.fullName);

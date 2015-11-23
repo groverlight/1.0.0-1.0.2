@@ -15,7 +15,11 @@
 #import "Mixpanel.h"
 #import <AudioToolbox/AudioToolbox.h>
 #import "FriendSelectionView.h"
+<<<<<<< HEAD
 #import "NavigationView.h"
+=======
+
+>>>>>>> origin/inviteMethod
 //__________________________________________________________________________________________________
 
 #define PARSE_USER_TOKEN_DEFAULTS_KEY @"ParseUserToken" //!< The key to retrieve the Parse token in the user defaults.
@@ -120,6 +124,7 @@ BOOL ParseInitialization
   InitializationBlockAction completion //!< The block to call when initialization has completed.
 )
 {
+<<<<<<< HEAD
   NSLog(@"ParseInitialization");
     NSMutableArray *friendDicts = [[NSMutableArray alloc]initWithArray:[PFUser currentUser][@"ArrayofContacts"] ];
     NSMutableArray *friendRecords = [[NSMutableArray alloc]init];
@@ -132,9 +137,31 @@ BOOL ParseInitialization
         friend.lastActivityTime = time;
         NSLog(@"Time:%f", time);
         [friendRecords addObject:friend ];
-        
+=======
+    NSLog(@"ParseInitialization");
+    PFQuery *query = [PFQuery queryWithClassName:@"localDatastore"];
+
+    [query fromLocalDatastore];
+    PFObject *temp = [query getFirstObject];
+   // NSLog(@"temp %@", temp);
+
+    if( contactsNotUsers == nil)
+    {
+        contactsNotUsers = [[NSMutableArray alloc]init];
     }
-  contactsNotUsers = friendRecords;
+    for (NSDictionary *person in temp[@"FriendsList"])
+    {
+>>>>>>> origin/inviteMethod
+        
+      //  NSLog(@"%@", person);
+        FriendRecord* tempRecord    = [FriendRecord new];
+        tempRecord.phoneNumber = [person objectForKey:@"phoneNumber"];
+        tempRecord.fullName = [person objectForKey:@"fullName"];
+        tempRecord.lastActivityTime = [[person objectForKey:@"lastActivityTime"] doubleValue];
+       // NSLog(@"tempRecord: %@", tempRecord);
+        [contactsNotUsers addObject:tempRecord];
+    }
+    
     [contactsNotUsers sortUsingComparator:^NSComparisonResult(id obj1, id obj2)
      {
          FriendRecord* record1 = (FriendRecord*)obj1;
@@ -142,7 +169,8 @@ BOOL ParseInitialization
          
          return ([record1.fullName caseInsensitiveCompare:record2.fullName]);
      }];
-    NSLog(@"%@", contactsNotUsers);
+    
+  NSLog(@"contactsNotUsers udpated: %@", contactsNotUsers);
   NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
   NSString* parseUserToken = [defaults stringForKey:PARSE_USER_TOKEN_DEFAULTS_KEY];
   FirstRun = (parseUserToken == nil);
@@ -998,11 +1026,15 @@ void ParseDidFailToRegisterForRemoteNotificationsWithError(NSError* error)
 //! Callback when receiving a remote notification.
 void ParseDidReceiveRemoteNotification(NSDictionary* userInfo)
 {
+<<<<<<< HEAD
   ParseLoadMessageArray(^{
      
  }, ^(BOOL value, NSError *error) {
      
  });
+=======
+
+>>>>>>> origin/inviteMethod
     
     NSLog(@"%@",userInfo);
    

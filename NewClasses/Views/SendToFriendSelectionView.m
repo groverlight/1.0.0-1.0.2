@@ -54,6 +54,7 @@
 - (void)updateFriendsLists
 {
   self.recentFriends  = GetTimeSortedFriendRecords();
+   // NSLog(@"contacts: %@", contactsNotUsers);
     self.allFriends     = contactsNotUsers;
   self->FriendsList.contentOffset = CGPointMake(0, 0- FriendsList.contentInset.top);
     

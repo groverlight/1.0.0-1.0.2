@@ -32,6 +32,7 @@
   NSInteger             FaceCount;
   BOOL                  ChangingReturnButtonType;
   SystemSoundID           soundEffect;
+  BOOL permission;
 }
 @synthesize snapshots;
 //____________________
@@ -52,6 +53,7 @@
 -(void)Initialize
 {
   [super Initialize];
+  permission = NO;
   CharactersLeftLabel = [PopLabel     new];
   TextView            = [EditView     new];
   FaceButton          = [WhiteButton  new];
@@ -96,11 +98,34 @@
         get_myself;
         NSUserDefaults* defaults  = [NSUserDefaults standardUserDefaults];
         BOOL faceAlertAlreadyDone = [defaults boolForKey:FACE_BUTTON_ALERT_FLAG_DEFAULTS_KEY];
-
+        BOOL goAlertAlreadyDone   = [defaults boolForKey:GO_BUTTON_ALERT_FLAG_DEFAULTS_KEY];
         if (faceAlertAlreadyDone)
         {
-            [myself faceButtonPressed];
+            
+            if (goAlertAlreadyDone)
+            {
+                [myself faceButtonPressed];
+            }
+            else
+            {
+                Alert(parameters.typingRightButtonAlertTitle   , parameters.typingRightButtonAlertMessage,
+                      parameters.typingRightButtonAlertOkString, parameters.typingRightButtonAlertCancelString,
+                      ^(NSInteger pressedButtonIndex)
+                      {
+                          [defaults setBool:YES forKey:GO_BUTTON_ALERT_FLAG_DEFAULTS_KEY];
+                          if (pressedButtonIndex == 1)
+                          {
+                              [myself faceButtonPressed];
+                          }
+                          else
+                          {
+                              [myself->TextView becomeFirstResponder];
+                          }
+                      });
+            }
+            
 
+    
 
         }
         else
@@ -120,6 +145,21 @@
                       if (pressedButtonIndex == 1)
                       {
                           [myself faceButtonPressed];
+                          // make sure they know there is a go button
+                          Alert(parameters.typingRightButtonAlertTitle   , parameters.typingRightButtonAlertMessage,
+                                parameters.typingRightButtonAlertOkString, parameters.typingRightButtonAlertCancelString,
+                                ^(NSInteger pressedButtonIndex2)
+                                {
+                                    [defaults setBool:YES forKey:GO_BUTTON_ALERT_FLAG_DEFAULTS_KEY];
+                                    if (pressedButtonIndex2 == 1)
+                                    {
+                                        [myself faceButtonPressed];
+                                    }
+                                    else
+                                    {
+                                        [myself->TextView becomeFirstResponder];
+                                    }
+                                });
 
                           NSLog(@"YES SELFIE");
 
@@ -130,6 +170,7 @@
                           [mixpanel identify:mixpanel.distinctId];
 
                           [mixpanel.people increment:@"Selfie Understood" by:[NSNumber numberWithInt:1]];
+                          
                       }
                       else {
 
@@ -189,51 +230,10 @@
     {
         get_myself;
         [myself->TextView resignFirstResponder];
-        NSUserDefaults* defaults  = [NSUserDefaults standardUserDefaults];
-        BOOL goAlertAlreadyDone   = [defaults boolForKey:GO_BUTTON_ALERT_FLAG_DEFAULTS_KEY];
-        if (goAlertAlreadyDone)
-        {
+
             [myself goButtonPressed];
-        }
-        else
-        {
-            NSLog(@"Calls send message alert");
 
-            NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"beep_prompt_2x"ofType:@"aif"];
-            NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
-            AudioServicesCreateSystemSoundID(CFBridgingRetain(soundURL), &(myself->soundEffect));
-
-            AudioServicesPlaySystemSound(myself->soundEffect);
-
-            Alert(parameters.typingRightButtonAlertTitle   , parameters.typingRightButtonAlertMessage,
-                  parameters.typingRightButtonAlertOkString, parameters.typingRightButtonAlertCancelString,
-                  ^(NSInteger pressedButtonIndex)
-                  {
-                      [defaults setBool:YES forKey:GO_BUTTON_ALERT_FLAG_DEFAULTS_KEY];
-                      if (pressedButtonIndex == 1)
-                      {
-                          [myself goButtonPressed];
-                          Mixpanel *mixpanel = [Mixpanel sharedInstance];
-                          
-                          [mixpanel track:@"go understood"];
-
-                          [mixpanel identify:mixpanel.distinctId];
-                          
-                          [mixpanel.people increment:@"Go understood" by:[NSNumber numberWithInt:1]];
-                      }
-                      else
-                      {
-                          [myself->TextView becomeFirstResponder];
-                          Mixpanel *mixpanel = [Mixpanel sharedInstance];
-                          
-                          [mixpanel track:@"go NOT understood"];
-
-                          [mixpanel identify:mixpanel.distinctId];
-                          
-                          [mixpanel.people increment:@"go NOT understood" by:[NSNumber numberWithInt:1]];
-                      }
-                  });
-        }
+        
     };
 }
 //__________________________________________________________________________________________________

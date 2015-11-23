@@ -8,6 +8,10 @@
 #import "Blocks.h"
 #import "FriendSelectionList.h"
 #import "FriendRecord.h"
+<<<<<<< HEAD
+=======
+#import "Parse.h"
+>>>>>>> origin/inviteMethod
 //__________________________________________________________________________________________________
 
 @class ParseUser;
