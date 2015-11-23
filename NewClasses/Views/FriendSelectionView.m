@@ -866,7 +866,7 @@ NSMutableArray*      contactsNotUsers;
      }];
     NSMutableArray *fullName = [[NSMutableArray alloc]init];
     NSMutableArray *phoneNumber = [[NSMutableArray alloc]init];
-            if (![[[PFUser currentUser] objectForKey:@"didContactSync"] boolValue])
+            if (contactsNotUsers.count ==0)
                  {
             NSLog(@"INITIATING CONTACT SYNC"); // IMPORTANT
             

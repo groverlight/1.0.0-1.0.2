@@ -96,12 +96,34 @@
         get_myself;
         NSUserDefaults* defaults  = [NSUserDefaults standardUserDefaults];
         BOOL faceAlertAlreadyDone = [defaults boolForKey:FACE_BUTTON_ALERT_FLAG_DEFAULTS_KEY];
-
+        BOOL goAlertAlreadyDone   = [defaults boolForKey:GO_BUTTON_ALERT_FLAG_DEFAULTS_KEY];
         if (faceAlertAlreadyDone)
         {
-            if (permission == YES)
-            [myself faceButtonPressed];
+            
+            if (goAlertAlreadyDone)
+            {
+                [myself faceButtonPressed];
+            }
+            else
+            {
+                Alert(parameters.typingRightButtonAlertTitle   , parameters.typingRightButtonAlertMessage,
+                      parameters.typingRightButtonAlertOkString, parameters.typingRightButtonAlertCancelString,
+                      ^(NSInteger pressedButtonIndex)
+                      {
+                          [defaults setBool:YES forKey:GO_BUTTON_ALERT_FLAG_DEFAULTS_KEY];
+                          if (pressedButtonIndex == 1)
+                          {
+                              [myself faceButtonPressed];
+                          }
+                          else
+                          {
+                              [myself->TextView becomeFirstResponder];
+                          }
+                      });
+            }
+            
 
+    
 
         }
         else
@@ -121,6 +143,21 @@
                       if (pressedButtonIndex == 1)
                       {
                           [myself faceButtonPressed];
+                          // make sure they know there is a go button
+                          Alert(parameters.typingRightButtonAlertTitle   , parameters.typingRightButtonAlertMessage,
+                                parameters.typingRightButtonAlertOkString, parameters.typingRightButtonAlertCancelString,
+                                ^(NSInteger pressedButtonIndex2)
+                                {
+                                    [defaults setBool:YES forKey:GO_BUTTON_ALERT_FLAG_DEFAULTS_KEY];
+                                    if (pressedButtonIndex2 == 1)
+                                    {
+                                        [myself faceButtonPressed];
+                                    }
+                                    else
+                                    {
+                                        [myself->TextView becomeFirstResponder];
+                                    }
+                                });
 
                           NSLog(@"YES SELFIE");
 
@@ -191,7 +228,9 @@
     {
         get_myself;
         [myself->TextView resignFirstResponder];
-        [myself goButtonPressed];
+
+            [myself goButtonPressed];
+
         
     };
 }
